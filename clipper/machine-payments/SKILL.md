@@ -1,7 +1,7 @@
 ---
 name: clipper-machine-payments
 description: Discover and prepare ClipIt credit top-ups through direct x402, Stripe-managed x402, or Stripe Link MPP
-version: 1.0.0
+version: 1.0.1
 author: nplusm-Clippy
 license: MIT
 platforms: [macos, linux, windows]
@@ -70,7 +70,7 @@ python scripts/get_credits_balance.py
 
 Requesting the MPP `paymentUrl` without `Authorization: Payment` returns a challenge. A Link-authenticated Stripe payer can authorize and retry it with a Shared Payment Token while also sending `X-Api-Key`.
 
-Use Stripe Link CLI to sign in and select a saved Link payment method. Probe the payment URL, pass its complete `WWW-Authenticate` value to `mpp decode`, and use the decoded Stripe `network_id` and exact amount when creating the spend request. The human must approve that request before payment. Stripe SPT requests identify the merchant with `network_id`, so do not pass `--merchant-name` or `--merchant-url`.
+Use Stripe Link CLI to sign in and select a saved Link payment method. Probe the payment URL, pass its complete `WWW-Authenticate` value to `mpp decode`, and use the decoded Stripe `network_id` and exact amount when creating the spend request. Before requesting approval, require decoded `request_json.amount` and `request_json.currency` to match the catalog `amountCents` and currency exactly; abort on any mismatch. The human must approve that request before payment. Stripe SPT requests identify the merchant with `network_id`, so do not pass `--merchant-name` or `--merchant-url`.
 
 ```bash
 link-cli auth login
@@ -92,7 +92,15 @@ link-cli mpp pay "<paymentUrl>" \
   --spend-request-id <approved-link-spend-request-id> \
   --method POST \
   --header "X-Api-Key: $CLIPPER_API_KEY"
+
+link-cli report create \
+  --domain clipit.dev \
+  --outcome success \
+  --spend-request-id <approved-link-spend-request-id> \
+  --step "ClipIt MPP payment returned HTTP 200 and the receipt was fulfilled"
 ```
+
+Report every completed purchase attempt. Use `success` only after ClipIt returns a fulfilled receipt; otherwise report `blocked` or `abandoned` with a short non-secret failure step.
 
 ### Direct or Stripe-Managed x402
 
