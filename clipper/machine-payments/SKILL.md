@@ -68,10 +68,30 @@ python scripts/get_credits_balance.py
 
 ### Stripe Link/Card MPP
 
-Requesting the MPP `paymentUrl` without `Authorization: Payment` returns a challenge. A Link-authenticated Stripe payer can authorize and retry it with a Shared Payment Token while also sending `X-Api-Key`. For example, in an environment where Stripe Link CLI is installed and the user has approved its spend:
+Requesting the MPP `paymentUrl` without `Authorization: Payment` returns a challenge. A Link-authenticated Stripe payer can authorize and retry it with a Shared Payment Token while also sending `X-Api-Key`.
+
+Use Stripe Link CLI to sign in and select a saved Link payment method. Probe the payment URL, pass its complete `WWW-Authenticate` value to `mpp decode`, and use the decoded Stripe `network_id` and exact amount when creating the spend request. The human must approve that request before payment. Stripe SPT requests identify the merchant with `network_id`, so do not pass `--merchant-name` or `--merchant-url`.
 
 ```bash
-link mpp pay "<paymentUrl>" --header "X-Api-Key: $CLIPPER_API_KEY"
+link-cli auth login
+link-cli payment-methods list
+link-cli mpp decode --challenge '<complete WWW-Authenticate header>'
+
+link-cli spend-request create \
+  --credential-type shared_payment_token \
+  --network-id <decoded-stripe-network-id> \
+  --payment-method-id <link-payment-method-id> \
+  --amount <catalog-amount-cents> \
+  --currency usd \
+  --context "Purchase the exact ClipIt credit product and amount that the user approved through the Stripe Link machine-payment rail for this ClipIt account." \
+  --line-item "name:<catalog-product-label>,unit_amount:<catalog-amount-cents>,quantity:1" \
+  --total "type:total,display_text:Total,amount:<catalog-amount-cents>" \
+  --request-approval
+
+link-cli mpp pay "<paymentUrl>" \
+  --spend-request-id <approved-link-spend-request-id> \
+  --method POST \
+  --header "X-Api-Key: $CLIPPER_API_KEY"
 ```
 
 ### Direct or Stripe-Managed x402
