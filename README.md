@@ -29,6 +29,7 @@ Your agent will take it from there.
 - **Publish and schedule** to 13 social platforms (YouTube, TikTok, Instagram, Facebook, LinkedIn, X, Bluesky, Threads, Pinterest, Reddit, Telegram, Snapchat, Google Business)
 - **Track performance** — post metrics, platform breakdowns, top clips
 - **Watch your spend** — check credit balance and estimate costs before anything paid runs
+- **Top up autonomously with approval** — discover direct x402, Stripe-managed x402, and Stripe Link MPP rails when credits run low
 
 ## Example Requests
 
@@ -79,7 +80,7 @@ Or clone this repo — Codex reads the root `AGENTS.md` automatically.
 ```bash
 hermes skills tap add nplusm-Clippy/ClipIt-Agent-Pack
 
-hermes skills install clipper/video-management clipper/clip-creation clipper/export-rendering clipper/thumbnail-generation clipper/caption-generation clipper/broll-generation clipper/social-publishing clipper/account-insights
+hermes skills install clipper/video-management clipper/clip-creation clipper/export-rendering clipper/thumbnail-generation clipper/caption-generation clipper/broll-generation clipper/social-publishing clipper/account-insights clipper/machine-payments
 ```
 
 Add `CLIPPER_API_KEY` and `CLIPPER_BASE_URL=https://clipit.dev` to `~/.hermes/.env` or the equivalent environment file for that runtime.
@@ -127,6 +128,7 @@ Any successful response — even an empty list — means you're connected. A `40
 | [broll-generation](clipper/broll-generation/SKILL.md) | AI B-Roll image and video overlays | `plan_broll.py`, `generate_broll.py` |
 | [social-publishing](clipper/social-publishing/SKILL.md) | Post/schedule to 13 platforms | `post_to_social.py`, `schedule_social_post.py` |
 | [account-insights](clipper/account-insights/SKILL.md) | Credits, cost estimates, analytics | `get_credits_balance.py`, `estimate_cost.py`, `get_top_clips.py` |
+| [machine-payments](clipper/machine-payments/SKILL.md) | Approved x402 or Stripe Link MPP credit purchases | `get_payment_capabilities.py`, `get_billing_catalog.py`, `create_payment_attempt.py`, `get_payment_receipt.py` |
 
 ## Permissions
 
@@ -141,6 +143,7 @@ Each skill requires specific API key permissions. The **Connect an Agent** flow 
 | broll-generation | `broll_generation` |
 | social-publishing | `social_publishing` |
 | account-insights | none — every key can read its own credits and analytics |
+| machine-payments | none beyond an active API key; payment signing stays in the user's wallet or Link payer |
 | asset uploads | `file_upload` |
 | orchestration | `clippy_agent` |
 
