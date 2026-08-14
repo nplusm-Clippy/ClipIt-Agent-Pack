@@ -120,7 +120,7 @@ Any successful response — even an empty list — means you're connected. A `40
 
 | Skill | What It Does | Key Scripts |
 |-------|-------------|-------------|
-| [video-management](clipper/video-management/SKILL.md) | Import, upload, list, transcribe, delete videos | `import_video_from_url.py`, `transcribe_video.py`, `list_videos.py` |
+| [video-management](clipper/video-management/SKILL.md) | Use enterprise library sources; import, upload, list, transcribe, and delete videos | `list_assets.py`, `use_library_video.py`, `transcribe_video.py` |
 | [clip-creation](clipper/clip-creation/SKILL.md) | AI clip suggestions, create, edit, render, download | `suggest_clips.py`, `create_clip.py`, `render_clip.py` |
 | [export-rendering](clipper/export-rendering/SKILL.md) | Export jobs and download URLs | `start_export.py`, `wait_for_export.py`, `download_export.py` |
 | [thumbnail-generation](clipper/thumbnail-generation/SKILL.md) | AI thumbnails from text descriptions | `generate_thumbnail.py` |
@@ -149,7 +149,7 @@ Each skill requires specific API key permissions. The **Connect an Agent** flow 
 
 ## Credits & Costs
 
-Operations consume [$CLIP credits](https://clipit.dev) at the same rates as the web app:
+Ordinary API keys consume [$CLIP credits](https://clipit.dev) at the same rates as the web app. Enterprise workspace keys record calculated usage for reporting without debiting the client account:
 
 | Operation | Cost |
 |-----------|------|
@@ -161,7 +161,7 @@ Operations consume [$CLIP credits](https://clipit.dev) at the same rates as the 
 | Social post | 65 $CLIP per platform |
 | Clip render / export | Varies by duration and quality |
 
-**Agents: always preflight paid operations** — check the balance and estimate first, and confirm with the user before spending:
+**Ordinary-key agents: always preflight paid operations** — check the balance and estimate first, and confirm with the user before spending. Enterprise workspace keys may still estimate for reporting, but they do not require client balance:
 
 ```bash
 python scripts/get_credits_balance.py
