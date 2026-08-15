@@ -1,7 +1,7 @@
 ---
 name: clipper-social-publishing
 description: Post and schedule clips to 13 social media platforms via ClipIt
-version: 1.0.0
+version: 1.1.0
 author: nplusm-Clippy
 license: MIT
 platforms: [macos, linux, windows]
@@ -30,19 +30,23 @@ Use this skill when the user wants to:
 
 **Supported platforms:** YouTube, TikTok, Instagram, Facebook, LinkedIn, Twitter/X, Bluesky, Threads, Pinterest, Reddit, Telegram, Snapchat, Google Business.
 
-**Prerequisite:** The clip MUST be rendered first (use `render_clip.py --wait` from the clip-creation skill). Social platforms need an actual video file, not just clip metadata.
+**Prerequisite:** The clip MUST have one completed export that exactly matches its current canonical editor snapshot. Use `start_export.py --wait` from the export-rendering skill. The publishing scripts read `/api/v1/clips/:clipId/delivery-state` and fail closed unless they can pin the exact `exportId`, editor `snapshotId`, and output-object fingerprint.
 
-**Account setup:** Social accounts are connected via the ClipIt web UI (Settings -> Social Accounts). The API cannot connect new accounts — only post through already-connected ones.
+**Account setup:** Ordinary users connect accounts in ClipIt Settings. Enterprise clients connect accounts in their workspace portal, and an admin grants the exact accounts that Hermes may use. The API cannot connect or grant accounts; it can only list and publish through already-connected/authorized accounts.
 
-Use account-insights before posting to multiple platforms: `get_credits_balance.py` shows available $CLIP and `estimate_cost.py` can preflight known publishing costs.
+**Publishing authority:** Always list accounts immediately before publishing and pin the returned `accountId`. Enterprise workspace keys support one exact platform/account per publish or schedule request. Ordinary keys may still publish to multiple platforms when every platform has an exact account pin.
+
+**API key permissions:** The scripts require both `social_publishing` and `clip_generation`; `clip_generation` is needed to read canonical delivery-state before the publish call.
+
+Use account-insights before an ordinary-key post: `get_credits_balance.py` shows available $CLIP and `estimate_cost.py` can preflight known publishing costs. Enterprise workspace posts record usage for reporting but debit 0 client $CLIP credits.
 
 ## Quick Reference
 
 | Operation | Script | Cost |
 |-----------|--------|------|
 | List connected accounts | `list_social_accounts.py` | Free |
-| Post immediately | `post_to_social.py --clip-id <id> --platforms tiktok --caption "..." [--wait]` | 65 $CLIP/platform |
-| Schedule post | `schedule_social_post.py --clip-id <id> --platforms tiktok --caption "..." --scheduled-for <iso>` | Billed at post time |
+| Post immediately | `post_to_social.py --clip-id <id> --platform linkedin --account-id <accountId> --caption "..." [--export-id <id>] [--wait]` | Ordinary: 65 $CLIP/platform; enterprise: usage-only, 0 client debit |
+| Schedule post | `schedule_social_post.py --clip-id <id> --platform linkedin --account-id <accountId> --caption "..." --scheduled-for <iso> [--export-id <id>]` | Ordinary: billed at post time; enterprise: usage-only, 0 client debit |
 | Check post status | `get_social_post.py --post-id <id>` | Free |
 | Cancel scheduled post | `cancel_social_post.py --post-id <id>` | Free |
 
@@ -54,31 +58,46 @@ Use account-insights before posting to multiple platforms: `get_credits_balance.
 
 **Steps:**
 1. Run `python scripts/list_social_accounts.py`
-2. Each entry shows: `platform`, `connected` (true/false), `accountName`
-3. If the user wants to post to a platform that isn't connected, direct them to https://clipit.dev/settings/social to connect it
+2. Each authorized entry shows `platform`, `connected`, `accountId`, and `accountName`. Copy the exact `accountId`; names are display-only and are not publishing authority.
+3. For an enterprise key, this list contains only accounts actively granted to that workspace. If the account is missing, have the client connect it in the workspace portal and have an admin grant it.
+4. For an ordinary key, direct the user to https://clipit.dev/settings/social when the target account is not connected.
 
 ### Posting a Clip Immediately
 
 **When to use:** The user says "post this to TikTok" or "share on Instagram."
 
 **Prerequisites:**
-- The clip MUST be rendered (`renderStatus === 'completed'`). If not, render it first.
-- The user MUST have the target platform(s) connected. Check with `list_social_accounts.py`.
+- The clip MUST have a verified exact-current completed export. If it does not, save the editor state, start an export, and wait for completion.
+- The exact target account MUST appear in `list_social_accounts.py` immediately before publishing.
+- For enterprise, the clip/export must belong to a client-selected deliverable and the target account grant must still be active.
 
 **Steps:**
-1. Verify the clip is rendered: `python scripts/get_clip.py --clip-id <id>` — check `renderStatus`
-2. Run `python scripts/post_to_social.py --clip-id <id> --platforms tiktok,instagram --caption "Your caption here" --wait`
-3. For YouTube, you MUST include `--title "Video Title"` — YouTube requires a separate title field
-4. The result includes per-platform results (each platform may succeed or fail independently)
+1. Run `python scripts/list_social_accounts.py` and copy the exact `accountId` for the intended platform.
+2. Run `python scripts/post_to_social.py --clip-id <id> --platform linkedin --account-id <accountId> --caption "Your caption here" --wait`.
+3. If delivery-state reports multiple exact-current exports, rerun with `--export-id <id>` to select one explicitly.
+4. For YouTube, include `--title "Video Title"`.
+5. The script automatically reads delivery-state and sends `exportId`, `expectedSnapshotId`, `expectedOutputObjectFingerprint`, `expectedAccountIds`, and `publishExactCurrentArtifact=true`. Never hand-build or weaken those pins.
 
 **Example:**
 ```bash
 python scripts/post_to_social.py \
   --clip-id clip_xyz \
-  --platforms tiktok,instagram,youtube \
+  --platform linkedin \
+  --account-id account_linkedin_123 \
+  --export-id export_xyz \
   --caption "This is the best moment from today's stream! #viral #clips" \
-  --title "INSANE PLAY - Best Moment" \
   --hashtags "viral,clips,gaming" \
+  --wait
+```
+
+Ordinary keys retain multi-platform support:
+
+```bash
+python scripts/post_to_social.py \
+  --clip-id clip_xyz \
+  --platforms tiktok,instagram \
+  --account-ids tiktok=account_tt_123,instagram=account_ig_456 \
+  --caption "Best moment" \
   --wait
 ```
 
@@ -87,10 +106,13 @@ python scripts/post_to_social.py \
 **When to use:** The user wants to post at a specific time (e.g., "post tomorrow at 9am").
 
 **Steps:**
-1. Run `python scripts/schedule_social_post.py --clip-id <id> --platforms tiktok --caption "..." --scheduled-for "2026-04-15T09:00:00Z"`
-2. The `--scheduled-for` value MUST be in the future (ISO 8601 format with timezone)
-3. Credits are NOT charged at scheduling time — they're charged when the post actually fires
-4. The response includes a `postId` you can use to check status or cancel
+1. Refresh `list_social_accounts.py` and copy the exact authorized `accountId`.
+2. Run `python scripts/schedule_social_post.py --clip-id <id> --platform tiktok --account-id <accountId> --caption "..." --scheduled-for "2030-04-15T09:00:00Z" --wait`.
+3. Add `--export-id <id>` when delivery-state has more than one exact-current export.
+4. Enterprise schedules use one exact platform/account request and record usage without debiting client credits.
+5. The `--scheduled-for` value MUST be in the future (ISO 8601 format with timezone).
+6. Ordinary-key credits are not charged at scheduling time; they are charged when the post fires.
+7. The response includes either a completed schedule record or a `jobId`; `--wait` follows enterprise schedule registration jobs.
 
 ### Checking Post Status
 
@@ -113,12 +135,14 @@ python scripts/post_to_social.py \
 
 ## Pitfalls
 
-- **Clip MUST be rendered.** The API returns `CLIP_NOT_RENDERED` if you try to post an unrendered clip. Always check with `get_clip.py` first.
+- **Exact export identity is mandatory.** A render status alone is insufficient. The scripts refuse stale, ambiguous, unverified, or non-current exports; use `--export-id` only to choose among completed exports that exactly match the current editor snapshot.
+- **Never identify an account by display name.** Refresh `list_social_accounts.py` and pin its exact `accountId`. Revoked enterprise grants disappear from this list.
+- **Enterprise means one account per request.** Run a separate approved request for each platform/account. Do not combine enterprise platforms.
 - **YouTube requires `--title`.** If you're posting to YouTube without a title, the API returns 400. Always include `--title` when YouTube is in the platforms list.
-- **65 $CLIP per platform per post.** Posting to 3 platforms costs 195 $CLIP. Check account-insights and confirm with the user before posting to many platforms.
+- **Ordinary posts cost 65 $CLIP per platform.** Check account-insights and confirm before publishing. Enterprise workspace keys use `enterprise_usage_only`: usage is measured but the client balance is not debited.
 - **Scheduled posts aren't free to cancel.** While no credits are charged until the post fires, cancelling at the last second might not work if the post is already in the posting queue.
 - **Platform-specific character limits.** Twitter/X: 280 chars, TikTok: 2200 chars, Instagram: 2200 chars. The API validates these but it's better to respect them upfront.
-- **Social accounts are connected via the web UI only.** You cannot connect a new social account through the API. If the user needs to connect one, direct them to https://clipit.dev/settings/social.
+- **Social setup stays in the web UI.** You cannot connect or grant an account through these scripts. Ordinary users use Settings; enterprise clients and admins use the enterprise portal/workspace controls.
 
 ## Verification
 

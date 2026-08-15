@@ -16,7 +16,7 @@ If Node is available, the richer path is the ClipIt CLI: `npm install -g @clipit
 
 - Each capability is documented in `clipper/<skill>/SKILL.md` — read the relevant one before acting. Skills: video-management, clip-creation, export-rendering, thumbnail-generation, caption-generation, broll-generation, social-publishing, account-insights, machine-payments.
 - Every script in `scripts/` is a thin REST binding with `--help`.
-- **Cost preflight:** rendering, exports, B-Roll, thumbnails, and social posts spend the user's $CLIP credits. Check `python scripts/get_credits_balance.py` and `python scripts/estimate_cost.py` before paid operations, and confirm with the user before spending.
+- **Cost preflight:** ordinary API keys spend the user's $CLIP credits on rendering, exports, B-Roll, thumbnails, and social posts. Check `python scripts/get_credits_balance.py` and `python scripts/estimate_cost.py` before paid operations, and confirm with the user before spending. Enterprise workspace keys record usage without debiting the client balance; social publishing still requires explicit approval.
 - **Credit top-ups:** when credits are insufficient, read `clipper/machine-payments/SKILL.md`, discover live rails and products, and create a payable attempt only after explicit approval or a configured budget policy.
 - Long-running jobs: poll renders with `scripts/wait_for_job.py`, exports with `scripts/wait_for_export.py` (exports use a different endpoint — do not mix them up).
 - Live, permission-scoped operating instructions: `python scripts/get_agent_instructions.py --target generic --format markdown`.

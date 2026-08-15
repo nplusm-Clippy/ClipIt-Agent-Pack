@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""List connected social media accounts.
+"""List exact connected or enterprise-granted social media account IDs.
 
 Usage:
   python list_social_accounts.py
+
+Use each returned accountId to pin a publish or schedule request.
 """
 
 from clipper_client import ClipperClient, print_json, main_wrapper

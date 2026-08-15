@@ -126,7 +126,7 @@ Any successful response — even an empty list — means you're connected. A `40
 | [thumbnail-generation](clipper/thumbnail-generation/SKILL.md) | AI thumbnails from text descriptions | `generate_thumbnail.py` |
 | [caption-generation](clipper/caption-generation/SKILL.md) | Word-level captions with style presets | `generate_captions.py`, `update_captions.py` |
 | [broll-generation](clipper/broll-generation/SKILL.md) | AI B-Roll image and video overlays | `plan_broll.py`, `generate_broll.py` |
-| [social-publishing](clipper/social-publishing/SKILL.md) | Post/schedule to 13 platforms | `post_to_social.py`, `schedule_social_post.py` |
+| [social-publishing](clipper/social-publishing/SKILL.md) | Exact-artifact, exact-account posting/scheduling to 13 platforms | `list_social_accounts.py`, `post_to_social.py`, `schedule_social_post.py` |
 | [account-insights](clipper/account-insights/SKILL.md) | Credits, cost estimates, analytics | `get_credits_balance.py`, `estimate_cost.py`, `get_top_clips.py` |
 | [machine-payments](clipper/machine-payments/SKILL.md) | Approved x402 or Stripe Link MPP credit purchases | `get_payment_capabilities.py`, `get_billing_catalog.py`, `create_payment_attempt.py`, `get_payment_receipt.py` |
 
@@ -141,11 +141,43 @@ Each skill requires specific API key permissions. The **Connect an Agent** flow 
 | thumbnail-generation | `thumbnail_generation` |
 | caption-generation | `caption_generation` |
 | broll-generation | `broll_generation` |
-| social-publishing | `social_publishing` |
+| social-publishing | `social_publishing`, `clip_generation` (exact delivery-state preflight) |
 | account-insights | none — every key can read its own credits and analytics |
 | machine-payments | none beyond an active API key; payment signing stays in the user's wallet or Link payer |
 | asset uploads | `file_upload` |
 | orchestration | `clippy_agent` |
+
+## Exact Social Publishing
+
+Publishing is fail-closed around both the finished clip and the destination account. The scripts first read the clip's canonical delivery-state, select one verified exact-current export, list currently connected or workspace-granted social accounts, and then pin all of that authority in the request. They send `exportId`, `expectedSnapshotId`, `expectedOutputObjectFingerprint`, `expectedAccountIds`, and `publishExactCurrentArtifact=true` automatically.
+
+List the available account IDs immediately before publishing:
+
+```bash
+python scripts/list_social_accounts.py
+```
+
+Enterprise workspace keys publish or schedule one exact platform/account per request. The clip/export must also be a client-selected deliverable:
+
+```bash
+python scripts/post_to_social.py \
+  --clip-id clip_xyz \
+  --platform linkedin \
+  --account-id account_linkedin_123 \
+  --export-id export_xyz \
+  --caption "Approved client caption" \
+  --wait
+
+python scripts/schedule_social_post.py \
+  --clip-id clip_xyz \
+  --platform twitter \
+  --account-id account_x_456 \
+  --caption "Approved client caption" \
+  --scheduled-for "2030-08-20T14:00:00Z" \
+  --wait
+```
+
+`--export-id` is optional when only one completed export exactly matches the current editor snapshot; use it to resolve an otherwise ambiguous delivery-state. Ordinary API keys retain comma-separated `--platforms` plus `--account-ids platform=id,...` support. Enterprise workspace publishing records usage for reporting but does not debit the client $CLIP balance; ordinary keys keep normal publishing charges and approval rules.
 
 ## Credits & Costs
 
