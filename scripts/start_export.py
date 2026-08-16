@@ -7,7 +7,9 @@ Usage:
 
 import argparse
 import json
+import sys
 from clipper_client import ClipperClient, print_json, main_wrapper
+from export_contract import prepare_export_start_request
 
 
 def parse_json_object(value):
@@ -74,6 +76,10 @@ def main():
     parser.add_argument("--description", help="Export metadata description")
     parser.add_argument("--tags", help="Comma-separated export metadata tags")
     parser.add_argument("--options-json", type=parse_json_object, help="Additional exportStart JSON fields")
+    parser.add_argument(
+        "--idempotency-key",
+        help="Stable key to reuse only when retrying the same export after an unknown outcome",
+    )
     parser.add_argument("--wait", action="store_true", help="Wait for export completion")
     parser.add_argument("--timeout", type=float, default=600, help="Max wait in seconds")
     parser.add_argument("--poll-interval", type=float, default=3, help="Poll interval in seconds")
@@ -149,17 +155,32 @@ def main():
         body["metadata"] = metadata
 
     client = ClipperClient()
+    body, editor_state = prepare_export_start_request(
+        client,
+        args.clip_id,
+        body,
+        requested_idempotency_key=args.idempotency_key,
+    )
+    print(
+        f"Export idempotency key: {body['idempotencyKey']}",
+        file=sys.stderr,
+    )
     response = client.post("/api/v1/exports", body)
 
     if args.wait and response.get("exportJobId"):
-        export = client.wait_for_export(
+        response = client.wait_for_export(
             response["exportJobId"],
             poll_interval=args.poll_interval,
             timeout=args.timeout,
         )
-        print_json(export)
-    else:
-        print_json(response)
+    print_json({
+        **response,
+        "clipId": args.clip_id,
+        "snapshotId": editor_state["snapshotId"],
+        "expectedEditorVersion": body["expectedEditorVersion"],
+        "expectedEditorStateHash": body["expectedEditorStateHash"],
+        "idempotencyKey": body["idempotencyKey"],
+    })
 
 
 if __name__ == "__main__":

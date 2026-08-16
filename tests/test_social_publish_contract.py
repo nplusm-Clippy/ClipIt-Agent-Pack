@@ -2,6 +2,7 @@ import unittest
 
 from scripts.social_publish_contract import (
     SocialPublishContractError,
+    is_enterprise_key,
     parse_account_id_pins,
     parse_platforms,
     prepare_social_publish_request,
@@ -79,6 +80,33 @@ class FakeClient:
 
 
 class SocialPublishContractTests(unittest.TestCase):
+    def test_authoritative_workspace_scope_wins_over_generic_agent_info(self):
+        self.assertTrue(is_enterprise_key({
+            "scope": {
+                "identityType": "workspace_api_key",
+                "enterprise": True,
+            },
+            "apiKey": {"agentInfo": {"type": "generic"}},
+        }))
+
+    def test_authoritative_personal_scope_prevents_legacy_enterprise_fallback(self):
+        self.assertFalse(is_enterprise_key({
+            "scope": {
+                "identityType": "personal_api_key",
+                "enterprise": False,
+            },
+            "apiKey": {"agentInfo": {"type": "enterprise_hermes"}},
+        }))
+
+    def test_legacy_agent_info_is_used_only_when_scope_is_absent(self):
+        self.assertTrue(is_enterprise_key({
+            "apiKey": {"agentInfo": {"type": "enterprise_hermes"}},
+        }))
+        self.assertFalse(is_enterprise_key({
+            "scope": None,
+            "apiKey": {"agentInfo": {"type": "enterprise_hermes"}},
+        }))
+
     def test_enterprise_schedule_pins_delivery_and_one_granted_account(self):
         client = FakeClient(
             enterprise=True,

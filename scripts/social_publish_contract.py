@@ -86,6 +86,13 @@ def parse_account_id_pins(value: Optional[str]) -> Dict[str, str]:
 def is_enterprise_key(agent_identity: Any) -> bool:
     if not isinstance(agent_identity, dict):
         return False
+    if "scope" in agent_identity:
+        scope = agent_identity.get("scope")
+        return (
+            isinstance(scope, dict)
+            and scope.get("identityType") == "workspace_api_key"
+            and scope.get("enterprise") is True
+        )
     api_key = agent_identity.get("apiKey")
     if not isinstance(api_key, dict):
         return False

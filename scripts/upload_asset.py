@@ -7,9 +7,12 @@ Usage:
 
 import argparse
 import mimetypes
-import os
-import requests
+import sys
 from clipper_client import ClipperClient, print_json, main_wrapper
+from asset_upload_contract import (
+    resolve_asset_idempotency_key,
+    upload_library_asset,
+)
 
 
 @main_wrapper
@@ -17,42 +20,30 @@ def main():
     parser = argparse.ArgumentParser(description="Upload a library asset")
     parser.add_argument("--file", required=True, help="Path to the asset file")
     parser.add_argument("--content-type", help="MIME type, guessed from file when omitted")
-    parser.add_argument("--duration", type=float, help="Duration in seconds for audio/video assets")
+    parser.add_argument(
+        "--idempotency-key",
+        help="Stable key to reuse only when retrying this exact upload after an unknown outcome",
+    )
+    parser.add_argument("--duration", type=float, help=argparse.SUPPRESS)
     args = parser.parse_args()
 
     file_path = args.file
-    filename = os.path.basename(file_path)
-    size = os.path.getsize(file_path)
     content_type = args.content_type or mimetypes.guess_type(file_path)[0] or "application/octet-stream"
+    idempotency_key = resolve_asset_idempotency_key(args.idempotency_key)
+    if args.duration is not None:
+        print(
+            "WARNING: --duration is deprecated and ignored; ClipIt derives media metadata during finalization.",
+            file=sys.stderr,
+        )
+    print(f"Asset idempotency key: {idempotency_key}", file=sys.stderr)
 
     client = ClipperClient()
-    signed = client.post(
-        "/api/v1/assets/sign-upload",
-        {
-            "filename": filename,
-            "contentType": content_type,
-            "size": size,
-        },
-    )
-
-    with open(file_path, "rb") as file_obj:
-        upload_response = requests.put(
-            signed["uploadUrl"],
-            data=file_obj,
-            headers={"Content-Type": content_type},
-            timeout=600,
-        )
-    upload_response.raise_for_status()
-
-    finalize_body = {
-        "objectPath": signed["key"],
-        "fileSize": size,
-    }
-    if args.duration is not None:
-        finalize_body["duration"] = args.duration
-
-    result = client.post(f"/api/v1/assets/{signed['assetId']}/finalize", finalize_body)
-    print_json(result)
+    print_json(upload_library_asset(
+        client,
+        file_path,
+        content_type,
+        requested_idempotency_key=idempotency_key,
+    ))
 
 
 if __name__ == "__main__":

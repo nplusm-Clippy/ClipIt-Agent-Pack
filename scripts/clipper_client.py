@@ -1,7 +1,8 @@
 """
 Clipper REST client shared by all skill scripts.
 
-Reads CLIPPER_API_KEY and CLIPPER_BASE_URL from environment variables.
+Reads the active ClipIt CLI profile plus CLIPPER_API_KEY and CLIPPER_BASE_URL.
+Named profiles are isolated from ambient personal key and base-URL settings.
 Never logs the API key.
 """
 
@@ -9,10 +10,153 @@ import os
 import sys
 import json
 import time
+from pathlib import Path
 import requests
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional, Tuple
 
 DEFAULT_BASE_URL = "https://clipit.dev"
+
+
+def _clipit_config_path() -> Path:
+    config_dir = os.environ.get("CLIPIT_CONFIG_DIR")
+    if config_dir:
+        return Path(config_dir).expanduser() / "config.json"
+    if os.name == "nt":
+        app_data = os.environ.get("APPDATA")
+        if app_data:
+            return Path(app_data) / "ClipIt" / "config.json"
+    return Path.home() / ".config" / "clipit" / "config.json"
+
+
+def _read_clipit_config() -> Dict[str, Any]:
+    config_path = _clipit_config_path()
+    try:
+        with config_path.open("r", encoding="utf-8") as config_file:
+            config = json.load(config_file)
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+    return config if isinstance(config, dict) else {}
+
+
+def _profile_config(config: Dict[str, Any], profile_name: str) -> Dict[str, Any]:
+    profiles = config.get("profiles")
+    configured_profile = (
+        profiles.get(profile_name) if isinstance(profiles, dict) else None
+    )
+
+    if profile_name != "default":
+        return configured_profile if isinstance(configured_profile, dict) else {}
+
+    profile: Dict[str, Any] = {}
+    for field in ("apiKey", "baseUrl"):
+        if field in config:
+            profile[field] = config[field]
+    if isinstance(configured_profile, dict):
+        profile.update(configured_profile)
+    return profile
+
+
+def _non_empty_string(value: Any) -> Optional[str]:
+    if not isinstance(value, str):
+        return None
+    value = value.strip()
+    return value or None
+
+
+def resolve_clipit_connection(
+    api_key: Optional[str] = None,
+    base_url: Optional[str] = None,
+    profile: Optional[str] = None,
+) -> Tuple[str, str, str]:
+    """Resolve a key, base URL, and profile using the ClipIt CLI contract."""
+    config = _read_clipit_config()
+    profile_name = (
+        _non_empty_string(profile)
+        or _non_empty_string(os.environ.get("CLIPIT_PROFILE"))
+        or _non_empty_string(config.get("currentProfile"))
+        or "default"
+    )
+    configured_profile = _profile_config(config, profile_name)
+
+    resolved_key = _non_empty_string(api_key)
+    if not resolved_key and profile_name != "default":
+        resolved_key = _non_empty_string(configured_profile.get("apiKey"))
+        if not resolved_key:
+            raise RuntimeError(
+                f'ClipIt profile "{profile_name}" does not contain an API key. '
+                "Set the workspace key on that named profile. The ambient "
+                "CLIPPER_API_KEY was not used."
+            )
+    if not resolved_key:
+        resolved_key = _non_empty_string(os.environ.get("CLIPPER_API_KEY"))
+    if not resolved_key:
+        resolved_key = _non_empty_string(configured_profile.get("apiKey"))
+    if not resolved_key:
+        raise RuntimeError(
+            "No ClipIt API key was found. Set CLIPPER_API_KEY, configure the "
+            "default ClipIt CLI profile, or pass api_key explicitly."
+        )
+
+    resolved_base_url = _non_empty_string(base_url)
+    if not resolved_base_url and profile_name != "default":
+        resolved_base_url = (
+            _non_empty_string(configured_profile.get("baseUrl"))
+            or DEFAULT_BASE_URL
+        )
+    if not resolved_base_url:
+        resolved_base_url = (
+            _non_empty_string(os.environ.get("CLIPPER_BASE_URL"))
+            or _non_empty_string(configured_profile.get("baseUrl"))
+            or DEFAULT_BASE_URL
+        )
+    resolved_base_url = resolved_base_url.rstrip("/")
+    return resolved_key, resolved_base_url, profile_name
+
+
+def require_enterprise_workspace_scope(
+    agent_identity: Any,
+    expected_workspace_id: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Require the authoritative active team-operated enterprise scope."""
+    if not isinstance(agent_identity, dict) or "scope" not in agent_identity:
+        raise RuntimeError(
+            "ClipIt did not return an authoritative workspace scope. Update the "
+            "server/Agent Pack before operating on enterprise content."
+        )
+    scope = agent_identity.get("scope")
+    if not isinstance(scope, dict):
+        raise RuntimeError("ClipIt returned an invalid workspace scope.")
+
+    invalid_requirements = []
+    if scope.get("identityType") != "workspace_api_key":
+        invalid_requirements.append("identityType=workspace_api_key")
+    if scope.get("enterprise") is not True:
+        invalid_requirements.append("enterprise=true")
+    if not _non_empty_string(scope.get("workspaceId")):
+        invalid_requirements.append("a workspace ID")
+    if not _non_empty_string(scope.get("workspaceName")):
+        invalid_requirements.append("a workspace name")
+    if scope.get("workspaceStatus") != "active":
+        invalid_requirements.append("workspaceStatus=active")
+    if scope.get("workspaceRole") != "team_operator":
+        invalid_requirements.append("workspaceRole=team_operator")
+    if scope.get("billingMode") != "enterprise_usage_only":
+        invalid_requirements.append("billingMode=enterprise_usage_only")
+    if invalid_requirements:
+        raise RuntimeError(
+            "Enterprise workspace identity preflight failed; required: "
+            + ", ".join(invalid_requirements)
+            + "."
+        )
+
+    expected_workspace_id = _non_empty_string(expected_workspace_id)
+    if expected_workspace_id and scope.get("workspaceId") != expected_workspace_id:
+        raise RuntimeError(
+            "Enterprise workspace identity preflight failed: the authenticated "
+            "key belongs to a different workspace."
+        )
+    return scope
 
 
 class ClipperError(Exception):
@@ -34,16 +178,23 @@ class ClipperClient:
     Does NOT handle retries — long operations should be polled via wait_for_job.
     """
 
-    def __init__(self, api_key: Optional[str] = None, base_url: Optional[str] = None):
-        self.api_key = api_key or os.environ.get("CLIPPER_API_KEY")
-        if not self.api_key:
-            raise RuntimeError(
-                "CLIPPER_API_KEY not set. Add it to your agent's environment "
-                "or pass it explicitly to ClipperClient()."
-            )
-        self.base_url = (
-            base_url or os.environ.get("CLIPPER_BASE_URL") or DEFAULT_BASE_URL
-        ).rstrip("/")
+    def __init__(
+        self,
+        api_key: Optional[str] = None,
+        base_url: Optional[str] = None,
+        profile: Optional[str] = None,
+    ):
+        self.api_key, self.base_url, self.profile_name = resolve_clipit_connection(
+            api_key=api_key,
+            base_url=base_url,
+            profile=profile,
+        )
+
+    def get_agent_identity(self) -> Dict[str, Any]:
+        identity = self.get("/api/v1/agent/me")
+        if not isinstance(identity, dict):
+            raise RuntimeError("ClipIt returned an invalid agent identity response.")
+        return identity
 
     def _headers(self) -> Dict[str, str]:
         return {

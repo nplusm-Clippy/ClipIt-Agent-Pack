@@ -26,6 +26,7 @@ Your agent will take it from there.
 - **Generate thumbnails** from a text description, in up to 4K
 - **Generate B-Roll** overlay images and video, including start/end frame transitions
 - **Render and export** in the format, aspect ratio, and quality you need
+- **Deliver finished enterprise clips** for client review without selecting on the client's behalf
 - **Publish and schedule** to 13 social platforms (YouTube, TikTok, Instagram, Facebook, LinkedIn, X, Bluesky, Threads, Pinterest, Reddit, Telegram, Snapchat, Google Business)
 - **Track performance** — post metrics, platform breakdowns, top clips
 - **Watch your spend** — check credit balance and estimate costs before anything paid runs
@@ -83,7 +84,98 @@ hermes skills tap add nplusm-Clippy/ClipIt-Agent-Pack
 hermes skills install clipper/video-management clipper/clip-creation clipper/export-rendering clipper/thumbnail-generation clipper/caption-generation clipper/broll-generation clipper/social-publishing clipper/account-insights clipper/machine-payments
 ```
 
-Add `CLIPPER_API_KEY` and `CLIPPER_BASE_URL=https://clipit.dev` to `~/.hermes/.env` or the equivalent environment file for that runtime.
+For ordinary personal usage, add `CLIPPER_API_KEY` and `CLIPPER_BASE_URL=https://clipit.dev` to `~/.hermes/.env` or the equivalent environment file for that runtime.
+
+### ClipIt Team Only: Enterprise Workspace Profiles
+
+Enterprise workspace keys are for the ClipIt team operating contracted client workspaces. They are not a normal-user feature and must not be placed in the shared Hermes `CLIPPER_API_KEY` environment variable. Create one named ClipIt CLI profile per workspace so personal and client authority cannot be mixed:
+
+This workflow requires ClipIt CLI 0.2.6 or newer.
+
+```bash
+npm install -g @clipit-ai/cli@latest
+clipit auth set-key --stdin --profile "enterprise-client-slug"
+clipit auth use "enterprise-client-slug"
+python scripts/verify_enterprise_workspace.py \
+  --workspace-id "<workspace-id-from-admin-dashboard>" \
+  --profile "enterprise-client-slug"
+```
+
+Paste the workspace key only into the CLI's hidden prompt; never save it in chat, shell history, the repository, or Hermes' global environment. `clipit auth use` makes that non-default profile active for both the CLI and Python scripts. An explicit `CLIPIT_PROFILE="enterprise-client-slug"` remains available for one-command isolation. The Python scripts deliberately ignore ambient personal `CLIPPER_API_KEY` and `CLIPPER_BASE_URL` settings whenever a non-default profile is active.
+
+The identity preflight must pass before any client operation. It verifies the exact workspace ID, active status, team-operator authority, and enterprise usage-only billing. Then list the client's uploaded source assets and register the selected video for processing:
+
+```bash
+python scripts/list_assets.py --type video
+python scripts/use_library_video.py --asset-id "<asset-id>"
+python scripts/list_videos.py
+```
+
+`list_assets.py` shows raw client uploads. `use_library_video.py` idempotently creates the processing `videoId` used by the normal transcription, clipping, rendering, and publishing scripts. Do not use `list_videos.py` as the workspace identity check.
+
+For a manual clip without captions, use the following exact sequence. Snapshot initialization and rendering repeat the expected workspace/profile preflight, explicitly pin the same settings, and disable automatic reframing:
+
+```bash
+python scripts/create_clip.py \
+  --video-id "<video-id>" \
+  --start 0 \
+  --end 30 \
+  --title "Client-facing title"
+
+python scripts/initialize_editor_snapshot.py \
+  --workspace-id "<workspace-id-from-admin-dashboard>" \
+  --profile "enterprise-client-slug" \
+  --clip-id "<clip-id>" \
+  --aspect-ratio 9:16 \
+  --fit-background blur \
+  --quality high \
+  --no-captions \
+  --caption-style minimal
+
+python scripts/render_clip.py \
+  --workspace-id "<workspace-id-from-admin-dashboard>" \
+  --profile "enterprise-client-slug" \
+  --clip-id "<clip-id>" \
+  --aspect-ratio 9:16 \
+  --quality high \
+  --no-captions \
+  --caption-style minimal \
+  --no-auto-reframe \
+  --wait
+
+python scripts/start_export.py \
+  --clip-id "<clip-id>" \
+  --aspect-ratio 9:16 \
+  --reframe-mode fit \
+  --fit-background blur \
+  --resolution 1080p \
+  --wait
+```
+
+If captions are desired, transcribe before creating/rendering the clip, then change **both** the initializer and render commands to the same explicit caption choice:
+
+```bash
+python scripts/transcribe_video.py --video-id "<video-id>" --wait
+# Use --captions --caption-style minimal on both snapshot initialization and render.
+```
+
+Transcription is also required before `suggest_clips.py`; it is not required for a manual no-caption clip. Changing aspect ratio, quality, caption enablement/style, or framing after initialization makes the export snapshot stale, so reinitialize intentionally if those choices change.
+
+After export completion, place that exact export in the client's **Delivered Clips** tab:
+
+```bash
+python scripts/deliver_export.py \
+  --workspace-id "<workspace-id-from-admin-dashboard>" \
+  --export-id "<completed-export-id>" \
+  --title "Client-facing title"
+
+python scripts/list_deliverables.py \
+  --workspace-id "<workspace-id-from-admin-dashboard>" \
+  --export-id "<completed-export-id>" \
+  --status ready
+```
+
+Both delivery scripts repeat the authoritative workspace identity preflight. Delivery creates `ready` review state only; the client must select the clip in the portal before the workspace key can publish it. After client selection, confirm with `list_deliverables.py --status selected`. A retry of an already delivered export resolves the existing exact delivery and reports `replayed: true` without changing client authority.
 
 ### OpenClaw and Other CLI Agents
 
@@ -114,15 +206,17 @@ Or call `GET /api/v1/agent/instructions?target=<your-framework>&format=markdown`
 python scripts/list_videos.py      # or: clipit videos list
 ```
 
-Any successful response — even an empty list — means you're connected. A `401` means the key was entered incorrectly; re-copy it from ClipIt Settings. A `403` names the missing permission; enable it on the key in **Settings → API Keys**. With the CLI installed, `clipit doctor --json` reports connectivity, auth state, and the active profile in one shot.
+For an ordinary personal key, any successful response — even an empty list — means you're connected. A `401` means the key was entered incorrectly; re-copy it from ClipIt Settings. A `403` names the missing permission; enable it on the key in **Settings → API Keys**. With the CLI installed, `clipit doctor --json` reports connectivity, auth state, and the active profile in one shot.
+
+For an enterprise workspace key, a successful personal-library request is not proof of the correct connection. Run `verify_enterprise_workspace.py` with the named profile and expected workspace ID; continue only when it returns `"verified": true` for that workspace.
 
 ## Skills
 
 | Skill | What It Does | Key Scripts |
 |-------|-------------|-------------|
 | [video-management](clipper/video-management/SKILL.md) | Use enterprise library sources; import, upload, list, transcribe, and delete videos | `list_assets.py`, `use_library_video.py`, `transcribe_video.py` |
-| [clip-creation](clipper/clip-creation/SKILL.md) | AI clip suggestions, create, edit, render, download | `suggest_clips.py`, `create_clip.py`, `render_clip.py` |
-| [export-rendering](clipper/export-rendering/SKILL.md) | Export jobs and download URLs | `start_export.py`, `wait_for_export.py`, `download_export.py` |
+| [clip-creation](clipper/clip-creation/SKILL.md) | AI clip suggestions, canonical workspace snapshots, create, edit, render, download | `suggest_clips.py`, `create_clip.py`, `initialize_editor_snapshot.py`, `render_clip.py` |
+| [export-rendering](clipper/export-rendering/SKILL.md) | Canonical exports, downloads, and enterprise client delivery | `start_export.py`, `deliver_export.py`, `list_deliverables.py`, `download_export.py` |
 | [thumbnail-generation](clipper/thumbnail-generation/SKILL.md) | AI thumbnails from text descriptions | `generate_thumbnail.py` |
 | [caption-generation](clipper/caption-generation/SKILL.md) | Word-level captions with style presets | `generate_captions.py`, `update_captions.py` |
 | [broll-generation](clipper/broll-generation/SKILL.md) | AI B-Roll image and video overlays | `plan_broll.py`, `generate_broll.py` |
@@ -178,6 +272,8 @@ python scripts/schedule_social_post.py \
 ```
 
 `--export-id` is optional when only one completed export exactly matches the current editor snapshot; use it to resolve an otherwise ambiguous delivery-state. Ordinary API keys retain comma-separated `--platforms` plus `--account-ids platform=id,...` support. Enterprise workspace publishing records usage for reporting but does not debit the client $CLIP balance; ordinary keys keep normal publishing charges and approval rules.
+
+Use `deliver_export.py` to create the client's `ready` review item, then `list_deliverables.py --status selected` to confirm that the client granted publishing authority. These scripts cannot select or unselect for the client.
 
 ## Credits & Costs
 
