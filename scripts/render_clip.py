@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render a clip via AWS Lambda (Remotion). Returns a downloadable video.
+"""Render a personal clip or a deliberate no-caption enterprise clip.
 
 Usage:
   python render_clip.py --clip-id <id> [--aspect-ratio 9:16] [--quality high]
@@ -30,22 +30,20 @@ def render_clip(
             raise RuntimeError(
                 "Enterprise workspace renders require a named ClipIt profile."
             )
-        if not isinstance(body.get("includeCaptions"), bool):
-            raise RuntimeError(
-                "Enterprise workspace renders require an explicit caption choice."
-            )
-        if body.get("captionStyle") not in CAPTION_STYLES:
-            raise RuntimeError(
-                "Enterprise workspace renders require an explicit caption style."
-            )
-        if body.get("autoReframe") is not False:
-            raise RuntimeError(
-                "Enterprise canonical renders require auto reframing to be disabled."
-            )
         require_enterprise_workspace_scope(
             client.get_agent_identity(),
             expected_workspace_id=workspace_id,
         )
+        if (
+            body.get("includeCaptions") is not False
+            or "captionStyle" in body
+            or body.get("autoReframe") is not False
+        ):
+            raise RuntimeError(
+                "Direct captioned enterprise render is disabled because it can "
+                "replace exact caption settings. Use "
+                "run_enterprise_exact_delivery.py instead."
+            )
     return client.post(f"/api/v1/clips/{clip_id}/render", body)
 
 
@@ -62,19 +60,19 @@ def main():
         "--captions",
         dest="include_captions",
         action="store_true",
-        help="Render captions; enterprise calls must match snapshot initialization",
+        help="Render captions for personal clips; enterprise captions use the exact recipe",
     )
     captions.add_argument(
         "--no-captions",
         dest="include_captions",
         action="store_false",
-        help="Render without captions; enterprise calls must match initialization",
+        help="Render without captions; allowed for a matching enterprise snapshot",
     )
     parser.set_defaults(include_captions=True)
     parser.add_argument(
         "--caption-style",
         choices=sorted(CAPTION_STYLES),
-        help="Caption style; required explicitly for enterprise renders",
+        help="Legacy coarse caption style for personal renders",
     )
     parser.add_argument("--watermark", action="store_true", default=False)
     reframing = parser.add_mutually_exclusive_group()

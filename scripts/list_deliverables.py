@@ -2,7 +2,7 @@
 """List ready or client-selected deliverables in one enterprise workspace.
 
 Usage:
-  python list_deliverables.py --workspace-id <id> [--status ready|selected]
+  python list_deliverables.py --workspace-id <id> --profile <name> [--status ready|selected]
 """
 
 import argparse
@@ -16,6 +16,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="List exact-workspace enterprise deliverables"
     )
+    parser.add_argument("--profile", required=True, help="Named ClipIt CLI profile")
     parser.add_argument(
         "--workspace-id",
         required=True,
@@ -27,7 +28,7 @@ def main():
     parser.add_argument("--offset", type=int, default=0, help="Pagination offset")
     args = parser.parse_args()
 
-    client = ClipperClient()
+    client = ClipperClient(profile=args.profile)
     print_json(list_enterprise_deliverables(
         client,
         args.workspace_id,

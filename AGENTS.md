@@ -24,10 +24,10 @@ For an enterprise clip, use this exact authority-preserving sequence:
 2. Run `list_assets.py --type video`, select an asset, run `use_library_video.py --asset-id <asset-id>`, and confirm the resulting processing video with `list_videos.py`.
 3. Run `transcribe_video.py --video-id <video-id> --wait` before captioned renders or AI clip suggestions. Manual clips without captions do not require transcription.
 4. Create the clip with `create_clip.py`.
-5. Run `initialize_editor_snapshot.py` with the exact workspace, clip, aspect ratio, fit background, quality, and explicit caption choice. Its safe default is `--no-captions --caption-style minimal`.
-6. Run `render_clip.py` with the same aspect ratio, quality, and caption choice, plus `--workspace-id <expected-id> --profile <profile> --no-auto-reframe --wait`.
-7. Run `start_export.py` with export framing that matches the snapshot, wait for completion, then run `deliver_export.py` to create a `ready` deliverable.
-8. Leave selection to the client. The agent may confirm `selected` with `list_deliverables.py`, but it must never select or publish a merely `ready` deliverable.
+5. Run `initialize_editor_snapshot.py` with the exact workspace, clip, aspect ratio, fit background, quality, and caption choice. For captions, pass the full approved object with `--caption-style-json @style.json` and retain the returned version/hash/settings revision. For no captions, use `--no-captions` and omit every style flag.
+6. For captioned enterprise work, run `run_enterprise_exact_delivery.py` with that exact identity, style object, max-usage cap, and explicit outro policy. Inspect the read-only plan before `--confirm`; resume its durable receipt until completed. Direct captioned `render_clip.py` calls are blocked because the legacy endpoint can replace exact fields. The deliberate no-caption path remains available with `--no-captions --no-auto-reframe`.
+7. Require the recipe receipt to prove the caption-style hash, snapshot lineage, output fingerprint, outro policy, artifact duration, and render/export/delivery IDs. `deliver_export.py` is only a recovery path for an already eligible export; it reads exact export lineage and accepts no caller title/note.
+8. Leave selection to the client. The agent may confirm `selected` with `list_deliverables.py --workspace-id <expected-id> --profile <profile>`, but it must never select or publish a merely `ready` deliverable.
 
 Changing aspect ratio, quality, caption enablement/style, or framing after initialization makes the snapshot stale. Reinitialize intentionally instead of bypassing the export identity check.
 
@@ -35,7 +35,7 @@ Changing aspect ratio, quality, caption enablement/style, or framing after initi
 
 - Each capability is documented in `clipper/<skill>/SKILL.md` — read the relevant one before acting. Skills: video-management, clip-creation, export-rendering, thumbnail-generation, caption-generation, broll-generation, social-publishing, account-insights, machine-payments.
 - Every script in `scripts/` is a thin REST binding with `--help`.
-- **Cost preflight:** ordinary API keys spend the user's $CLIP credits on rendering, exports, B-Roll, thumbnails, and social posts. Check `python scripts/get_credits_balance.py` and `python scripts/estimate_cost.py` before paid operations, and confirm with the user before spending. Enterprise workspace keys record usage without debiting the client balance; social publishing still requires explicit approval.
+- **Cost preflight:** ordinary API keys may check balance before paid operations. Enterprise usage-only keys intentionally cannot read owner balance/history; use `estimate_cost.py --max-credits <n>` or the exact recipe preflight and report internal estimated usage separately from `clientCreditChargeClip: 0`. Continue only when affordability, the approval cap, and spend limits all pass.
 - **Credit top-ups:** when credits are insufficient, read `clipper/machine-payments/SKILL.md`, discover live rails and products, and create a payable attempt only after explicit approval or a configured budget policy.
 - Long-running jobs: poll renders with `scripts/wait_for_job.py`, exports with `scripts/wait_for_export.py` (exports use a different endpoint — do not mix them up).
 - Live, permission-scoped operating instructions: `python scripts/get_agent_instructions.py --target generic --format markdown`.
@@ -44,4 +44,5 @@ Changing aspect ratio, quality, caption enablement/style, or framing after initi
 
 - Never write the API key into files, logs, chat, or prompts.
 - Never operate on enterprise content until the named-profile identity preflight matches the expected workspace ID.
+- Never approximate an approved enterprise style, silently omit a field, invent delivery copy, or ask the client to repair/save the editor. Return one product-owned blocked state when the exact contract cannot be satisfied.
 - Treat publishing to social platforms and credit-spending operations as user-approval checkpoints.

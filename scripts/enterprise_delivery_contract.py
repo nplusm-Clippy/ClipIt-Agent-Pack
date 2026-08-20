@@ -1,5 +1,6 @@
-"""Fail-closed helpers for enterprise ready-deliverable operations."""
+"""Fail-closed helpers for exact enterprise ready-deliverable operations."""
 
+import re
 from typing import Any, Dict, Optional
 
 try:
@@ -10,6 +11,10 @@ except ImportError:
 
 class EnterpriseDeliveryContractError(ValueError):
     """Raised when workspace delivery scope or response data is invalid."""
+
+
+SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
+MEDIA_DURATION_TOLERANCE_SECONDS = 0.15
 
 
 def _non_empty_string(value: Any) -> Optional[str]:
@@ -34,6 +39,7 @@ def _require_deliverable(
     workspace_id: str,
     export_id: Optional[str] = None,
     required_status: Optional[str] = None,
+    expectations: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     if not isinstance(value, dict):
         raise EnterpriseDeliveryContractError("Enterprise deliverable is invalid.")
@@ -59,7 +65,105 @@ def _require_deliverable(
         raise EnterpriseDeliveryContractError(
             f"Enterprise deliverable status is not {required_status}."
         )
+    if expectations is not None:
+        verification = value.get("verification")
+        if not isinstance(verification, dict):
+            raise EnterpriseDeliveryContractError(
+                "Enterprise deliverable is missing exact verification."
+            )
+        exact_fields = set(expectations) - {"artifactDuration"}
+        if any(verification.get(field) != expectations[field] for field in exact_fields):
+            raise EnterpriseDeliveryContractError(
+                "Enterprise deliverable verification does not match the exact export."
+            )
+        verified_duration = verification.get("artifactDuration")
+        approved_duration = expectations.get("artifactDuration")
+        if (
+            isinstance(verified_duration, bool)
+            or not isinstance(verified_duration, (int, float))
+            or isinstance(approved_duration, bool)
+            or not isinstance(approved_duration, (int, float))
+            or abs(verified_duration - approved_duration)
+            > MEDIA_DURATION_TOLERANCE_SECONDS
+        ):
+            raise EnterpriseDeliveryContractError(
+                "Enterprise deliverable duration does not match the approved export."
+            )
     return value
+
+
+def _require_sha256(value: Any, field: str) -> str:
+    if not isinstance(value, str) or not SHA256_PATTERN.fullmatch(value):
+        raise EnterpriseDeliveryContractError(
+            f"Completed export is missing exact {field}."
+        )
+    return value
+
+
+def require_completed_export_expectations(
+    client: Any,
+    export_id: str,
+) -> Dict[str, Any]:
+    export = client.get(f"/api/v1/exports/{export_id}")
+    if not isinstance(export, dict) or export.get("id") != export_id:
+        raise EnterpriseDeliveryContractError(
+            "ClipIt returned a different export than requested."
+        )
+    if export.get("status") != "completed":
+        raise EnterpriseDeliveryContractError(
+            "Only a completed export can become a ready deliverable."
+        )
+    enterprise_execution_id = _non_empty_string(export.get("enterpriseExecutionId"))
+    snapshot_id = _non_empty_string(export.get("snapshotId"))
+    editor_version = export.get("editorVersion")
+    include_outro = export.get("includeOutro")
+    artifact_duration = export.get("artifactDuration")
+    approved_artifact_duration = export.get("approvedArtifactDuration")
+    if not enterprise_execution_id:
+        raise EnterpriseDeliveryContractError(
+            "Completed export is missing enterprise execution lineage."
+        )
+    if not snapshot_id:
+        raise EnterpriseDeliveryContractError(
+            "Completed export is missing its canonical snapshot ID."
+        )
+    if isinstance(editor_version, bool) or not isinstance(editor_version, int) or editor_version < 1:
+        raise EnterpriseDeliveryContractError(
+            "Completed export is missing its canonical editor version."
+        )
+    if not isinstance(include_outro, bool):
+        raise EnterpriseDeliveryContractError(
+            "Completed export is missing its approved outro policy."
+        )
+    if (
+        isinstance(artifact_duration, bool)
+        or not isinstance(artifact_duration, (int, float))
+        or artifact_duration <= 0
+        or isinstance(approved_artifact_duration, bool)
+        or not isinstance(approved_artifact_duration, (int, float))
+        or approved_artifact_duration <= 0
+        or abs(artifact_duration - approved_artifact_duration)
+        > MEDIA_DURATION_TOLERANCE_SECONDS
+    ):
+        raise EnterpriseDeliveryContractError(
+            "Completed export duration does not match its approved output policy."
+        )
+    return {
+        "enterpriseExecutionId": enterprise_execution_id,
+        "snapshotId": snapshot_id,
+        "editorVersion": editor_version,
+        "editorStateHash": _require_sha256(
+            export.get("editorStateHash"), "editor-state hash"
+        ),
+        "outputObjectFingerprint": _require_sha256(
+            export.get("outputObjectFingerprint"), "output object fingerprint"
+        ),
+        "captionStyleHash": _require_sha256(
+            export.get("captionStyleHash"), "caption-style hash"
+        ),
+        "includeOutro": include_outro,
+        "artifactDuration": approved_artifact_duration,
+    }
 
 
 def _list_params(
@@ -143,29 +247,18 @@ def deliver_export_to_client(
     client: Any,
     expected_workspace_id: str,
     export_id: str,
-    title: str,
-    note: Optional[str] = None,
 ) -> Dict[str, Any]:
-    """Create a ready delivery; never select on the client's behalf."""
+    """Create one exact ready delivery; never select or label it on the client's behalf."""
     scope = require_workspace_preflight(client, expected_workspace_id)
     workspace_id = scope["workspaceId"]
     export_id = _non_empty_string(export_id)
-    title = _non_empty_string(title)
     if not export_id:
         raise EnterpriseDeliveryContractError("Export ID is required.")
-    if not title or len(title) > 255:
-        raise EnterpriseDeliveryContractError("Title must be 1-255 characters.")
-    if note is not None:
-        note = note.strip()
-        if len(note) > 2000:
-            raise EnterpriseDeliveryContractError(
-                "Note must not exceed 2,000 characters."
-            )
-        note = note or None
-
-    body: Dict[str, Any] = {"exportId": export_id, "title": title}
-    if note is not None:
-        body["note"] = note
+    expectations = require_completed_export_expectations(client, export_id)
+    body: Dict[str, Any] = {
+        "exportId": export_id,
+        "expectations": expectations,
+    }
     try:
         response = client.post("/api/v1/deliverables", body)
     except ClipperError as error:
@@ -182,6 +275,12 @@ def deliver_export_to_client(
             raise EnterpriseDeliveryContractError(
                 "Existing delivery could not be resolved uniquely after DELIVERY_EXISTS."
             ) from error
+        _require_deliverable(
+            existing[0],
+            workspace_id,
+            export_id=export_id,
+            expectations=expectations,
+        )
         return {"deliverable": existing[0], "replayed": True}
 
     if not isinstance(response, dict):
@@ -193,5 +292,6 @@ def deliver_export_to_client(
         workspace_id,
         export_id=export_id,
         required_status="ready",
+        expectations=expectations,
     )
     return {"deliverable": deliverable, "replayed": False}

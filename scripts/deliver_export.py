@@ -2,9 +2,10 @@
 """Place one completed export in an enterprise client's Delivered Clips tab.
 
 Usage:
-  python deliver_export.py --workspace-id <id> --export-id <id> --title <title>
+  python deliver_export.py --workspace-id <id> --export-id <id> --profile <name>
 
-This creates a ready deliverable only. The client selects publishing authority.
+ClipIt derives the title and note from the bound canonical snapshot. This creates
+a ready deliverable only; the client retains publishing authority.
 """
 
 import argparse
@@ -24,17 +25,14 @@ def main():
         help="Expected workspace ID from the ClipIt admin dashboard",
     )
     parser.add_argument("--export-id", required=True, help="Completed export ID")
-    parser.add_argument("--title", required=True, help="Client-facing clip title")
-    parser.add_argument("--note", help="Optional client-facing note")
+    parser.add_argument("--profile", required=True, help="Named ClipIt CLI profile")
     args = parser.parse_args()
 
-    client = ClipperClient()
+    client = ClipperClient(profile=args.profile)
     print_json(deliver_export_to_client(
         client,
         args.workspace_id,
         args.export_id,
-        args.title,
-        note=args.note,
     ))
 
 

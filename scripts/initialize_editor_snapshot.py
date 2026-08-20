@@ -9,6 +9,11 @@ from clipper_client import (
     print_json,
     require_enterprise_workspace_scope,
 )
+from exact_caption_style_contract import (
+    ExactCaptionStyleContractError,
+    parse_json_object,
+    require_exact_caption_style_readback,
+)
 
 
 def initialize_editor_snapshot(
@@ -19,7 +24,8 @@ def initialize_editor_snapshot(
     fit_background="blur",
     quality="high",
     include_captions=False,
-    caption_style="minimal",
+    caption_style=None,
+    caption_preset_id=None,
 ):
     if client.profile_name == "default":
         raise RuntimeError(
@@ -29,15 +35,19 @@ def initialize_editor_snapshot(
         client.get_agent_identity(),
         expected_workspace_id=workspace_id,
     )
+    body = {
+        "aspectRatio": aspect_ratio,
+        "fitBackground": fit_background,
+        "quality": quality,
+        "includeCaptions": include_captions,
+    }
+    if include_captions and caption_style is not None:
+        body["captionStyle"] = caption_style
+    if include_captions and caption_preset_id is not None:
+        body["captionPresetId"] = caption_preset_id
     response = client.post(
         f"/api/v1/clips/{clip_id}/editor-snapshot/initialize",
-        {
-            "aspectRatio": aspect_ratio,
-            "fitBackground": fit_background,
-            "quality": quality,
-            "includeCaptions": include_captions,
-            "captionStyle": caption_style,
-        },
+        body,
     )
     if not isinstance(response, dict):
         raise RuntimeError("ClipIt returned an invalid editor snapshot response.")
@@ -49,11 +59,17 @@ def initialize_editor_snapshot(
         raise RuntimeError("ClipIt did not return a canonical editor state hash.")
     if response.get("captionsEnabled") is not include_captions:
         raise RuntimeError("ClipIt initialized different caption settings than requested.")
-    caption_preset_id = response.get("captionPresetId")
-    if include_captions and not isinstance(caption_preset_id, str):
-        raise RuntimeError("ClipIt did not return the canonical caption preset.")
-    if not include_captions and caption_preset_id is not None:
+    returned_caption_preset_id = response.get("captionPresetId")
+    if not include_captions and returned_caption_preset_id is not None:
         raise RuntimeError("ClipIt unexpectedly enabled a canonical caption preset.")
+    if caption_preset_id is not None and returned_caption_preset_id != caption_preset_id:
+        raise RuntimeError("ClipIt initialized a different caption preset than requested.")
+    if include_captions:
+        require_exact_caption_style_readback(
+            response,
+            clip_id,
+            caption_style if isinstance(caption_style, dict) else {},
+        )
     return {
         **response,
         "workspaceId": scope["workspaceId"],
@@ -99,13 +115,42 @@ def main():
         help="Initialize without captions (default)",
     )
     parser.set_defaults(include_captions=False)
-    parser.add_argument(
+    style = parser.add_mutually_exclusive_group()
+    style.add_argument(
         "--caption-style",
-        default="minimal",
         choices=["bold", "minimal", "neon", "classic"],
-        help="Canonical caption style (default: minimal)",
+        help="Legacy coarse caption style",
+    )
+    style.add_argument(
+        "--caption-preset-id",
+        choices=[
+            "hormozi",
+            "mrbeast",
+            "minimal-white",
+            "netflix",
+            "tiktok-viral",
+            "podcast",
+            "gaming-neon",
+            "karaoke",
+        ],
+        help="Named canonical caption preset",
+    )
+    style.add_argument(
+        "--caption-style-json",
+        help="Exact style JSON object or @path/to/style.json",
     )
     args = parser.parse_args()
+
+    caption_style = args.caption_style
+    if args.caption_style_json:
+        try:
+            caption_style = parse_json_object(args.caption_style_json)
+        except ExactCaptionStyleContractError as exc:
+            parser.error(str(exc))
+    if not args.include_captions and (
+        caption_style is not None or args.caption_preset_id is not None
+    ):
+        parser.error("caption style options require --captions")
 
     client = ClipperClient(profile=args.profile)
     print_json(initialize_editor_snapshot(
@@ -116,7 +161,8 @@ def main():
         fit_background=args.fit_background,
         quality=args.quality,
         include_captions=args.include_captions,
-        caption_style=args.caption_style,
+        caption_style=caption_style,
+        caption_preset_id=args.caption_preset_id,
     ))
 
 

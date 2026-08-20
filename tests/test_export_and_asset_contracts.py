@@ -78,6 +78,15 @@ class ExportContractTests(unittest.TestCase):
 
         self.assertEqual(body["idempotencyKey"], "same-export-retry-1")
 
+    def test_exact_duration_no_outro_policy_is_preserved(self):
+        body, _ = prepare_export_start_request(
+            ExportClient(),
+            "clip-current",
+            {"includeOutro": False},
+        )
+
+        self.assertIs(body["includeOutro"], False)
+
     def test_conflicting_editor_pin_fails_closed(self):
         with self.assertRaisesRegex(ExportContractError, "conflicts"):
             prepare_export_start_request(

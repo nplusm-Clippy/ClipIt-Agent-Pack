@@ -22,14 +22,14 @@ Your agent will take it from there.
 - **Transcribe** with word-level timing and speaker labels
 - **Find viral moments** automatically and suggest ready-to-cut clips
 - **Create and edit clips** with precise start/end timing
-- **Caption** with styled presets (bold, neon, minimal, classic, tiktok-viral) or custom fonts and colors
+- **Caption** with presets or exact canonical style fields such as scale, words per line, position, animation, and highlights
 - **Generate thumbnails** from a text description, in up to 4K
 - **Generate B-Roll** overlay images and video, including start/end frame transitions
 - **Render and export** in the format, aspect ratio, and quality you need
 - **Deliver finished enterprise clips** for client review without selecting on the client's behalf
 - **Publish and schedule** to 13 social platforms (YouTube, TikTok, Instagram, Facebook, LinkedIn, X, Bluesky, Threads, Pinterest, Reddit, Telegram, Snapchat, Google Business)
 - **Track performance** — post metrics, platform breakdowns, top clips
-- **Watch your spend** — check credit balance and estimate costs before anything paid runs
+- **Watch your spend** — preflight internal usage, client charge, and approval caps before anything paid runs
 - **Top up autonomously with approval** — discover direct x402, Stripe-managed x402, and Stripe Link MPP rails when credits run low
 
 ## Example Requests
@@ -90,7 +90,7 @@ For ordinary personal usage, add `CLIPPER_API_KEY` and `CLIPPER_BASE_URL=https:/
 
 Enterprise workspace keys are for the ClipIt team operating contracted client workspaces. They are not a normal-user feature and must not be placed in the shared Hermes `CLIPPER_API_KEY` environment variable. Create one named ClipIt CLI profile per workspace so personal and client authority cannot be mixed:
 
-This workflow requires ClipIt CLI 0.2.6 or newer.
+This workflow requires the current ClipIt CLI/server contract exposing `deliverEnterpriseClipExact` and least-privilege credit preflight.
 
 ```bash
 npm install -g @clipit-ai/cli@latest
@@ -113,7 +113,7 @@ python scripts/list_videos.py
 
 `list_assets.py` shows raw client uploads. `use_library_video.py` idempotently creates the processing `videoId` used by the normal transcription, clipping, rendering, and publishing scripts. Do not use `list_videos.py` as the workspace identity check.
 
-For a manual clip without captions, use the following exact sequence. Snapshot initialization and rendering repeat the expected workspace/profile preflight, explicitly pin the same settings, and disable automatic reframing:
+For a captioned enterprise clip, put the complete approved style in `style.json`, including every requested scale, line, position, animation, and highlight field. Initialize the canonical snapshot, then use the idempotent exact-delivery recipe:
 
 ```bash
 python scripts/create_clip.py \
@@ -129,53 +129,49 @@ python scripts/initialize_editor_snapshot.py \
   --aspect-ratio 9:16 \
   --fit-background blur \
   --quality high \
-  --no-captions \
-  --caption-style minimal
+  --captions \
+  --caption-style-json @style.json
 
-python scripts/render_clip.py \
+python scripts/run_enterprise_exact_delivery.py \
   --workspace-id "<workspace-id-from-admin-dashboard>" \
   --profile "enterprise-client-slug" \
   --clip-id "<clip-id>" \
-  --aspect-ratio 9:16 \
-  --quality high \
-  --no-captions \
-  --caption-style minimal \
-  --no-auto-reframe \
-  --wait
-
-python scripts/start_export.py \
-  --clip-id "<clip-id>" \
-  --aspect-ratio 9:16 \
-  --reframe-mode fit \
-  --fit-background blur \
-  --resolution 1080p \
+  --style-json @style.json \
+  --expected-editor-version "<initializer-editor-version>" \
+  --expected-editor-state-hash "<initializer-editor-state-hash>" \
+  --expected-clip-settings-revision "<initializer-settings-revision>" \
+  --max-credits 15 \
+  --no-outro \
+  --confirm \
   --wait
 ```
 
-If captions are desired, transcribe before creating/rendering the clip, then change **both** the initializer and render commands to the same explicit caption choice:
+The recipe first returns a read-only plan with exact target/source/snapshot identity, normalized style/hash, render state, internal usage, zero enterprise client charge, cap decision, and explicit outro policy. `--confirm` advances only that plan hash. If it returns `processing`, reuse its resume token with the plan hash, caption-style hash, and expected final duration from the receipt; completed stages are not repeated. The final receipt must contain render/export/delivery IDs plus the exact caption hash, output fingerprint, snapshot lineage, outro policy, and artifact duration.
+
+Transcribe before any captioned clip or AI suggestion:
 
 ```bash
 python scripts/transcribe_video.py --video-id "<video-id>" --wait
-# Use --captions --caption-style minimal on both snapshot initialization and render.
 ```
 
-Transcription is also required before `suggest_clips.py`; it is not required for a manual no-caption clip. Changing aspect ratio, quality, caption enablement/style, or framing after initialization makes the export snapshot stale, so reinitialize intentionally if those choices change.
+For a deliberate no-caption enterprise clip, initialize with `--no-captions` and omit every caption-style flag. The no-caption `render_clip.py --no-captions --no-auto-reframe` path remains available. Direct captioned enterprise rendering is blocked because the legacy endpoint can replace exact style fields. Never ask the client to open the editor, save, or reply when a requested capability is unavailable; return one product-owned blocked state.
 
-After export completion, place that exact export in the client's **Delivered Clips** tab:
+The recipe creates the ready delivery automatically. To recover a completed eligible export independently, the fail-closed delivery command reads its exact lineage and lets ClipIt derive canonical title/note copy:
 
 ```bash
 python scripts/deliver_export.py \
   --workspace-id "<workspace-id-from-admin-dashboard>" \
   --export-id "<completed-export-id>" \
-  --title "Client-facing title"
+  --profile "enterprise-client-slug"
 
 python scripts/list_deliverables.py \
   --workspace-id "<workspace-id-from-admin-dashboard>" \
+  --profile "enterprise-client-slug" \
   --export-id "<completed-export-id>" \
   --status ready
 ```
 
-Both delivery scripts repeat the authoritative workspace identity preflight. Delivery creates `ready` review state only; the client must select the clip in the portal before the workspace key can publish it. After client selection, confirm with `list_deliverables.py --status selected`. A retry of an already delivered export resolves the existing exact delivery and reports `replayed: true` without changing client authority.
+Both delivery scripts repeat the authoritative workspace identity preflight. Delivery requires enterprise execution, snapshot version/hash, caption hash, output fingerprint, outro policy, and probed duration to match; caller-supplied titles/notes are not accepted. Delivery creates `ready` review state only; the client must select the clip in the portal before the workspace key can publish it. A retry resolves the existing exact delivery with `replayed: true` without changing client authority.
 
 ### OpenClaw and Other CLI Agents
 
@@ -215,10 +211,10 @@ For an enterprise workspace key, a successful personal-library request is not pr
 | Skill | What It Does | Key Scripts |
 |-------|-------------|-------------|
 | [video-management](clipper/video-management/SKILL.md) | Use enterprise library sources; import, upload, list, transcribe, and delete videos | `list_assets.py`, `use_library_video.py`, `transcribe_video.py` |
-| [clip-creation](clipper/clip-creation/SKILL.md) | AI clip suggestions, canonical workspace snapshots, create, edit, render, download | `suggest_clips.py`, `create_clip.py`, `initialize_editor_snapshot.py`, `render_clip.py` |
-| [export-rendering](clipper/export-rendering/SKILL.md) | Canonical exports, downloads, and enterprise client delivery | `start_export.py`, `deliver_export.py`, `list_deliverables.py`, `download_export.py` |
+| [clip-creation](clipper/clip-creation/SKILL.md) | AI clip suggestions, canonical workspace snapshots, exact enterprise delivery, personal render/download | `suggest_clips.py`, `initialize_editor_snapshot.py`, `run_enterprise_exact_delivery.py`, `render_clip.py` |
+| [export-rendering](clipper/export-rendering/SKILL.md) | Canonical exports, exact enterprise recipes, downloads, and client delivery | `run_enterprise_exact_delivery.py`, `start_export.py`, `deliver_export.py`, `download_export.py` |
 | [thumbnail-generation](clipper/thumbnail-generation/SKILL.md) | AI thumbnails from text descriptions | `generate_thumbnail.py` |
-| [caption-generation](clipper/caption-generation/SKILL.md) | Word-level captions with style presets | `generate_captions.py`, `update_captions.py` |
+| [caption-generation](clipper/caption-generation/SKILL.md) | Word-level captions, presets, and exact canonical enterprise styles | `generate_captions.py`, `set_caption_style.py`, `update_captions.py` |
 | [broll-generation](clipper/broll-generation/SKILL.md) | AI B-Roll image and video overlays | `plan_broll.py`, `generate_broll.py` |
 | [social-publishing](clipper/social-publishing/SKILL.md) | Exact-artifact, exact-account posting/scheduling to 13 platforms | `list_social_accounts.py`, `post_to_social.py`, `schedule_social_post.py` |
 | [account-insights](clipper/account-insights/SKILL.md) | Credits, cost estimates, analytics | `get_credits_balance.py`, `estimate_cost.py`, `get_top_clips.py` |
@@ -232,11 +228,12 @@ Each skill requires specific API key permissions. The **Connect an Agent** flow 
 |------------|---------------------|
 | video-management | `file_upload`, `url_extraction`, `video_processing`, `transcription` |
 | clip-creation, export-rendering | `clip_generation` |
+| exact enterprise delivery recipe | `clippy_agent`, `clip_generation`, `caption_generation` (no `credits_read`) |
 | thumbnail-generation | `thumbnail_generation` |
 | caption-generation | `caption_generation` |
 | broll-generation | `broll_generation` |
 | social-publishing | `social_publishing`, `clip_generation` (exact delivery-state preflight) |
-| account-insights | none — every key can read its own credits and analytics |
+| account-insights | least-privilege preflight requires an active key; balance/history still require `credits_read` and are intentionally unavailable to usage-only workspace keys |
 | machine-payments | none beyond an active API key; payment signing stays in the user's wallet or Link payer |
 | asset uploads | `file_upload` |
 | orchestration | `clippy_agent` |
@@ -273,7 +270,7 @@ python scripts/schedule_social_post.py \
 
 `--export-id` is optional when only one completed export exactly matches the current editor snapshot; use it to resolve an otherwise ambiguous delivery-state. Ordinary API keys retain comma-separated `--platforms` plus `--account-ids platform=id,...` support. Enterprise workspace publishing records usage for reporting but does not debit the client $CLIP balance; ordinary keys keep normal publishing charges and approval rules.
 
-Use `deliver_export.py` to create the client's `ready` review item, then `list_deliverables.py --status selected` to confirm that the client granted publishing authority. These scripts cannot select or unselect for the client.
+Use `deliver_export.py` to create the client's `ready` review item, then `list_deliverables.py --profile <name> --status selected` to confirm that the client granted publishing authority. These scripts cannot select or unselect for the client.
 
 ## Credits & Costs
 
@@ -289,11 +286,11 @@ Ordinary API keys consume [$CLIP credits](https://clipit.dev) at the same rates 
 | Social post | 65 $CLIP per platform |
 | Clip render / export | Varies by duration and quality |
 
-**Ordinary-key agents: always preflight paid operations** — check the balance and estimate first, and confirm with the user before spending. Enterprise workspace keys may still estimate for reporting, but they do not require client balance:
+**Always preflight paid operations.** Ordinary keys may check balance. Enterprise workspace keys must use the least-privilege preflight, which reports internal usage and cap decisions without exposing owner balance/history; `clientCreditChargeClip` remains zero:
 
 ```bash
 python scripts/get_credits_balance.py
-python scripts/estimate_cost.py --operation-type lambda_render --provider aws_lambda --model-id remotion-4.0 videoSeconds=45
+python scripts/estimate_cost.py --profile "enterprise-client-slug" --operation-type lambda_render --provider aws_lambda --model-id remotion-4.0 --max-credits 15 videoSeconds=45
 ```
 
 ## Async Operations

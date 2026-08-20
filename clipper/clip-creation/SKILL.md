@@ -31,7 +31,7 @@ Use this skill when the user wants to:
 
 **Prerequisite:** The video must be imported first (use the video-management skill). Transcription is required for captions and AI suggestions, but not for a manual no-caption clip.
 
-**Cost preflight:** For AI suggestions and rendering, use the account-insights skill first: `get_credits_balance.py` to check balance, then `estimate_cost.py` when duration/model metrics are known.
+**Cost preflight:** For AI suggestions and rendering, use account-insights first. Ordinary keys may check balance; enterprise usage-only keys use `estimate_cost.py --max-credits <n>` and report internal usage separately from the zero client charge.
 
 ## Quick Reference
 
@@ -44,6 +44,7 @@ Use this skill when the user wants to:
 | Update clip | `update_clip.py --clip-id <id> [--start] [--end] [--title] [--caption]` | Free |
 | Delete clip | `delete_clip.py --clip-id <id>` | Free |
 | Initialize enterprise snapshot | `initialize_editor_snapshot.py --workspace-id <id> --clip-id <id>` | Free |
+| Exact enterprise render/export/deliver | `run_enterprise_exact_delivery.py --workspace-id <id> --clip-id <id> --profile <name> --style-json @style.json --max-credits <n> --confirm` | Varies |
 | Render clip | `render_clip.py --clip-id <id> [--aspect-ratio 9:16] [--wait]` | Varies |
 | Download rendered clip | `download_clip.py --clip-id <id>` | Free |
 
@@ -87,7 +88,7 @@ python scripts/create_clip.py --video-id vid_abc123 --start 120.0 --end 155.5 --
 
 ### Rendering a Clip
 
-**When to use:** The user wants a downloadable video file. Rendering applies captions, aspect ratio, and quality settings.
+**When to use:** A personal-key user wants a downloadable video file. Enterprise workspace clips use the exact recipe below.
 
 **Steps:**
 1. Check credits with `python scripts/get_credits_balance.py` from account-insights
@@ -103,7 +104,7 @@ python scripts/create_clip.py --video-id vid_abc123 --start 120.0 --end 155.5 --
 - `--caption-style` — `bold`, `minimal`, `neon`, `classic`
 - `--watermark` — add ClipIt watermark (default: no)
 - `--auto-reframe` / `--no-auto-reframe` — enable or disable automatic subject framing
-- `--workspace-id` and `--profile` — require an exact named enterprise workspace preflight before rendering
+- `--workspace-id` — rejects direct enterprise rendering and points to the exact-delivery recipe, preventing legacy caption-style overwrite
 
 **Example:**
 ```bash
@@ -131,7 +132,7 @@ python scripts/render_clip.py --clip-id clip_xyz --aspect-ratio 9:16 --quality h
    ```bash
    python scripts/transcribe_video.py --video-id "<video-id>" --wait
    ```
-4. Create the clip, then initialize its canonical editor snapshot. Caption intent is explicit; the safe no-caption default is shown:
+4. Create the clip, then initialize its canonical editor snapshot with the approved exact style. For an exact TikTok Viral request, place the full object (including scale, words-per-line, position, animation, and highlights) in `style.json`:
    ```bash
    python scripts/create_clip.py \
      --video-id "<video-id>" \
@@ -146,34 +147,27 @@ python scripts/render_clip.py --clip-id clip_xyz --aspect-ratio 9:16 --quality h
      --aspect-ratio 9:16 \
      --fit-background blur \
      --quality high \
-     --no-captions \
-     --caption-style minimal
+     --captions \
+     --caption-style-json @style.json
    ```
-5. Render with the same aspect ratio, quality, and caption choice. Keep automatic reframing off so the render does not replace the snapshot's full-frame authority:
+5. Run the exact recipe with the version/hash/settings revision returned by initialization. The recipe preflights all capabilities and cost before approval, then resumes render/export/delivery from a durable checkpoint:
    ```bash
-   python scripts/render_clip.py \
+   python scripts/run_enterprise_exact_delivery.py \
      --workspace-id "<expected-workspace-id>" \
      --profile "enterprise-client-slug" \
      --clip-id "<clip-id>" \
-     --aspect-ratio 9:16 \
-     --quality high \
-     --no-captions \
-     --caption-style minimal \
-     --no-auto-reframe \
+     --style-json @style.json \
+     --expected-editor-version "<initializer-editor-version>" \
+     --expected-editor-state-hash "<initializer-editor-state-hash>" \
+     --expected-clip-settings-revision "<initializer-settings-revision>" \
+     --max-credits 15 \
+     --no-outro \
+     --confirm \
      --wait
    ```
-6. Export with matching framing, then use the export-rendering skill to deliver the completed export as `ready`:
-   ```bash
-   python scripts/start_export.py \
-     --clip-id "<clip-id>" \
-     --aspect-ratio 9:16 \
-     --reframe-mode fit \
-     --fit-background blur \
-     --resolution 1080p \
-     --wait
-   ```
+6. Verify the final receipt has the approved `captionStyleHash`, outro policy, snapshot lineage, output fingerprint, artifact duration, and render/export/delivery IDs. Delivery creates `ready` review state only; client selection remains client authority.
 
-For captions, use `--captions --caption-style <style>` on **both** `initialize_editor_snapshot.py` and `render_clip.py`. If any aspect, quality, caption, or framing choice changes, initialize a new canonical snapshot intentionally before exporting. Delivery creates `ready` review state only; client selection remains client authority.
+Never use direct `render_clip.py --workspace-id ...` for enterprise work; its legacy four-style request can replace exact fields. If a requested field is unsupported, return one product-owned blocked state rather than asking the client to edit and save manually.
 
 ### Downloading a Rendered Clip
 
@@ -191,8 +185,8 @@ For captions, use `--captions --caption-style <style>` on **both** `initialize_e
 - **Changing clip timing invalidates the render.** If you update start/end times with `update_clip.py`, the previous render is stale — re-render before downloading.
 - **Download URLs expire.** Each call to `download_clip.py` generates a fresh signed URL. Don't cache them.
 - **Credits vary by render duration and quality.** A 60-second 4K render costs more than a 15-second standard render. Use account-insights before bulk renders.
-- **Enterprise settings must match the canonical snapshot.** Use the same aspect ratio, quality, and explicit caption choice for initialization and rendering, and use `--no-auto-reframe`. Reinitialize if those choices change.
-- **A workspace ID is not enough by itself.** Enterprise initialization and rendering must pass the exact named-profile identity preflight; never fall back to a personal key.
+- **Enterprise exactness is acceptance, not best effort.** The normalized caption object/hash, snapshot identity, source binding, outro policy, and final duration must all match before delivery.
+- **A workspace ID is not enough by itself.** Enterprise initialization and the exact recipe must pass the named-profile identity preflight; never fall back to a personal key.
 
 ## Verification
 
@@ -200,4 +194,5 @@ For captions, use `--captions --caption-style <style>` on **both** `initialize_e
 - **Clip created:** Response includes a `clipId` (non-empty string) and status 201
 - **Render succeeded:** Job status is `completed` and `result.renderUrl` is a valid URL
 - **Enterprise snapshot pinned:** Initialization returns the requested `clipId`, an integer `editorVersion`, an `editorStateHash`, and the requested caption state
+- **Enterprise receipt complete:** Exact recipe returns `state: "completed"` with render/export/delivery IDs and verified caption, snapshot, output-fingerprint, outro, and duration lineage
 - **Download URL works:** The URL from `download_clip.py` returns a video file when fetched (Content-Type: video/mp4)

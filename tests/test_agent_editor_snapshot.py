@@ -5,6 +5,17 @@ from scripts.render_clip import render_clip
 
 
 WORKSPACE_ID = "11111111-1111-4111-8111-111111111111"
+EXACT_STYLE = {
+    "fontFamily": "Inter",
+    "fontSize": 44,
+    "fontSizeScale": 2,
+    "fontWeight": 800,
+    "color": "#ffffff",
+    "backgroundColor": "transparent",
+    "position": "bottom",
+    "wordsPerLine": 2,
+    "animation": "pop",
+}
 
 
 def workspace_identity(workspace_id=WORKSPACE_ID):
@@ -35,6 +46,10 @@ class FakeClient:
     def post(self, path, body=None):
         self.calls.append((path, body))
         if path.endswith("/editor-snapshot/initialize"):
+            captions_enabled = body.get("includeCaptions") is True
+            caption_style = body.get("captionStyle")
+            if captions_enabled and not isinstance(caption_style, dict):
+                caption_style = EXACT_STYLE.copy()
             return {
                 "schema": "clipit_agent_editor_snapshot",
                 "version": 1,
@@ -47,8 +62,13 @@ class FakeClient:
                 "aspectRatio": "9:16",
                 "fitBackground": "blur",
                 "quality": "1080p",
-                "captionsEnabled": False,
-                "captionPresetId": None,
+                "captionsEnabled": captions_enabled,
+                "captionPresetId": (
+                    body.get("captionPresetId")
+                    or ("gaming-neon" if body.get("captionStyle") == "neon" else None)
+                ),
+                "captionStyle": caption_style if captions_enabled else None,
+                "captionStyleHash": "c" * 64 if captions_enabled else None,
             }
         if path.endswith("/render"):
             return {"jobId": "job-1", "status": "queued"}
@@ -79,23 +99,12 @@ class AgentEditorSnapshotTests(unittest.TestCase):
                     "fitBackground": "blur",
                     "quality": "high",
                     "includeCaptions": False,
-                    "captionStyle": "minimal",
                 },
             ),
         ])
 
     def test_initialization_sends_explicit_caption_style_when_enabled(self):
         client = FakeClient()
-        original_post = client.post
-
-        def post(path, body=None):
-            response = original_post(path, body)
-            response["captionsEnabled"] = True
-            response["captionPresetId"] = "neon-glow"
-            return response
-
-        client.post = post
-
         result = initialize_editor_snapshot(
             client,
             WORKSPACE_ID,
@@ -105,9 +114,24 @@ class AgentEditorSnapshotTests(unittest.TestCase):
         )
 
         self.assertTrue(result["captionsEnabled"])
-        self.assertEqual(result["captionPresetId"], "neon-glow")
+        self.assertEqual(result["captionPresetId"], "gaming-neon")
         self.assertEqual(client.calls[-1][1]["includeCaptions"], True)
         self.assertEqual(client.calls[-1][1]["captionStyle"], "neon")
+
+    def test_initialization_round_trips_exact_caption_style_and_hash(self):
+        client = FakeClient()
+
+        result = initialize_editor_snapshot(
+            client,
+            WORKSPACE_ID,
+            "clip-1",
+            include_captions=True,
+            caption_style=EXACT_STYLE,
+        )
+
+        self.assertEqual(result["captionStyle"], EXACT_STYLE)
+        self.assertEqual(result["captionStyleHash"], "c" * 64)
+        self.assertEqual(client.calls[-1][1]["captionStyle"], EXACT_STYLE)
 
     def test_initialization_rejects_default_personal_profile_before_network(self):
         client = FakeClient(profile_name="default")
@@ -117,13 +141,35 @@ class AgentEditorSnapshotTests(unittest.TestCase):
 
         self.assertEqual(client.calls, [])
 
-    def test_enterprise_render_preflights_and_preserves_no_auto_reframe(self):
+    def test_enterprise_direct_render_is_blocked_before_mutation(self):
         client = FakeClient()
         body = {
             "aspectRatio": "9:16",
             "quality": "high",
             "includeCaptions": False,
             "captionStyle": "minimal",
+            "watermark": False,
+            "autoReframe": False,
+        }
+
+        with self.assertRaisesRegex(RuntimeError, "exact caption settings"):
+            render_clip(
+                client,
+                "clip-1",
+                body,
+                workspace_id=WORKSPACE_ID,
+            )
+
+        self.assertEqual(client.calls, [
+            ("identity", None),
+        ])
+
+    def test_enterprise_no_caption_render_preserves_legacy_capability(self):
+        client = FakeClient()
+        body = {
+            "aspectRatio": "9:16",
+            "quality": "high",
+            "includeCaptions": False,
             "watermark": False,
             "autoReframe": False,
         }
@@ -136,47 +182,7 @@ class AgentEditorSnapshotTests(unittest.TestCase):
         )
 
         self.assertEqual(result["jobId"], "job-1")
-        self.assertEqual(client.calls, [
-            ("identity", None),
-            ("/api/v1/clips/clip-1/render", body),
-        ])
-
-    def test_enterprise_render_rejects_implicit_caption_or_reframe_settings(self):
-        unsafe_bodies = [
-            {
-                "aspectRatio": "9:16",
-                "quality": "high",
-                "watermark": False,
-                "autoReframe": False,
-            },
-            {
-                "aspectRatio": "9:16",
-                "quality": "high",
-                "includeCaptions": False,
-                "watermark": False,
-                "autoReframe": False,
-            },
-            {
-                "aspectRatio": "9:16",
-                "quality": "high",
-                "includeCaptions": False,
-                "captionStyle": "minimal",
-                "watermark": False,
-                "autoReframe": True,
-            },
-        ]
-
-        for body in unsafe_bodies:
-            with self.subTest(body=body):
-                client = FakeClient()
-                with self.assertRaises(RuntimeError):
-                    render_clip(
-                        client,
-                        "clip-1",
-                        body,
-                        workspace_id=WORKSPACE_ID,
-                    )
-                self.assertEqual(client.calls, [])
+        self.assertEqual(client.calls[-1], ("/api/v1/clips/clip-1/render", body))
 
     def test_wrong_workspace_fails_before_snapshot_or_render_mutation(self):
         client = FakeClient()

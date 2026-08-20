@@ -26,6 +26,7 @@ def parse_json_object(value):
 def main():
     parser = argparse.ArgumentParser(description="Start a ClipIt export rendering job")
     parser.add_argument("--clip-id", required=True, help="Clip ID to export")
+    parser.add_argument("--profile", help="Named ClipIt CLI profile")
     parser.add_argument("--project-id", help="Optional project ID")
     parser.add_argument("--sequence-id", help="Optional sequence ID")
     parser.add_argument("--start", type=float, help="Export start time in seconds")
@@ -58,6 +59,20 @@ def main():
     parser.add_argument("--audio-sample-rate", type=int, default=48000)
     parser.add_argument("--include-audio", dest="include_audio", action="store_true", default=True)
     parser.add_argument("--no-audio", dest="include_audio", action="store_false")
+    outro = parser.add_mutually_exclusive_group()
+    outro.add_argument(
+        "--include-outro",
+        dest="include_outro",
+        action="store_true",
+        help="Append the four-second ClipIt outro (default)",
+    )
+    outro.add_argument(
+        "--no-outro",
+        dest="include_outro",
+        action="store_false",
+        help="Preserve the exact content duration without the ClipIt outro",
+    )
+    parser.set_defaults(include_outro=True)
     parser.add_argument("--audio-volume", type=float, help="Audio volume 0-100")
     parser.add_argument("--audio-muted", action="store_true", help="Mute exported audio")
     parser.add_argument("--playback-rate", type=float, help="Playback speed 0.25-4")
@@ -105,6 +120,7 @@ def main():
             "aspectRatio": args.aspect_ratio,
             "reframeMode": args.reframe_mode,
             "includeAudio": args.include_audio,
+            "includeOutro": args.include_outro,
         }
     )
 
@@ -154,7 +170,7 @@ def main():
     if metadata:
         body["metadata"] = metadata
 
-    client = ClipperClient()
+    client = ClipperClient(profile=args.profile)
     body, editor_state = prepare_export_start_request(
         client,
         args.clip_id,
@@ -179,6 +195,7 @@ def main():
         "snapshotId": editor_state["snapshotId"],
         "expectedEditorVersion": body["expectedEditorVersion"],
         "expectedEditorStateHash": body["expectedEditorStateHash"],
+        "includeOutro": body["includeOutro"],
         "idempotencyKey": body["idempotencyKey"],
     })
 

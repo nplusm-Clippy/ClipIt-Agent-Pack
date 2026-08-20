@@ -30,7 +30,7 @@ Use this skill when the user wants to:
 
 **Supported platforms:** YouTube, TikTok, Instagram, Facebook, LinkedIn, Twitter/X, Bluesky, Threads, Pinterest, Reddit, Telegram, Snapchat, Google Business.
 
-**Prerequisite:** The clip MUST have one completed export that exactly matches its current canonical editor snapshot. Use `start_export.py --wait` from the export-rendering skill. The publishing scripts read `/api/v1/clips/:clipId/delivery-state` and fail closed unless they can pin the exact `exportId`, editor `snapshotId`, and output-object fingerprint. For enterprise, first create a `ready` review item with `deliver_export.py`; the client must then select it in the portal. Confirm that authority with `list_deliverables.py --status selected`.
+**Prerequisite:** The clip MUST have one completed export that exactly matches its current canonical editor snapshot. For enterprise, use the exact-delivery recipe so style, export lineage, outro policy, artifact duration, and ready-deliverable state are verified together; the client must then select it in the portal. Confirm authority with the named profile and `list_deliverables.py --status selected`.
 
 **Account setup:** Ordinary users connect accounts in ClipIt Settings. Enterprise clients connect accounts in their workspace portal, and an admin grants the exact accounts that Hermes may use. The API cannot connect or grant accounts; it can only list and publish through already-connected/authorized accounts.
 
@@ -47,7 +47,7 @@ Use account-insights before an ordinary-key post: `get_credits_balance.py` shows
 | Operation | Script | Cost |
 |-----------|--------|------|
 | List connected accounts | `list_social_accounts.py` | Free |
-| Check selected enterprise deliveries | `list_deliverables.py --workspace-id <id> --status selected` | Free |
+| Check selected enterprise deliveries | `list_deliverables.py --workspace-id <id> --profile <name> --status selected` | Free |
 | Post immediately | `post_to_social.py --clip-id <id> --platform linkedin --account-id <accountId> --caption "..." [--export-id <id>] [--wait]` | Ordinary: 65 $CLIP/platform; enterprise: usage-only, 0 client debit |
 | Schedule post | `schedule_social_post.py --clip-id <id> --platform linkedin --account-id <accountId> --caption "..." --scheduled-for <iso> [--export-id <id>]` | Ordinary: billed at post time; enterprise: usage-only, 0 client debit |
 | Check post status | `get_social_post.py --post-id <id>` | Free |
@@ -76,7 +76,7 @@ Use account-insights before an ordinary-key post: `get_credits_balance.py` shows
 - For enterprise, the clip/export must belong to a client-selected deliverable and the target account grant must still be active.
 
 **Steps:**
-1. For enterprise, run `python scripts/list_deliverables.py --workspace-id <id> --status selected --export-id <id>` and confirm the exact export is selected.
+1. For enterprise, run `python scripts/list_deliverables.py --workspace-id <id> --profile <name> --status selected --export-id <id>` and confirm the exact export is selected.
 2. Run `python scripts/list_social_accounts.py` and copy the exact `accountId` for the intended platform.
 3. Run `python scripts/post_to_social.py --clip-id <id> --platform linkedin --account-id <accountId> --caption "Your caption here" --wait`.
 4. If delivery-state reports multiple exact-current exports, rerun with `--export-id <id>` to select one explicitly.
@@ -144,7 +144,7 @@ python scripts/post_to_social.py \
 - **Never identify an account by display name.** Refresh `list_social_accounts.py` and pin its exact `accountId`. Revoked enterprise grants disappear from this list.
 - **Enterprise means one account per request.** Run a separate approved request for each platform/account. Do not combine enterprise platforms.
 - **Enterprise identity must be proven first.** A successful personal-library request is not workspace proof; require `verify_enterprise_workspace.py` for the expected workspace ID.
-- **Agents cannot select client authority.** `deliver_export.py` creates `ready` only. Wait for the client to select in the portal and verify `selected` with `list_deliverables.py`.
+- **Agents cannot select client authority.** The recipe and `deliver_export.py` create `ready` only. Wait for the client to select in the portal and verify `selected` with the same named profile.
 - **YouTube requires `--title`.** If you're posting to YouTube without a title, the API returns 400. Always include `--title` when YouTube is in the platforms list.
 - **Ordinary posts cost 65 $CLIP per platform.** Check account-insights and confirm before publishing. Enterprise workspace keys use `enterprise_usage_only`: usage is measured but the client balance is not debited.
 - **Scheduled posts aren't free to cancel.** While no credits are charged until the post fires, cancelling at the last second might not work if the post is already in the posting queue.

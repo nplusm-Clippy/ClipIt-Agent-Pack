@@ -35,7 +35,7 @@ Estimate before expensive paid work: render/export, B-Roll generation, thumbnail
 | Operation | Script | Cost |
 |-----------|--------|------|
 | Check credits | `get_credits_balance.py` | Free |
-| Estimate cost | `estimate_cost.py --operation-type <type> --provider <provider> key=value` | Free |
+| Preflight cost/cap | `estimate_cost.py --operation-type <type> --provider <provider> [--max-credits <n>] key=value` | Free |
 | Analytics overview | `get_analytics_overview.py [--days 30]` | Free |
 | Analytics by platform | `get_analytics_overview.py --by-platform [--days 30]` | Free |
 | Top clips | `get_top_clips.py [--metric views] [--limit 10]` | Free |
@@ -45,7 +45,7 @@ Estimate before expensive paid work: render/export, B-Roll generation, thumbnail
 
 ### Checking Credits
 
-**When to use:** Before any operation that spends $CLIP or when the user asks about account balance.
+**When to use:** For ordinary personal keys when the user asks about account balance. Enterprise usage-only workspace keys intentionally cannot read owner balance/history; use the cost preflight below instead.
 
 **Steps:**
 1. Run `python scripts/get_credits_balance.py`
@@ -63,8 +63,9 @@ python scripts/get_credits_balance.py
 
 **Steps:**
 1. Choose the operation, provider, optional model, and numeric metrics
-2. Run `estimate_cost.py` with metrics as `key=value` pairs
-3. Continue only if `affordable` is true and no spend-limit violation is returned
+2. Run `estimate_cost.py` with metrics as `key=value` pairs and the approved `--max-credits` cap when one exists
+3. Continue only if `affordable` and `withinApprovalCap` are true and no spend-limit violation is returned
+4. Report `internalEstimatedUsageClip` separately from `clientCreditChargeClip`; enterprise usage-only work must show a zero client charge
 
 **Examples:**
 ```bash
@@ -75,9 +76,11 @@ python scripts/estimate_cost.py \
   videoSeconds=120
 
 python scripts/estimate_cost.py \
+  --profile <workspace-profile> \
   --operation-type lambda_render \
   --provider aws_lambda \
   --model-id remotion-4.0 \
+  --max-credits 15 \
   videoSeconds=45
 ```
 
@@ -93,7 +96,8 @@ python scripts/estimate_cost.py \
 
 ## Pitfalls
 
-- **Use $CLIP fields.** The API also returns base units internally. These scripts print the `*Clip` values for user-facing cost decisions.
+- **Separate usage from charge.** `internalEstimatedUsageClip` is operational usage, while `clientCreditChargeClip` is the client debit. Enterprise usage-only work reports the former and charges zero.
+- **Do not request enterprise balance.** Workspace keys intentionally lack `credits_read`; `/api/v1/credits/preflight` evaluates cost and caps without disclosing balance/history.
 - **Estimates require the right metrics.** For render/export, use `videoSeconds`. Provider/model names must match what the metering service expects.
 - **Analytics depends on published posts.** Empty analytics can simply mean no connected social metrics have been captured yet.
 - **Spend limits can block an affordable balance.** If `spendLimitViolation` is present, do not start the paid operation with the same API key.
@@ -101,6 +105,6 @@ python scripts/estimate_cost.py \
 ## Verification
 
 - **Balance checked:** Response includes `balanceClip` and `units: "clip"`
-- **Estimate succeeded:** Response includes `estimatedCostClip`, `affordable`, and `balanceClip`
+- **Preflight succeeded:** Response includes `internalEstimatedUsageClip`, `clientCreditChargeClip`, `settlementMode`, `affordable`, and `withinApprovalCap`, with no balance field
 - **Analytics loaded:** Overview contains totals such as `totalViews` or platform rows
 - **Top clips loaded:** Response is an array of clips/posts with a selected metric value
