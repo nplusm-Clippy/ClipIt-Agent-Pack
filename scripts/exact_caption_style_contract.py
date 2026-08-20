@@ -3,7 +3,7 @@
 import json
 import re
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 try:
     from .clipper_client import require_enterprise_workspace_scope
@@ -12,6 +12,14 @@ except ImportError:
 
 
 SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
+CAPTION_STYLE_DIRECTIVE_PATTERN = re.compile(
+    r"^[ \t]*[Cc][Aa][Pp][Tt][Ii][Oo][Nn][Ss]?[ \t]+[Ss][Ii][Zz][Ee][ \t]+"
+    r"(?P<percent>(?:[5-9][0-9](?:\.[0-9]+)?|[12][0-9]{2}(?:\.[0-9]+)?|300(?:\.0+)?))"
+    r"[ \t]*%[ \t]+"
+    r"(?P<layout>(?:[Aa][Uu][Tt][Oo]|[Ss][Tt][Aa][Cc][Kk][Ee][Dd]|"
+    r"[Ss][Ii][Nn][Gg][Ll][Ee](?:[ \t]*-[ \t]*[Ll][Ii][Nn][Ee]|[ \t]+[Ll][Ii][Nn][Ee])?))"
+    r"\.?[ \t]*\Z",
+)
 
 
 class ExactCaptionStyleContractError(ValueError):
@@ -38,6 +46,25 @@ def parse_json_object(value: str) -> Dict[str, Any]:
             "Exact caption style must be a JSON object."
         )
     return parsed
+
+
+def parse_caption_style_directive(value: str) -> Dict[str, Any]:
+    match = CAPTION_STYLE_DIRECTIVE_PATTERN.fullmatch(value)
+    if len(value) > 80 or not match:
+        raise ExactCaptionStyleContractError(
+            "Caption directive must use the exact form "
+            "'caption size <50-300>% <auto|single|single-line|stacked>'."
+        )
+    percent = float(match.group("percent"))
+    if percent < 50 or percent > 300:
+        raise ExactCaptionStyleContractError(
+            "Caption size percentage must be between 50% and 300%."
+        )
+    layout = match.group("layout").lower()
+    return {
+        "fontSizeScale": percent / 100,
+        "captionLineMode": "single-line" if layout.startswith("single") else layout,
+    }
 
 
 def require_exact_caption_style_readback(
@@ -77,11 +104,21 @@ def set_exact_caption_style(
     client: Any,
     workspace_id: str,
     clip_id: str,
-    style: Dict[str, Any],
+    style: Optional[Dict[str, Any]],
     expected_editor_version: int,
     expected_editor_state_hash: str,
     expected_clip_settings_revision: int,
+    directive: Optional[str] = None,
 ) -> Dict[str, Any]:
+    if (style is None) == (directive is None):
+        raise ExactCaptionStyleContractError(
+            "Provide exactly one exact caption style object or caption directive."
+        )
+    if style is not None:
+        requested_style = style
+    else:
+        assert directive is not None
+        requested_style = parse_caption_style_directive(directive)
     if getattr(client, "profile_name", "default") == "default":
         raise ExactCaptionStyleContractError(
             "Enterprise workspace operations require a named ClipIt profile."
@@ -90,16 +127,20 @@ def set_exact_caption_style(
         client.get_agent_identity(),
         expected_workspace_id=workspace_id,
     )
+    body = {
+        "expectedEditorVersion": expected_editor_version,
+        "expectedEditorStateHash": expected_editor_state_hash,
+        "expectedClipSettingsRevision": expected_clip_settings_revision,
+    }
+    if style is not None:
+        body["captionStyle"] = style
+    else:
+        body["captionDirective"] = directive
     response = client.patch(
         f"/api/v1/clips/{clip_id}/editor-snapshot/caption-style",
-        {
-            "expectedEditorVersion": expected_editor_version,
-            "expectedEditorStateHash": expected_editor_state_hash,
-            "expectedClipSettingsRevision": expected_clip_settings_revision,
-            "captionStyle": style,
-        },
+        body,
     )
-    exact = require_exact_caption_style_readback(response, clip_id, style)
+    exact = require_exact_caption_style_readback(response, clip_id, requested_style)
     if exact.get("schema") != "clipit_exact_caption_style" or exact.get("version") != 1:
         raise ExactCaptionStyleContractError(
             "ClipIt returned an unsupported exact caption-style contract."

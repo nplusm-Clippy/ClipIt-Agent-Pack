@@ -14,6 +14,7 @@ EXACT_STYLE = {
     "backgroundColor": "transparent",
     "position": "bottom",
     "wordsPerLine": 2,
+    "captionLineMode": "single-line",
     "animation": "pop",
 }
 

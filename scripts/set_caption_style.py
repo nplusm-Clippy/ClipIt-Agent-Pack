@@ -26,11 +26,15 @@ def main():
     parser.add_argument("--workspace-id", required=True)
     parser.add_argument("--clip-id", required=True)
     parser.add_argument("--profile", required=True, help="Named ClipIt CLI profile")
-    parser.add_argument(
+    style_input = parser.add_mutually_exclusive_group(required=True)
+    style_input.add_argument(
         "--style-json",
-        required=True,
         type=parse_style,
         help="Exact style JSON object or @path/to/style.json",
+    )
+    style_input.add_argument(
+        "--directive",
+        help="Strict shorthand such as 'caption size 200%% single'",
     )
     parser.add_argument("--expected-editor-version", required=True, type=int)
     parser.add_argument("--expected-editor-state-hash", required=True)
@@ -46,6 +50,7 @@ def main():
         args.expected_editor_version,
         args.expected_editor_state_hash,
         args.expected_clip_settings_revision,
+        directive=args.directive,
     ))
 
 

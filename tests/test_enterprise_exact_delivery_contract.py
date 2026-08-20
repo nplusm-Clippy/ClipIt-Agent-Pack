@@ -5,6 +5,7 @@ from scripts.enterprise_exact_delivery_contract import (
     advance_enterprise_exact_delivery,
     preflight_enterprise_exact_delivery,
 )
+from scripts.exact_caption_style_contract import set_exact_caption_style
 from tests.test_agent_editor_snapshot import EXACT_STYLE, WORKSPACE_ID, workspace_identity
 
 
@@ -100,7 +101,92 @@ class FakeRecipeClient:
         return {"success": True, "result": self.results.pop(0)}
 
 
+class FakeSequentialClient(FakeRecipeClient):
+    def patch(self, path, body):
+        self.calls.append((path, body))
+        return {
+            "schema": "clipit_exact_caption_style",
+            "version": 1,
+            "updated": True,
+            "clipId": CLIP_ID,
+            "editorVersion": 8,
+            "editorStateHash": "e" * 64,
+            "clipSettingsRevision": 4,
+            "captionPresetId": None,
+            "captionStyle": EXACT_STYLE.copy(),
+            "captionStyleHash": STYLE_HASH,
+            "renderRequired": True,
+            "renderQueued": False,
+            "capability": {"unknownFields": "rejected"},
+        }
+
+
 class EnterpriseExactDeliveryContractTests(unittest.TestCase):
+    def test_style_mutation_identity_replaces_initializer_identity_for_preflight_and_advance(self):
+        next_plan = plan()
+        next_plan["target"] = {
+            **next_plan["target"],
+            "editorVersion": 8,
+            "editorStateHash": "e" * 64,
+            "clipSettingsRevision": 4,
+        }
+        client = FakeSequentialClient([next_plan, receipt()])
+
+        mutation = set_exact_caption_style(
+            client,
+            WORKSPACE_ID,
+            CLIP_ID,
+            EXACT_STYLE,
+            7,
+            "a" * 64,
+            3,
+        )
+        delivery_request = {
+            **REQUEST,
+            "expectedEditorVersion": mutation["editorVersion"],
+            "expectedEditorStateHash": mutation["editorStateHash"],
+            "expectedClipSettingsRevision": mutation["clipSettingsRevision"],
+            "captionStyle": mutation["captionStyle"],
+        }
+
+        approved = preflight_enterprise_exact_delivery(
+            client,
+            WORKSPACE_ID,
+            delivery_request,
+        )
+        preflight_parameters = client.calls[-1][1]["parameters"]
+        advance_enterprise_exact_delivery(
+            client,
+            approved,
+            delivery_request,
+            idempotency_key="mutation-identity-handoff",
+        )
+
+        mutation_body = client.calls[1][1]
+        self.assertEqual((
+            mutation_body["expectedEditorVersion"],
+            mutation_body["expectedEditorStateHash"],
+            mutation_body["expectedClipSettingsRevision"],
+        ), (7, "a" * 64, 3))
+        self.assertEqual((
+            preflight_parameters["expectedEditorVersion"],
+            preflight_parameters["expectedEditorStateHash"],
+            preflight_parameters["expectedClipSettingsRevision"],
+        ), (8, "e" * 64, 4))
+        self.assertEqual(preflight_parameters["captionStyle"], mutation["captionStyle"])
+        self.assertEqual(
+            approved["exactCaptionStyle"]["styleHash"],
+            mutation["captionStyleHash"],
+        )
+        advance_parameters = client.calls[-1][1]["parameters"]
+        self.assertEqual((
+            advance_parameters["expectedEditorVersion"],
+            advance_parameters["expectedEditorStateHash"],
+            advance_parameters["expectedClipSettingsRevision"],
+        ), (8, "e" * 64, 4))
+        self.assertEqual(advance_parameters["captionStyle"], mutation["captionStyle"])
+        self.assertEqual(advance_parameters["planHash"], approved["planHash"])
+
     def test_preflight_is_one_read_only_tool_call_with_exact_target(self):
         client = FakeRecipeClient([plan()])
 
