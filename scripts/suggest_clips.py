@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Find viral clip opportunities in a video using AI (Grok 4.20).
+"""Find clip opportunities through ClipIt's current inference route.
 
 Usage:
   python suggest_clips.py --video-id <id> [--count N] [--platforms tiktok,youtube]
   [--min-duration 15] [--max-duration 60]
 
 Returns JSON with clip opportunities: start/end times, titles, themes, confidence.
-Always waits for completion (suggestion takes 10-30s).
+Always waits for the returned job; retain its ID if the wait is interrupted.
 """
 
 import argparse

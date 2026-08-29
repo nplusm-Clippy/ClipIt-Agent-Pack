@@ -1,23 +1,18 @@
 ---
 name: clipper-social-publishing
-description: Post and schedule clips to 13 social media platforms via ClipIt
-version: 1.3.0
-author: nplusm-Clippy
+description: Inspect authorized social accounts and post, schedule, monitor, or cancel an exact-current ClipIt export with explicit artifact, account, copy, timing, and spend approval. Use for any social delivery or publishing-status request.
 license: MIT
-platforms: [macos, linux, windows]
 metadata:
+  version: "2.0.0"
   tags: [Video, ClipIt, Social Media, TikTok, YouTube, Instagram, Publishing, Scheduling]
   hermes:
     tags: [Video, ClipIt, Social Media, TikTok, YouTube, Instagram, Publishing, Scheduling]
     requires_toolsets: [terminal]
-required_environment_variables:
-  - name: CLIPPER_API_KEY
-    prompt: "Enter your ClipIt API key"
-    help: "Get one at https://clipit.dev -> Settings -> API Keys -> Quick Connect"
-    required_for: "ClipIt API access"
 ---
 
 # ClipIt Social Publishing
+
+Use with `clipit-operator` and `delivery-qa`. Prefer current `clipit social` commands or discovered MCP tools; use these Python scripts as the exact REST fallback. Refresh account IDs and delivery state immediately before every publish/schedule mutation.
 
 ## When to Use
 
@@ -40,18 +35,16 @@ Use this skill when the user wants to:
 
 **API key permissions:** The scripts require both `social_publishing` and `clip_generation`; `clip_generation` is needed to read canonical delivery-state before the publish call.
 
-Use account-insights before an ordinary-key post: `get_credits_balance.py` shows available $CLIP and `estimate_cost.py` can preflight known publishing costs. Enterprise workspace posts record usage for reporting but debit 0 client $CLIP credits.
+Run a live preflight and apply an approved cap before an ordinary-key post. Enterprise workspace posts report internal usage separately from `clientCreditChargeClip: 0`.
 
 ## Quick Reference
 
-| Operation | Script | Cost |
-|-----------|--------|------|
-| List connected accounts | `list_social_accounts.py` | Free |
-| Check selected enterprise deliveries | `list_deliverables.py --workspace-id <id> --profile <name> --status selected` | Free |
-| Post immediately | `post_to_social.py --clip-id <id> --platform linkedin --account-id <accountId> --caption "..." [--export-id <id>] [--wait]` | Ordinary: 65 $CLIP/platform; enterprise: usage-only, 0 client debit |
-| Schedule post | `schedule_social_post.py --clip-id <id> --platform linkedin --account-id <accountId> --caption "..." --scheduled-for <iso> [--export-id <id>]` | Ordinary: billed at post time; enterprise: usage-only, 0 client debit |
-| Check post status | `get_social_post.py --post-id <id>` | Free |
-| Cancel scheduled post | `cancel_social_post.py --post-id <id>` | Free |
+| Operation | Preferred path | REST fallback |
+|-----------|----------------|---------------|
+| List accounts | `clipit social accounts --json` | `list_social_accounts.py` |
+| Check selected enterprise delivery | `clipit deliverables list --status selected --json` | `list_deliverables.py --status selected` |
+| Post/schedule | `clipit social post|schedule ... --confirm --max-credits <cap> --json` | `post_to_social.py`; `schedule_social_post.py` |
+| Status/cancel | `clipit social get|cancel ...` | `get_social_post.py`; `cancel_social_post.py` |
 
 ## Procedure
 
@@ -78,10 +71,11 @@ Use account-insights before an ordinary-key post: `get_credits_balance.py` shows
 **Steps:**
 1. For enterprise, run `python scripts/list_deliverables.py --workspace-id <id> --profile <name> --status selected --export-id <id>` and confirm the exact export is selected.
 2. Run `python scripts/list_social_accounts.py` and copy the exact `accountId` for the intended platform.
-3. Run `python scripts/post_to_social.py --clip-id <id> --platform linkedin --account-id <accountId> --caption "Your caption here" --wait`.
-4. If delivery-state reports multiple exact-current exports, rerun with `--export-id <id>` to select one explicitly.
-5. For YouTube, include `--title "Video Title"`.
-6. The script automatically reads delivery-state and sends `exportId`, `expectedSnapshotId`, `expectedOutputObjectFingerprint`, `expectedAccountIds`, and `publishExactCurrentArtifact=true`. Never hand-build or weaken those pins.
+3. Present the exact current artifact, account, caption/title, immediate timing, live estimate, and cap; obtain publish approval.
+4. Prefer `clipit social post ... --confirm --max-credits <cap> --json`; use `post_to_social.py` only as the approved REST fallback.
+5. If delivery-state reports multiple exact-current exports, pin one with `--export-id <id>`.
+6. For YouTube, include the current required title field.
+7. The fallback automatically pins export/snapshot/output/account identity. Never hand-build or weaken those pins.
 
 **Example:**
 ```bash
@@ -112,12 +106,12 @@ python scripts/post_to_social.py \
 
 **Steps:**
 1. Refresh `list_social_accounts.py` and copy the exact authorized `accountId`.
-2. Run `python scripts/schedule_social_post.py --clip-id <id> --platform tiktok --account-id <accountId> --caption "..." --scheduled-for "2030-04-15T09:00:00Z" --wait`.
-3. Add `--export-id <id>` when delivery-state has more than one exact-current export.
-4. Enterprise schedules use one exact platform/account request and record usage without debiting client credits.
-5. The `--scheduled-for` value MUST be in the future (ISO 8601 format with timezone).
-6. Ordinary-key credits are not charged at scheduling time; they are charged when the post fires.
-7. The response includes either a completed schedule record or a `jobId`; `--wait` follows enterprise schedule registration jobs.
+2. Present the exact artifact/account/copy/time zone/time, live estimate, and cap; obtain schedule approval.
+3. Prefer `clipit social schedule ... --confirm --max-credits <cap> --json`; use `schedule_social_post.py` only as the approved REST fallback.
+4. Add `--export-id <id>` when delivery-state has more than one exact-current export.
+5. Enterprise schedules use one exact platform/account request and usage-only settlement.
+6. The scheduled timestamp must be in the future and include an explicit timezone.
+7. Retain any returned job ID and wait/resume the same schedule request.
 
 ### Checking Post Status
 
@@ -134,9 +128,9 @@ python scripts/post_to_social.py \
 **When to use:** The user wants to cancel a post before it goes out.
 
 **Steps:**
-1. Run `python scripts/cancel_social_post.py --post-id <id>`
-2. Only works on `scheduled` or `pending` status — cannot cancel already-posted content
-3. If the post was already sent to the scheduling queue, it's also cancelled there
+1. Re-read the exact post and obtain cancellation approval for its ID/account/time.
+2. Prefer `clipit social cancel <id> --confirm --json`; use the script only as an approved fallback.
+3. Cancellation applies only before the post has completed; verify the returned final state.
 
 ## Pitfalls
 
@@ -146,9 +140,9 @@ python scripts/post_to_social.py \
 - **Enterprise identity must be proven first.** A successful personal-library request is not workspace proof; require `verify_enterprise_workspace.py` for the expected workspace ID.
 - **Agents cannot select client authority.** The recipe and `deliver_export.py` create `ready` only. Wait for the client to select in the portal and verify `selected` with the same named profile.
 - **YouTube requires `--title`.** If you're posting to YouTube without a title, the API returns 400. Always include `--title` when YouTube is in the platforms list.
-- **Ordinary posts cost 65 $CLIP per platform.** Check account-insights and confirm before publishing. Enterprise workspace keys use `enterprise_usage_only`: usage is measured but the client balance is not debited.
+- **Do not use remembered publishing prices.** Preflight the exact artifact/destinations under the active profile and confirm against the approved cap. Enterprise usage-only settlement records usage without client debit.
 - **Scheduled posts aren't free to cancel.** While no credits are charged until the post fires, cancelling at the last second might not work if the post is already in the posting queue.
-- **Platform-specific character limits.** Twitter/X: 280 chars, TikTok: 2200 chars, Instagram: 2200 chars. The API validates these but it's better to respect them upfront.
+- **Platform limits change.** Use current platform validation/tool output for titles, captions, hashtags, duration, and scheduling constraints.
 - **Social setup stays in the web UI.** You cannot connect or grant an account through these scripts. Ordinary users use Settings; enterprise clients and admins use the enterprise portal/workspace controls.
 
 ## Verification

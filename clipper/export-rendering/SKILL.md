@@ -1,23 +1,18 @@
 ---
 name: clipper-export-rendering
-description: Start, wait for, download, and deliver ClipIt exports
-version: 1.1.0
-author: nplusm-Clippy
+description: Preflight, start, resume, inspect, download, and deliver ClipIt renders/exports tied to the current verified editor state. Use for format/quality output, export recovery, enterprise exact delivery, or client-selection checks.
 license: MIT
-platforms: [macos, linux, windows]
 metadata:
+  version: "2.0.0"
   tags: [Video, ClipIt, Export, Render, Download, Remotion]
   hermes:
     tags: [Video, ClipIt, Export, Render, Download, Remotion]
     requires_toolsets: [terminal]
-required_environment_variables:
-  - name: CLIPPER_API_KEY
-    prompt: "Enter your ClipIt API key"
-    help: "Get one at https://clipit.dev -> Settings -> API Keys -> Connect an Agent"
-    required_for: "ClipIt API access"
 ---
 
 # ClipIt Export Rendering
+
+Use with `clipit-operator` and run `delivery-qa` before a final export/delivery claim. Prefer `clipit exports`/`clipit deliverables` or discovered MCP tools; the Python scripts below remain the REST and enterprise-exactness fallback.
 
 ## When to Use
 
@@ -33,14 +28,11 @@ Exports are separate from generic jobs. Always poll export jobs with `GET /api/v
 
 ## Quick Reference
 
-| Operation | Script | Cost |
-|-----------|--------|------|
-| Start export | `start_export.py --clip-id <id> [--start 0] [--end 30] [--format mp4]` | Varies |
-| Wait for export | `wait_for_export.py --job-id <exportJobId>` | Free |
-| Download export | `download_export.py --job-id <exportJobId>` | Free |
-| Run exact enterprise delivery | `run_enterprise_exact_delivery.py --workspace-id <id> --clip-id <id> --profile <name> --style-json @style.json --max-credits <n> --confirm` | Varies |
-| Deliver eligible enterprise export | `deliver_export.py --workspace-id <id> --export-id <id> --profile <name>` | Free |
-| List enterprise deliveries | `list_deliverables.py --workspace-id <id> --profile <name> [--status ready\|selected]` | Free |
+| Operation | Preferred path | REST fallback |
+|-----------|----------------|---------------|
+| Start/wait/download export | `clipit exports start|wait|download ...` | `start_export.py`; `wait_for_export.py`; `download_export.py` |
+| Exact enterprise delivery | enterprise exact contract | `run_enterprise_exact_delivery.py ... --max-credits <cap> --confirm` |
+| Deliver/list enterprise output | `clipit deliverables create|list ...` | `deliver_export.py`; `list_deliverables.py` |
 
 ## Procedure
 
@@ -49,17 +41,10 @@ Exports are separate from generic jobs. Always poll export jobs with `GET /api/v
 **When to use:** The user wants a finished media file with specific export settings.
 
 **Steps:**
-1. Use account-insights first. Ordinary keys may check balance; enterprise usage-only keys must use the balance-free preflight.
-2. When duration is known, estimate render/export cost:
-   ```bash
-   python scripts/estimate_cost.py \
-     --operation-type lambda_render \
-     --provider aws_lambda \
-     --model-id remotion-4.0 \
-     videoSeconds=30
-   ```
-3. Run `python scripts/start_export.py --clip-id <id> --start 0 --end 30 --format mp4 --aspect-ratio 9:16 --wait`
-4. If you omit `--wait`, save the returned `exportJobId`
+1. Re-read the current delivery/editor state and run delivery QA for the intended output.
+2. Use the friendly CLI to preflight and start under the user's approved cap: `clipit exports start --clip-id <id> --params @export.json --confirm --max-credits <cap> --json`.
+3. Use `python scripts/start_export.py ...` only as the REST fallback after the same exact settings and approval are established.
+4. Save the returned export identity and wait with `clipit exports wait <jobId> --stream` or `wait_for_export.py`; do not use the generic job poller.
 
 `start_export.py` first reads `/api/v1/clips/{clipId}/delivery-state` and refuses to export unless ClipIt returns a verified `current_editor_snapshot`. It pins `expectedEditorVersion` and `expectedEditorStateHash` from that response and generates a new idempotency key for a new export. The script prints that non-secret key before sending the export request. If the outcome is unknown, retry the exact same export with that key via `--idempotency-key`; do not reuse it for a different export.
 
@@ -98,7 +83,7 @@ python scripts/run_enterprise_exact_delivery.py \
   --expected-editor-version "<initializer-editor-version>" \
   --expected-editor-state-hash "<initializer-editor-state-hash>" \
   --expected-clip-settings-revision "<initializer-settings-revision>" \
-  --max-credits 15 \
+  --max-credits "<approved-cap>" \
   --no-outro \
   --confirm \
   --wait

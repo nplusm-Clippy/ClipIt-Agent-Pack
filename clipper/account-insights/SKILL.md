@@ -1,23 +1,18 @@
 ---
 name: clipper-account-insights
-description: Check ClipIt credits, estimate costs, and inspect analytics
-version: 1.0.0
-author: nplusm-Clippy
+description: Inspect current ClipIt credit state, preflight paid work against a live estimate and spend cap, and review account, clip, post, or platform analytics. Use before metered operations or when the user asks about performance, affordability, usage, or top content.
 license: MIT
-platforms: [macos, linux, windows]
 metadata:
+  version: "2.0.0"
   tags: [ClipIt, Credits, Analytics, Cost Estimate, Reporting, Social Media]
   hermes:
     tags: [ClipIt, Credits, Analytics, Cost Estimate, Reporting, Social Media]
     requires_toolsets: [terminal]
-required_environment_variables:
-  - name: CLIPPER_API_KEY
-    prompt: "Enter your ClipIt API key"
-    help: "Get one at https://clipit.dev -> Settings -> API Keys -> Connect an Agent"
-    required_for: "ClipIt API access"
 ---
 
 # ClipIt Account Insights
+
+Use with `clipit-operator`. Prefer current `clipit credits` and `clipit analytics` commands or discovered MCP tools; the Python scripts below are compatible REST fallbacks. Never quote a remembered price: run the live preflight for the exact operation and metrics.
 
 ## When to Use
 
@@ -32,14 +27,11 @@ Estimate before expensive paid work: render/export, B-Roll generation, thumbnail
 
 ## Quick Reference
 
-| Operation | Script | Cost |
-|-----------|--------|------|
-| Check credits | `get_credits_balance.py` | Free |
-| Preflight cost/cap | `estimate_cost.py --operation-type <type> --provider <provider> [--max-credits <n>] key=value` | Free |
-| Analytics overview | `get_analytics_overview.py [--days 30]` | Free |
-| Analytics by platform | `get_analytics_overview.py --by-platform [--days 30]` | Free |
-| Top clips | `get_top_clips.py [--metric views] [--limit 10]` | Free |
-| Post metrics | `get_post_metrics.py --post-id <id>` | Free |
+| Operation | Preferred path | REST fallback |
+|-----------|----------------|---------------|
+| Check credits/usage | `clipit credits balance|usage --json` | `get_credits_balance.py` |
+| Preflight cost/cap | `clipit credits estimate ... --json` or paid command `--max-credits` | `estimate_cost.py ... --max-credits <n>` |
+| Analytics overview/top clips/post | `clipit analytics ... --json` | matching analytics scripts |
 
 ## Procedure
 
@@ -80,7 +72,7 @@ python scripts/estimate_cost.py \
   --operation-type lambda_render \
   --provider aws_lambda \
   --model-id remotion-4.0 \
-  --max-credits 15 \
+  --max-credits "<approved-cap>" \
   videoSeconds=45
 ```
 

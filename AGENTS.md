@@ -1,48 +1,100 @@
 # ClipIt Agent Pack
 
-You are working with the ClipIt Agent Pack — skills and Python script bindings that let any agent operate [ClipIt](https://clipit.dev), a video clipping platform (import → transcribe → clip → caption → render → export → publish → analyze).
+You are operating ClipIt as an editor and creator, not merely issuing API calls. Keep `clipper/clipit-operator/SKILL.md` active for every ClipIt task, then load the smallest domain skill needed for the current pass.
 
-## Setup (do this once)
+## Connect and inspect
 
-1. Confirm the environment variables are set (never echo the key):
-   - `CLIPPER_API_KEY` — from ClipIt → Settings → API Keys → Connect an Agent
-   - `CLIPPER_BASE_URL` — usually `https://clipit.dev`
-2. Install script dependencies: `pip install -r requirements.txt`
-3. Verify the account connection: `python scripts/list_videos.py` — any successful response (even an empty list) means you are connected. A `401` means the key is wrong; a `403` names a permission the user must enable on the key in ClipIt Settings.
+1. Prefer `clipit login`; never echo or write a credential.
+2. Run `clipit doctor --json`, `clipit auth status --json`, and `clipit context show --json`.
+3. Discover live capabilities before choosing a tool:
+   - `clipit skills list --json`
+   - `clipit skills manifest --json`
+   - `clipit skills describe <capabilityId> --json`
+   - `clipit media-guides list --json`
+   - `clipit media-guides describe <guideId> --json`
+   - `clipit tools list --json`
+   - `clipit tools describe <functionName> --json`
+4. Read the current source, transcript, clip, project, sequence, timeline, media layers, or delivery state before mutation.
 
-If Node is available, the richer path is the ClipIt CLI: `npm install -g @clipit-ai/cli`, store the key with `clipit auth set-key --stdin`, then `clipit agent install <your-framework-name>` (any name works) and verify with `clipit videos list`.
+## Execution hierarchy
 
-### Enterprise workspace setup (ClipIt team only)
+Use one execution owner for each mutation:
 
-Enterprise keys are for the ClipIt team operating contracted client workspaces, not normal users. Store each admin-created workspace key in its own non-default ClipIt CLI profile; never put a workspace key in the shared `CLIPPER_API_KEY` environment variable. Activate that profile with `clipit auth use <profile>` (or select it explicitly with `CLIPIT_PROFILE`), then run `python scripts/verify_enterprise_workspace.py --workspace-id <expected-id>` before reading or changing client content. Continue only when it verifies the exact active workspace, `team_operator` role, and `enterprise_usage_only` billing. A successful `list_videos.py` call alone is not an enterprise identity check.
+1. Purpose-built `clipit` domain command.
+2. `clipit ask` for one multi-tool Clippy outcome.
+3. `clipit run` after live tool discovery.
+4. The discovered tool through `clipit mcp stdio`.
+5. A Python script only when CLI/MCP is unavailable or the enterprise exact contract requires it.
 
-With a non-default profile selected, the Python client deliberately ignores ambient personal `CLIPPER_API_KEY` and `CLIPPER_BASE_URL` settings; a missing named-profile key fails closed. Keep one named profile per workspace and rerun the identity preflight whenever switching clients.
+Never repeat an uncertain mutation through a second transport. Read `clipper/clipit-operator/references/tool-transport.md` before switching transport or resuming work.
 
-For an enterprise clip, use this exact authority-preserving sequence:
+## Edit in passes
 
-1. Activate the workspace's named profile and run `verify_enterprise_workspace.py --workspace-id <expected-id> --profile <profile>`.
-2. Run `list_assets.py --type video`, select an asset, run `use_library_video.py --asset-id <asset-id>`, and confirm the resulting processing video with `list_videos.py`.
-3. Run `transcribe_video.py --video-id <video-id> --wait` before captioned renders or AI clip suggestions. Manual clips without captions do not require transcription.
-4. Create the clip with `create_clip.py`.
-5. Run `initialize_editor_snapshot.py` with the exact workspace, clip, aspect ratio, fit background, quality, and caption choice. For captions, pass the full approved object with `--caption-style-json @style.json` and retain the returned version/hash/settings revision. If the user says a bounded shorthand such as `caption size 200% single`, pass that phrase unchanged to `set_caption_style.py --directive` with the initialization identity. ClipIt maps 200% to scale 2 and `Single` to single-line layout while preserving words per caption and every unmentioned style field. The mutation advances the canonical editor identity: replace the initialization `editorVersion`, `editorStateHash`, and `clipSettingsRevision` with all three values returned by `set_caption_style.py`, and retain its full normalized `captionStyle` plus `captionStyleHash`. For no captions, use `--no-captions` and omit every style flag.
-6. For captioned enterprise work, run `run_enterprise_exact_delivery.py` with the latest identity and full normalized style from step 5, the max-usage cap, and explicit outro policy. If a style mutation ran, never reuse the initialization identity. Require the read-only plan's `exactCaptionStyle.styleHash` to equal the mutation's `captionStyleHash` before `--confirm`, then keep that same request identity/style and plan hash through advance and resume. Direct captioned `render_clip.py` calls are blocked because the legacy endpoint can replace exact fields. The deliberate no-caption path remains available with `--no-captions --no-auto-reframe`.
-7. Require the recipe receipt to prove the caption-style hash, snapshot lineage, output fingerprint, outro policy, artifact duration, and render/export/delivery IDs. `deliver_export.py` is only a recovery path for an already eligible export; it reads exact export lineage and accepts no caller title/note.
-8. Leave selection to the client. The agent may confirm `selected` with `list_deliverables.py --workspace-id <expected-id> --profile <profile>`, but it must never select or publish a merely `ready` deliverable.
+1. Establish creative brief, destination, source truth, invariants, approvals, and definition of done.
+2. Ingest/register and verify source/audio/transcript readiness.
+3. Build the story/paper edit, then A-roll assembly and pacing.
+4. Lock destination aspect and protect faces, products, slides, demos, and safe areas.
+5. Apply captions/graphics.
+6. Add justified thumbnail, B-Roll, or selected-section Alter media using the current provider prompt contract.
+7. Analyze and mix source audio, voiceover, music, and supporting layers.
+8. Run whole-program visual/audio/delivery QA before render/export/delivery/publish claims.
 
-Changing aspect ratio, quality, caption enablement/style, or framing after initialization makes the snapshot stale. Reinitialize intentionally instead of bypassing the export identity check.
+Read `clipper/clipit-operator/references/editorial-workflow.md`, `time-and-state.md`, `media-prompting.md`, and `media-qa.md` as those passes become relevant.
 
-## How to work
+## Time, identity, and state
 
-- Each capability is documented in `clipper/<skill>/SKILL.md` — read the relevant one before acting. Skills: video-management, clip-creation, export-rendering, thumbnail-generation, caption-generation, broll-generation, social-publishing, account-insights, machine-payments.
-- Every script in `scripts/` is a thin REST binding with `--help`.
-- **Cost preflight:** ordinary API keys may check balance before paid operations. Enterprise usage-only keys intentionally cannot read owner balance/history; use `estimate_cost.py --max-credits <n>` or the exact recipe preflight and report internal estimated usage separately from `clientCreditChargeClip: 0`. Continue only when affordability, the approval cap, and spend limits all pass.
-- **Credit top-ups:** when credits are insufficient, read `clipper/machine-payments/SKILL.md`, discover live rails and products, and create a payable attempt only after explicit approval or a configured budget policy.
-- Long-running jobs: poll renders with `scripts/wait_for_job.py`, exports with `scripts/wait_for_export.py` (exports use a different endpoint — do not mix them up).
-- Live, permission-scoped operating instructions: `python scripts/get_agent_instructions.py --target generic --format markdown`.
+- Name source time, clip-local time, or sequence time before using timestamps.
+- Keep source video, saved clip, timeline placement, sequence, media layer, job, export, and deliverable IDs distinct.
+- Re-read current state after every material mutation.
+- A change to bounds, timeline, aspect/framing, captions, visual/audio layers, quality, or outro policy can stale downstream render/export/QA.
+- Source audio is authoritative unless the user explicitly changes it. B-Roll and Alter provider audio never replace it.
+
+## Approval and spend
+
+- Inspect and plan before paid or irreversible work.
+- Paid generation, render/export, publishing/scheduling, payment, deletion, and other gated mutations require the live CLI/MCP confirmation behavior and exact user authority.
+- Use a current estimate and `--max-credits <approved-cap>`; never quote a remembered price.
+- If MCP returns `requiresConfirmation`, stop and retry the same tool with `confirmed: true` only after approval.
+- If CLI exits with code 12, follow the printed approval/resume path. Do not bypass it.
+- Payment additionally requires the exact live catalog product, price, rail, and budget approval.
+
+## Async and completion
+
+- Retain job, workflow, approval, conversation, plan, resume, generation, layer, render, export, delivery, and publish IDs.
+- Resume the same operation; unchanged progress is not proof of failure.
+- Use generic, export, and workflow waiters only for their matching job families.
+- Provider completed is not applied; applied is not QA-passed; rendered is not exact-current export/delivery; ready is not client-selected; scheduled is not posted.
+- Report observed evidence, spend against cap, warnings/waivers, and the exact next gate.
+
+## Domain skills
+
+- Ingest: `video-management`
+- Clip discovery/lifecycle: `clip-creation`
+- Timeline assembly: `timeline-editing`
+- Project/sequence structure: `project-sequence-management`
+- Persistent style: `creator-style`
+- Crop/layout: `crop-reframing`
+- Captions: `caption-generation`
+- Generated images/video: `thumbnail-generation`, `broll-generation`, `scene-alter`
+- Audio: `audio-production`
+- Long edit specs: `blueprint-to-edit`
+- Completion: `delivery-qa`
+- Output/delivery: `export-rendering`, `social-publishing`
+- Usage/payment: `account-insights`, `machine-payments`
+
+## Enterprise workspace exactness
+
+Enterprise keys are ClipIt-team authority. Keep one non-default named profile per contracted workspace, never a shared ambient key. Before any client-content operation, verify the expected workspace ID, active status, `team_operator` role, and `enterprise_usage_only` billing. A successful personal-library request is not workspace proof.
+
+Use the client Source Library asset, canonical editor snapshot, full approved caption object and style hash, latest editor version/hash/settings revision, read-only exact-delivery plan, approved max-usage cap, explicit outro policy, and the same request/plan/resume identity through completion. Direct captioned legacy enterprise rendering is blocked. The final receipt must prove current snapshot lineage, caption hash, output fingerprint, duration/outro policy, and render/export/delivery IDs.
+
+The agent may create a `ready` delivery but must never select for the client or publish before the client-selected state is verified. If exact capability is unavailable, return one product-owned blocked state; never approximate the style, invent delivery copy, or ask the client to repair/save the editor.
+
+Read `clipper/clipit-operator/references/enterprise-exactness.md` and use the tested Python enterprise scripts for that path.
 
 ## Boundaries
 
-- Never write the API key into files, logs, chat, or prompts.
-- Never operate on enterprise content until the named-profile identity preflight matches the expected workspace ID.
-- Never approximate an approved enterprise style, silently omit a field, invent delivery copy, or ask the client to repair/save the editor. Return one product-owned blocked state when the exact contract cannot be satisfied.
-- Treat publishing to social platforms and credit-spending operations as user-approval checkpoints.
+- Never expose credentials, wallet material, signed payment payloads, private profile data, or expiring signed URLs in durable notes.
+- Never fabricate source media, references, brands, identities, quotes, accounts, permissions, capability, price, approval, or QA evidence.
+- Deletion, publish/schedule, payment, and external delivery remain explicit authority gates.
+- Re-read original blueprint/brief and current artifact before saying the work is complete.

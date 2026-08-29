@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "packVersion": "2.0.0",
+  "minimumCliVersion": "0.3.0",
+  "capabilityContractVersion": "clipit-agent-capabilities.v1",
+  "mediaPromptingContract": "media-prompting-contract.v2",
+  "alwaysInstall": [
+    "clipit-operator"
+  ],
+  "skills": [
+    {"id": "clipit-operator", "path": "clipper/clipit-operator", "category": "core"},
+    {"id": "video-management", "path": "clipper/video-management", "category": "ingest"},
+    {"id": "clip-creation", "path": "clipper/clip-creation", "category": "editing"},
+    {"id": "timeline-editing", "path": "clipper/timeline-editing", "category": "editing"},
+    {"id": "project-sequence-management", "path": "clipper/project-sequence-management", "category": "editing"},
+    {"id": "creator-style", "path": "clipper/creator-style", "category": "creative-context"},
+    {"id": "crop-reframing", "path": "clipper/crop-reframing", "category": "editing"},
+    {"id": "caption-generation", "path": "clipper/caption-generation", "category": "editing"},
+    {"id": "thumbnail-generation", "path": "clipper/thumbnail-generation", "category": "media-generation"},
+    {"id": "broll-generation", "path": "clipper/broll-generation", "category": "media-generation"},
+    {"id": "scene-alter", "path": "clipper/scene-alter", "category": "media-generation"},
+    {"id": "audio-production", "path": "clipper/audio-production", "category": "media-generation"},
+    {"id": "blueprint-to-edit", "path": "clipper/blueprint-to-edit", "category": "workflow"},
+    {"id": "delivery-qa", "path": "clipper/delivery-qa", "category": "quality"},
+    {"id": "export-rendering", "path": "clipper/export-rendering", "category": "delivery"},
+    {"id": "social-publishing", "path": "clipper/social-publishing", "category": "delivery"},
+    {"id": "account-insights", "path": "clipper/account-insights", "category": "account"},
+    {"id": "machine-payments", "path": "clipper/machine-payments", "category": "account"}
+  ],
+  "mediaModels": {
+    "thumbnailAndStillImage": "openai/gpt-image-2",
+    "brollImageToVideo": "minimax/h3-max/image-to-video",
+    "selectedSectionAlter": "google/gemini-omni-flash/v1.1/edit",
+    "voiceover": "google/gemini-3.1-flash-tts",
+    "music": "minimax/music-2.6"
+  },
+  "mediaProviders": {
+    "thumbnailAndStillImage": "replicate",
+    "brollImageToVideo": "fal",
+    "selectedSectionAlter": "fal",
+    "voiceover": "replicate",
+    "music": "replicate"
+  },
+  "sharedReferences": [
+    "clipper/clipit-operator/references/tool-transport.md",
+    "clipper/clipit-operator/references/editorial-workflow.md",
+    "clipper/clipit-operator/references/time-and-state.md",
+    "clipper/clipit-operator/references/media-prompting.md",
+    "clipper/clipit-operator/references/media-qa.md",
+    "clipper/clipit-operator/references/outcome-recipes.md",
+    "clipper/clipit-operator/references/enterprise-exactness.md"
+  ]
+}

@@ -1,318 +1,230 @@
 # ClipIt Agent Pack
 
-Connect your AI agent to [ClipIt](https://clipit.dev) and let it do the work: import long videos, find the best moments, cut clips, add captions, generate thumbnails and B-Roll, render, export, and publish to your social accounts — all from a conversation with your agent.
+ClipIt Agent Pack equips a shell- or MCP-capable agent to act as a practical video editor: ingest footage, understand transcripts, shape a story, assemble timelines, frame subjects, caption, generate supporting media, mix audio, render, deliver, publish, and prove the result is ready.
 
-This repo contains everything an agent needs to operate ClipIt: skill files, ready-to-run scripts, and setup instructions agents understand. **You read the next section; your agent reads the rest.**
+Pack version `2.0.0` is described by [`agent-pack.manifest.json`](agent-pack.manifest.json). It targets capability contract `clipit-agent-capabilities.v1`, requires ClipIt CLI `0.3.0` or newer, and keeps `clipit-operator` active for every ClipIt task.
 
-## Connect Your Agent (the human part — 2 minutes)
+## Connect ClipIt
 
-1. **Get an API key**: go to [clipit.dev](https://clipit.dev) → **Settings** → **API Keys** → **Connect an Agent**. Pick your agent from the list — ClipIt generates a setup prompt tailored to it.
-2. **Paste the setup prompt into your agent**, then give it the API key when it asks. (Treat the key like a password — your agent is instructed never to repeat it.)
-3. **Done.** Ask your agent to "list my ClipIt videos" — if it answers, you're connected.
+Install the current CLI and use browser-linked login:
 
-No setup prompt handy? Just tell your agent:
+```bash
+npm install -g @clipit-ai/cli@latest
+clipit login
+clipit doctor --json
+clipit auth status --json
+```
 
-> Set up ClipIt for me using https://github.com/nplusm-Clippy/ClipIt-Agent-Pack — I'll give you my API key when you're ready to store it.
+Use `clipit login --no-browser` in a headless terminal. For CI or a manually issued key, pass the secret only through hidden standard input:
 
-Your agent will take it from there.
+```bash
+printf '%s' "$CLIPPER_API_KEY" | clipit auth set-key --stdin
+```
 
-## What Your Agent Can Do
+Never put a key in a prompt, skill file, repository, command-line argument, or log.
 
-- **Import** videos from YouTube, Vimeo, Twitch, or direct upload
-- **Transcribe** with word-level timing and speaker labels
-- **Find viral moments** automatically and suggest ready-to-cut clips
-- **Create and edit clips** with precise start/end timing
-- **Caption** with presets or exact canonical style fields such as scale, words per line, position, animation, and highlights
-- **Generate thumbnails** from a text description, in up to 4K
-- **Generate B-Roll** overlay images and video, including start/end frame transitions
-- **Render and export** in the format, aspect ratio, and quality you need
-- **Deliver finished enterprise clips** for client review without selecting on the client's behalf
-- **Publish and schedule** to 13 social platforms (YouTube, TikTok, Instagram, Facebook, LinkedIn, X, Bluesky, Threads, Pinterest, Reddit, Telegram, Snapchat, Google Business)
-- **Track performance** — post metrics, platform breakdowns, top clips
-- **Watch your spend** — preflight internal usage, client charge, and approval caps before anything paid runs
-- **Top up autonomously with approval** — discover direct x402, Stripe-managed x402, and Stripe Link MPP rails when credits run low
+Install ClipIt's live credential-free CLI instructions for the host agent:
 
-## Example Requests
+```bash
+clipit agent install codex       # or claude, hermes, openclaw, generic, or another name
+clipit agent doctor codex --json
+clipit agent update codex
+```
 
-Just talk to your agent in plain language:
+The CLI-generated instruction is the live connection layer. This repository adds the deeper editor/creator skill pack and Python REST/enterprise fallbacks.
 
-> "Take this YouTube video, find the three funniest moments, render them for TikTok with neon captions, generate thumbnails, and post them to TikTok and Instagram"
+## Install the Full Pack
 
-> "Import this video and create a clip from 1:30 to 2:15 with the title 'Best moment'"
+### Codex or another AGENTS.md agent
 
-> "Check my credit balance and estimate the cost before rendering this 45-second clip"
-
-> "Export clip_xyz as a 1080p MP4 in 9:16 and give me the download URL"
-
-> "Post clip_xyz to TikTok and YouTube with the caption 'Best moment of 2026' and schedule it for tomorrow at 9am"
-
----
-
-# For Agents
-
-**Start with [`AGENTS.md`](AGENTS.md)** — it has the full setup, verification, and working rules. The sections below are framework-specific install paths.
-
-## Install by Framework
+Clone the repository and work from its root. The agent reads [`AGENTS.md`](AGENTS.md), keeps [`clipper/clipit-operator/SKILL.md`](clipper/clipit-operator/SKILL.md) active, and loads the smallest domain skill needed for each task.
 
 ### Claude Code
 
-```bash
-npm install -g @clipit-ai/cli
-printf '%s' "$CLIPPER_API_KEY" | clipit auth set-key --stdin
-clipit agent install claude        # writes ~/.claude/skills/clipit-cli/SKILL.md
-clipit videos list                 # verify the account connection
-```
-
-Or clone this repo — Claude Code reads the root `CLAUDE.md` automatically and discovers every skill in `clipper/*/SKILL.md`.
-
-### Codex
-
-```bash
-npm install -g @clipit-ai/cli
-printf '%s' "$CLIPPER_API_KEY" | clipit auth set-key --stdin
-clipit agent install codex         # writes ~/.codex/skills/clipit-cli/SKILL.md
-clipit videos list                 # verify the account connection
-```
-
-Or clone this repo — Codex reads the root `AGENTS.md` automatically.
+Clone the repository and work from its root. [`CLAUDE.md`](CLAUDE.md) routes Claude to the same operating and domain skills.
 
 ### Hermes
 
 ```bash
 hermes skills tap add nplusm-Clippy/ClipIt-Agent-Pack
 
-hermes skills install clipper/video-management clipper/clip-creation clipper/export-rendering clipper/thumbnail-generation clipper/caption-generation clipper/broll-generation clipper/social-publishing clipper/account-insights clipper/machine-payments
+hermes skills install \
+  clipper/clipit-operator \
+  clipper/video-management \
+  clipper/clip-creation \
+  clipper/timeline-editing \
+  clipper/project-sequence-management \
+  clipper/creator-style \
+  clipper/crop-reframing \
+  clipper/caption-generation \
+  clipper/thumbnail-generation \
+  clipper/broll-generation \
+  clipper/scene-alter \
+  clipper/audio-production \
+  clipper/blueprint-to-edit \
+  clipper/delivery-qa \
+  clipper/export-rendering \
+  clipper/social-publishing \
+  clipper/account-insights \
+  clipper/machine-payments
 ```
 
-For ordinary personal usage, add `CLIPPER_API_KEY` and `CLIPPER_BASE_URL=https://clipit.dev` to `~/.hermes/.env` or the equivalent environment file for that runtime.
+`clipit-operator` is required. The remaining skills are installable domain modules; install the complete set for a general-purpose ClipIt editor.
 
-### ClipIt Team Only: Enterprise Workspace Profiles
+## How an Agent Uses ClipIt
 
-Enterprise workspace keys are for the ClipIt team operating contracted client workspaces. They are not a normal-user feature and must not be placed in the shared Hermes `CLIPPER_API_KEY` environment variable. Create one named ClipIt CLI profile per workspace so personal and client authority cannot be mixed:
-
-This workflow requires the current ClipIt CLI/server contract exposing `deliverEnterpriseClipExact` and least-privilege credit preflight.
+The authenticated server is the source of truth. Discover the live surface before guessing a tool or field:
 
 ```bash
-npm install -g @clipit-ai/cli@latest
-clipit auth set-key --stdin --profile "enterprise-client-slug"
-clipit auth use "enterprise-client-slug"
-python scripts/verify_enterprise_workspace.py \
-  --workspace-id "<workspace-id-from-admin-dashboard>" \
-  --profile "enterprise-client-slug"
+clipit skills list --json
+clipit skills describe <capabilityId> --json
+clipit skills manifest --json
+clipit media-guides list --json
+clipit media-guides describe <guideId> --json
+clipit tools list --json
+clipit tools describe <functionName> --json
+clipit context show --json
 ```
 
-Paste the workspace key only into the CLI's hidden prompt; never save it in chat, shell history, the repository, or Hermes' global environment. `clipit auth use` makes that non-default profile active for both the CLI and Python scripts. An explicit `CLIPIT_PROFILE="enterprise-client-slug"` remains available for one-command isolation. The Python scripts deliberately ignore ambient personal `CLIPPER_API_KEY` and `CLIPPER_BASE_URL` settings whenever a non-default profile is active.
+Use one execution owner per mutation, in this order:
 
-The identity preflight must pass before any client operation. It verifies the exact workspace ID, active status, team-operator authority, and enterprise usage-only billing. Then list the client's uploaded source assets and register the selected video for processing:
+1. A friendly `clipit <domain> <action>` command when it exactly covers the operation.
+2. `clipit ask` for a multi-tool Clippy outcome.
+3. `clipit run <functionName> --params @params.json` after live tool discovery.
+4. The same discovered tools through the `clipit mcp stdio` bridge.
+5. A script in `scripts/` only when CLI/MCP cannot express the operation or the enterprise exact contract requires it.
+
+Do not replay the same uncertain mutation through another transport.
+
+### Clippy workflows
 
 ```bash
-python scripts/list_assets.py --type video
-python scripts/use_library_video.py --asset-id "<asset-id>"
-python scripts/list_videos.py
+clipit context use --video-id <videoId>
+clipit ask "Find the strongest clip and prepare a review cut" --stream
 ```
 
-`list_assets.py` shows raw client uploads. `use_library_video.py` idempotently creates the processing `videoId` used by the normal transcription, clipping, rendering, and publishing scripts. Do not use `list_videos.py` as the workspace identity check.
-
-For a captioned enterprise clip, put the complete approved style in `style.json`, including every requested scale, line, position, animation, and highlight field. Initialize the canonical snapshot, then use the idempotent exact-delivery recipe:
+If a workflow pauses, keep its job/conversation/approval IDs and use the exact printed approval or resume command:
 
 ```bash
-python scripts/create_clip.py \
-  --video-id "<video-id>" \
-  --start 0 \
-  --end 30 \
-  --title "Client-facing title"
-
-python scripts/initialize_editor_snapshot.py \
-  --workspace-id "<workspace-id-from-admin-dashboard>" \
-  --profile "enterprise-client-slug" \
-  --clip-id "<clip-id>" \
-  --aspect-ratio 9:16 \
-  --fit-background blur \
-  --quality high \
-  --captions \
-  --caption-style-json @style.json
-
-python scripts/run_enterprise_exact_delivery.py \
-  --workspace-id "<workspace-id-from-admin-dashboard>" \
-  --profile "enterprise-client-slug" \
-  --clip-id "<clip-id>" \
-  --style-json @style.json \
-  --expected-editor-version "<initializer-editor-version>" \
-  --expected-editor-state-hash "<initializer-editor-state-hash>" \
-  --expected-clip-settings-revision "<initializer-settings-revision>" \
-  --max-credits 15 \
-  --no-outro \
-  --confirm \
-  --wait
+clipit workflow status <jobId> --json
+clipit workflow approve <jobId> --approval-id <approvalId> --decision approved
+clipit workflow wait <jobId> --stream
 ```
 
-The recipe first returns a read-only plan with exact target/source/snapshot identity, normalized style/hash, render state, internal usage, zero enterprise client charge, cap decision, and explicit outro policy. `--confirm` advances only that plan hash. If it returns `processing`, reuse its resume token with the plan hash, caption-style hash, and expected final duration from the receipt; completed stages are not repeated. The final receipt must contain render/export/delivery IDs plus the exact caption hash, output fingerprint, snapshot lineage, outro policy, and artifact duration.
+### MCP
 
-Transcribe before any captioned clip or AI suggestion:
+Configure an MCP-compatible client to launch:
 
 ```bash
-python scripts/transcribe_video.py --video-id "<video-id>" --wait
+clipit mcp stdio
 ```
 
-For a deliberate no-caption enterprise clip, initialize with `--no-captions` and omit every caption-style flag. The no-caption `render_clip.py --no-captions --no-auto-reframe` path remains available. Direct captioned enterprise rendering is blocked because the legacy endpoint can replace exact style fields. Never ask the client to open the editor, save, or reply when a requested capability is unavailable; return one product-owned blocked state.
+The bridge uses the active CLI profile and exposes live ClipIt tools plus progressive resources through `resources/list` and `resources/read`:
 
-The recipe creates the ready delivery automatically. To recover a completed eligible export independently, the fail-closed delivery command reads its exact lineage and lets ClipIt derive canonical title/note copy:
+- `clipit://instructions`
+- `clipit://manifest`
+- `clipit://skills/<capabilityId>`
+- `clipit://media-guides/<guideId>`
+
+Read the manifest first, then only the skill and media-guide resources needed for the current editing pass. Paid generation, publishing, deletion, and other gated mutations return `requiresConfirmation`; retry the same tool with `confirmed: true` only after the user approves the exact operation and cap.
+
+### Python REST fallback
 
 ```bash
-python scripts/deliver_export.py \
-  --workspace-id "<workspace-id-from-admin-dashboard>" \
-  --export-id "<completed-export-id>" \
-  --profile "enterprise-client-slug"
-
-python scripts/list_deliverables.py \
-  --workspace-id "<workspace-id-from-admin-dashboard>" \
-  --profile "enterprise-client-slug" \
-  --export-id "<completed-export-id>" \
-  --status ready
+python3 -m pip install -r requirements.txt
+python3 scripts/get_agent_instructions.py --target generic --format markdown
+python3 scripts/list_videos.py
 ```
 
-Both delivery scripts repeat the authoritative workspace identity preflight. Delivery requires enterprise execution, snapshot version/hash, caption hash, output fingerprint, outro policy, and probed duration to match; caller-supplied titles/notes are not accepted. Delivery creates `ready` review state only; the client must select the clip in the portal before the workspace key can publish it. A retry resolves the existing exact delivery with `replayed: true` without changing client authority.
+Every script supports `--help`. The scripts share CLI profiles and are not a second orchestration owner.
 
-### OpenClaw and Other CLI Agents
+## Editorial Operating Model
 
-`clipit agent install` accepts ANY framework name; unknown names get the full generic instructions written under `~/.config/clipit/agent-skills/<name>/clipit-cli/`:
+The pack teaches agents to work in passes:
 
-```bash
-npm install -g @clipit-ai/cli
-printf '%s' "$CLIPPER_API_KEY" | clipit auth set-key --stdin
-clipit agent install openclaw      # or crewai, langchain, your-framework
-clipit videos list                 # verify the account connection
-```
+1. Ingest and source integrity.
+2. Transcript/story paper edit.
+3. A-roll assembly and pacing.
+4. Format, crop, and visual context.
+5. Captions and graphics.
+6. B-Roll or selected-section Alter.
+7. Dialogue, voiceover, music, and mix.
+8. Whole-program delivery QA, then render/export/delivery/publish.
 
-Point your framework's skill loader at the generated `SKILL.md`, or clone this repo — frameworks that honor `AGENTS.md` pick it up automatically.
+See the shared [editorial workflow](clipper/clipit-operator/references/editorial-workflow.md), [time/state model](clipper/clipit-operator/references/time-and-state.md), [outcome recipes](clipper/clipit-operator/references/outcome-recipes.md), and [media QA contract](clipper/clipit-operator/references/media-qa.md).
 
-### Any Agent Using Raw REST
+## Current Media Prompt Contracts
 
-The Python scripts in `scripts/` are thin REST bindings (`pip install -r requirements.txt`, every script has `--help`). Fetch live, permission-scoped operating instructions:
+ClipIt selects and operates providers. Agents express typed intent through live ClipIt schemas and use the shared [media prompting contract](clipper/clipit-operator/references/media-prompting.md):
 
-```bash
-python scripts/get_agent_instructions.py --target generic --format markdown
-```
+| Purpose | Current model route | Core prompt behavior |
+| --- | --- | --- |
+| Thumbnail and B-Roll still | `openai/gpt-image-2` on Replicate | Explicit create/edit/composite mode, reference roles, exact text, crop-safe composition, invariants |
+| B-Roll image-to-video | `minimax/h3-max/image-to-video` on fal | Motion-first prompt, one camera idea, real-person continuity, no audio direction |
+| Selected-section Alter | `google/gemini-omni-flash/v1.1/edit` on fal | One visual delta, preserve source identity/timing/framing/audio, “Keep everything else the same.” |
+| Voiceover | `google/gemini-3.1-flash-tts` on Replicate | Literal text separate from performance direction and voice/language controls |
+| Music | `minimax/music-2.6` on Replicate | Production brief separate from lyrics and ClipIt timeline/mix controls |
 
-Or call `GET /api/v1/agent/instructions?target=<your-framework>&format=markdown` directly.
-
-## Verify the Connection
-
-```bash
-python scripts/list_videos.py      # or: clipit videos list
-```
-
-For an ordinary personal key, any successful response — even an empty list — means you're connected. A `401` means the key was entered incorrectly; re-copy it from ClipIt Settings. A `403` names the missing permission; enable it on the key in **Settings → API Keys**. With the CLI installed, `clipit doctor --json` reports connectivity, auth state, and the active profile in one shot.
-
-For an enterprise workspace key, a successful personal-library request is not proof of the correct connection. Run `verify_enterprise_workspace.py` with the named profile and expected workspace ID; continue only when it returns `"verified": true` for that workspace.
+Do not use older model attributions or a remembered provider price. Run a current plan/preflight for the exact request.
 
 ## Skills
 
-| Skill | What It Does | Key Scripts |
-|-------|-------------|-------------|
-| [video-management](clipper/video-management/SKILL.md) | Use enterprise library sources; import, upload, list, transcribe, and delete videos | `list_assets.py`, `use_library_video.py`, `transcribe_video.py` |
-| [clip-creation](clipper/clip-creation/SKILL.md) | AI clip suggestions, canonical workspace snapshots, exact enterprise delivery, personal render/download | `suggest_clips.py`, `initialize_editor_snapshot.py`, `run_enterprise_exact_delivery.py`, `render_clip.py` |
-| [export-rendering](clipper/export-rendering/SKILL.md) | Canonical exports, exact enterprise recipes, downloads, and client delivery | `run_enterprise_exact_delivery.py`, `start_export.py`, `deliver_export.py`, `download_export.py` |
-| [thumbnail-generation](clipper/thumbnail-generation/SKILL.md) | AI thumbnails from text descriptions | `generate_thumbnail.py` |
-| [caption-generation](clipper/caption-generation/SKILL.md) | Word-level captions, presets, and exact canonical enterprise styles | `generate_captions.py`, `set_caption_style.py`, `update_captions.py` |
-| [broll-generation](clipper/broll-generation/SKILL.md) | AI B-Roll image and video overlays | `plan_broll.py`, `generate_broll.py` |
-| [social-publishing](clipper/social-publishing/SKILL.md) | Exact-artifact, exact-account posting/scheduling to 13 platforms | `list_social_accounts.py`, `post_to_social.py`, `schedule_social_post.py` |
-| [account-insights](clipper/account-insights/SKILL.md) | Credits, cost estimates, analytics | `get_credits_balance.py`, `estimate_cost.py`, `get_top_clips.py` |
-| [machine-payments](clipper/machine-payments/SKILL.md) | Approved x402 or Stripe Link MPP credit purchases | `get_payment_capabilities.py`, `get_billing_catalog.py`, `create_payment_attempt.py`, `get_payment_receipt.py` |
+| Skill | Purpose |
+| --- | --- |
+| [clipit-operator](clipper/clipit-operator/SKILL.md) | Always-on CLI/MCP, context, approval, spend, resume, state, and verification rules |
+| [video-management](clipper/video-management/SKILL.md) | Ingest, assets, source registration, readiness, transcription, safe removal |
+| [clip-creation](clipper/clip-creation/SKILL.md) | Transcript-grounded suggestions, manual clips, saved-clip lifecycle, exact enterprise recipe |
+| [timeline-editing](clipper/timeline-editing/SKILL.md) | Inspect, add, move, trim, split, and remove timeline placements |
+| [project-sequence-management](clipper/project-sequence-management/SKILL.md) | Organize projects, sequences, tracks, and alternate versions |
+| [creator-style](clipper/creator-style/SKILL.md) | Read/infer/update/apply creator and learned preferences |
+| [crop-reframing](clipper/crop-reframing/SKILL.md) | Subject/context detection, aspect conversion, timed/stacked layouts |
+| [caption-generation](clipper/caption-generation/SKILL.md) | Word-timed captions, presets, exact canonical styles |
+| [thumbnail-generation](clipper/thumbnail-generation/SKILL.md) | GPT Image 2 thumbnail create/edit and image QA |
+| [broll-generation](clipper/broll-generation/SKILL.md) | GPT Image 2 + H3 Max B-Roll plan/generate/apply/QA |
+| [scene-alter](clipper/scene-alter/SKILL.md) | Gemini Omni Flash selected-section visual replacement and revert |
+| [audio-production](clipper/audio-production/SKILL.md) | TTS, music, source audio, layers, processing, and mix QA |
+| [blueprint-to-edit](clipper/blueprint-to-edit/SKILL.md) | Parse and execute long edit blueprints with durable checkpoints |
+| [delivery-qa](clipper/delivery-qa/SKILL.md) | Current-artifact visual/audio/technical/authority completion gate |
+| [export-rendering](clipper/export-rendering/SKILL.md) | Current-state render/export, resume, download, enterprise delivery |
+| [social-publishing](clipper/social-publishing/SKILL.md) | Exact artifact/account publishing, scheduling, and status |
+| [account-insights](clipper/account-insights/SKILL.md) | Live estimates/caps, usage, balance, and analytics |
+| [machine-payments](clipper/machine-payments/SKILL.md) | Explicitly approved live-catalog credit top-ups |
 
-## Permissions
+## Approval, Spend, and Async Safety
 
-Each skill requires specific API key permissions. The **Connect an Agent** flow in ClipIt settings pre-selects the common ones.
+- Inspect/plan first. Paid generation, render/export, publish/schedule, payment, deletion, and irreversible state changes require the reported confirmation gate.
+- Use `--max-credits <approved-cap>` and a current estimate; do not copy example prices.
+- Store returned job, workflow, approval, plan, resume, and artifact IDs. Query status before retrying.
+- Generic jobs use `clipit jobs wait`; exports use `clipit exports wait`; workflows use `clipit workflow wait`.
+- Provider completion is not application, QA, export, delivery, client selection, or publishing.
 
-| Capability | Required Permissions |
-|------------|---------------------|
-| video-management | `file_upload`, `url_extraction`, `video_processing`, `transcription` |
-| clip-creation, export-rendering | `clip_generation` |
-| exact enterprise delivery recipe | `clippy_agent`, `clip_generation`, `caption_generation` (no `credits_read`) |
-| thumbnail-generation | `thumbnail_generation` |
-| caption-generation | `caption_generation` |
-| broll-generation | `broll_generation` |
-| social-publishing | `social_publishing`, `clip_generation` (exact delivery-state preflight) |
-| account-insights | least-privilege preflight requires an active key; balance/history still require `credits_read` and are intentionally unavailable to usage-only workspace keys |
-| machine-payments | none beyond an active API key; payment signing stays in the user's wallet or Link payer |
-| asset uploads | `file_upload` |
-| orchestration | `clippy_agent` |
+## Enterprise Workspace Exactness
 
-## Exact Social Publishing
-
-Publishing is fail-closed around both the finished clip and the destination account. The scripts first read the clip's canonical delivery-state, select one verified exact-current export, list currently connected or workspace-granted social accounts, and then pin all of that authority in the request. They send `exportId`, `expectedSnapshotId`, `expectedOutputObjectFingerprint`, `expectedAccountIds`, and `publishExactCurrentArtifact=true` automatically.
-
-List the available account IDs immediately before publishing:
+Enterprise workspace keys are ClipIt-team authority, not a normal-user feature. Use one non-default named profile per workspace and verify the exact workspace before any client read or mutation:
 
 ```bash
-python scripts/list_social_accounts.py
+clipit auth set-key --stdin --profile "enterprise-client-slug"
+clipit auth use "enterprise-client-slug"
+python3 scripts/verify_enterprise_workspace.py \
+  --workspace-id "<expected-workspace-id>" \
+  --profile "enterprise-client-slug"
 ```
 
-Enterprise workspace keys publish or schedule one exact platform/account per request. The clip/export must also be a client-selected deliverable:
+Use Source Library registration, canonical snapshot identity, the complete approved caption object/hash, a read-only exact-delivery plan, the same capped confirmed request through resume, and an exact-lineage ready deliverable. Only the client may select it. Direct captioned legacy enterprise rendering and publishing a merely ready delivery are blocked.
+
+The complete authority-preserving sequence and recovery rules are in [enterprise-exactness.md](clipper/clipit-operator/references/enterprise-exactness.md). Existing Python contract scripts and tests remain the executable source of truth.
+
+## Development Validation
 
 ```bash
-python scripts/post_to_social.py \
-  --clip-id clip_xyz \
-  --platform linkedin \
-  --account-id account_linkedin_123 \
-  --export-id export_xyz \
-  --caption "Approved client caption" \
-  --wait
+python3 -m unittest discover -s tests -v
 
-python scripts/schedule_social_post.py \
-  --clip-id clip_xyz \
-  --platform twitter \
-  --account-id account_x_456 \
-  --caption "Approved client caption" \
-  --scheduled-for "2030-08-20T14:00:00Z" \
-  --wait
+for skill in clipper/*/SKILL.md; do
+  python3 /mnt/c/Users/namas/.codex/skills/.system/skill-creator/scripts/quick_validate.py "$(dirname "$skill")"
+done
 ```
 
-`--export-id` is optional when only one completed export exactly matches the current editor snapshot; use it to resolve an otherwise ambiguous delivery-state. Ordinary API keys retain comma-separated `--platforms` plus `--account-ids platform=id,...` support. Enterprise workspace publishing records usage for reporting but does not debit the client $CLIP balance; ordinary keys keep normal publishing charges and approval rules.
-
-Use `deliver_export.py` to create the client's `ready` review item, then `list_deliverables.py --profile <name> --status selected` to confirm that the client granted publishing authority. These scripts cannot select or unselect for the client.
-
-## Credits & Costs
-
-Ordinary API keys consume [$CLIP credits](https://clipit.dev) at the same rates as the web app. Enterprise workspace keys record calculated usage for reporting without debiting the client account:
-
-| Operation | Cost |
-|-----------|------|
-| Video transcription | 1 $CLIP per minute of audio |
-| AI clip suggestions | ~5 $CLIP |
-| Thumbnail generation | ~19.5 $CLIP |
-| B-Roll image generation | ~9.1 $CLIP |
-| B-Roll video generation (8s) | ~208 $CLIP (~416 with audio) |
-| Social post | 65 $CLIP per platform |
-| Clip render / export | Varies by duration and quality |
-
-**Always preflight paid operations.** Ordinary keys may check balance. Enterprise workspace keys must use the least-privilege preflight, which reports internal usage and cap decisions without exposing owner balance/history; `clientCreditChargeClip` remains zero:
-
-```bash
-python scripts/get_credits_balance.py
-python scripts/estimate_cost.py --profile "enterprise-client-slug" --operation-type lambda_render --provider aws_lambda --model-id remotion-4.0 --max-credits 15 videoSeconds=45
-```
-
-## Async Operations
-
-Long-running operations return IDs that must be polled. Generic jobs use `wait_for_job.py`; **export jobs use the export endpoint, not the generic jobs endpoint**:
-
-```bash
-python scripts/wait_for_job.py --job-id job_abc123
-python scripts/wait_for_export.py --job-id export_abc123
-```
-
-If a **webhook URL** is configured on the API key, ClipIt POSTs completion/failure events when supported jobs finish.
-
-## API Documentation
-
-- Interactive Swagger UI: **https://clipit.dev/api/v1/docs**
-- OpenAPI 3.1 spec: **https://clipit.dev/api/v1/openapi.json**
-
-## Support
-
-- Issues: https://github.com/nplusm-Clippy/ClipIt-Agent-Pack/issues
-- ClipIt: https://clipit.dev
+The test suite validates existing enterprise authority contracts, skill/manifest parity, reference packaging, current media terminology, and public B-Roll/thumbnail request shapes.
 
 ## License
 

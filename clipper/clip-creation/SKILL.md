@@ -1,23 +1,18 @@
 ---
 name: clipper-clip-creation
-description: Create, find, edit, render, and download video clips from ClipIt videos
-version: 1.1.0
-author: nplusm-Clippy
+description: Discover moments and create, inspect, update, render, or download ClipIt clips while preserving source-time meaning and exact enterprise editor state. Use for manual or AI-assisted clip selection and saved-clip lifecycle work.
 license: MIT
-platforms: [macos, linux, windows]
 metadata:
+  version: "2.0.0"
   tags: [Video, ClipIt, Clips, Render, AI, Viral, TikTok, YouTube Shorts]
   hermes:
     tags: [Video, ClipIt, Clips, Render, AI, Viral, TikTok, YouTube Shorts]
     requires_toolsets: [terminal]
-required_environment_variables:
-  - name: CLIPPER_API_KEY
-    prompt: "Enter your ClipIt API key"
-    help: "Get one at https://clipit.dev -> Settings -> API Keys -> Quick Connect"
-    required_for: "ClipIt API access"
 ---
 
 # ClipIt Clip Creation
+
+Use with `clipit-operator`. Prefer `clipit videos`, `clipit clips`, `clipit ask`, or discovered MCP tools; use these Python scripts for REST fallback and exact enterprise recipes. Read [../clipit-operator/references/editorial-workflow.md](../clipit-operator/references/editorial-workflow.md) before selecting or assembling moments.
 
 ## When to Use
 
@@ -31,22 +26,16 @@ Use this skill when the user wants to:
 
 **Prerequisite:** The video must be imported first (use the video-management skill). Transcription is required for captions and AI suggestions, but not for a manual no-caption clip.
 
-**Cost preflight:** For AI suggestions and rendering, use account-insights first. Ordinary keys may check balance; enterprise usage-only keys use `estimate_cost.py --max-credits <n>` and report internal usage separately from the zero client charge.
+**Spend preflight:** For AI suggestions and rendering, obtain a live estimate for the exact request and apply the user's approved cap. Enterprise usage-only keys report internal usage separately from the zero client charge.
 
 ## Quick Reference
 
-| Operation | Script | Cost |
-|-----------|--------|------|
-| AI viral clip suggestions | `suggest_clips.py --video-id <id> [--count 5]` | ~5 $CLIP |
-| Create clip manually | `create_clip.py --video-id <id> --start <s> --end <s>` | Minimal |
-| List clips | `list_clips.py [--video-id <id>]` | Free |
-| Get clip details | `get_clip.py --clip-id <id>` | Free |
-| Update clip | `update_clip.py --clip-id <id> [--start] [--end] [--title] [--caption]` | Free |
-| Delete clip | `delete_clip.py --clip-id <id>` | Free |
-| Initialize enterprise snapshot | `initialize_editor_snapshot.py --workspace-id <id> --clip-id <id>` | Free |
-| Exact enterprise render/export/deliver | `run_enterprise_exact_delivery.py --workspace-id <id> --clip-id <id> --profile <name> --style-json @style.json --max-credits <n> --confirm` | Varies |
-| Render clip | `render_clip.py --clip-id <id> [--aspect-ratio 9:16] [--wait]` | Varies |
-| Download rendered clip | `download_clip.py --clip-id <id>` | Free |
+| Operation | Preferred path | REST fallback |
+|-----------|----------------|---------------|
+| AI clip suggestions | `clipit videos suggest-clips <videoId> --count 5 --confirm --json` | `suggest_clips.py --video-id <id>` |
+| Create/list/get/update/delete | `clipit clips ...` | matching clip scripts |
+| Render and wait | `clipit clips render <clipId> --confirm --max-credits <cap> --json`; `clipit jobs wait <jobId>` | `render_clip.py --clip-id <id> --wait` |
+| Initialize/exact enterprise delivery | enterprise Python recipe | `initialize_editor_snapshot.py`; `run_enterprise_exact_delivery.py` |
 
 ## Procedure
 
@@ -58,7 +47,7 @@ Use this skill when the user wants to:
 
 **Steps:**
 1. Run `python scripts/suggest_clips.py --video-id <id> --count 5`
-2. The AI (Grok 4.20 with 2M context) analyzes the full transcript and returns clip opportunities
+2. ClipIt's current inference route analyzes the full transcript and returns clip opportunities; do not pin a remembered provider/model in the skill.
 3. Each opportunity includes: `title`, `startTime`, `endTime`, `reason`, `confidence`, `themes`, `viralPotential`
 4. To create a clip from a suggestion, use the `startTime` and `endTime` values with `create_clip.py`
 
@@ -91,11 +80,11 @@ python scripts/create_clip.py --video-id vid_abc123 --start 120.0 --end 155.5 --
 **When to use:** A personal-key user wants a downloadable video file. Enterprise workspace clips use the exact recipe below.
 
 **Steps:**
-1. Check credits with `python scripts/get_credits_balance.py` from account-insights
-2. Run `python scripts/render_clip.py --clip-id <id> --aspect-ratio 9:16 --quality high --wait`
-3. Rendering uses AWS Lambda (Remotion) and typically takes 30-120 seconds
-4. On completion, the job result includes the `renderUrl`
-5. To get a fresh download URL: `python scripts/download_clip.py --clip-id <id>`
+1. Re-read current clip/editor state and run delivery QA for the intended artifact.
+2. Preflight the exact render with a user-approved cap.
+3. Run `clipit clips render <id> --aspect 9:16 --quality high --confirm --max-credits <cap> --json` or the fallback script.
+4. Save the job ID and wait/resume with the matching generic job waiter.
+5. Inspect the current rendered media, then obtain a fresh download URL only when needed.
 
 **Render options:**
 - `--aspect-ratio` — `16:9` (YouTube), `9:16` (TikTok/Reels), `1:1` (Instagram), `4:5` (Facebook)
@@ -160,7 +149,7 @@ python scripts/render_clip.py --clip-id clip_xyz --aspect-ratio 9:16 --quality h
      --expected-editor-version "<initializer-editor-version>" \
      --expected-editor-state-hash "<initializer-editor-state-hash>" \
      --expected-clip-settings-revision "<initializer-settings-revision>" \
-     --max-credits 15 \
+     --max-credits "<approved-cap>" \
      --no-outro \
      --confirm \
      --wait
@@ -180,11 +169,12 @@ Never use direct `render_clip.py --workspace-id ...` for enterprise work; its le
 
 ## Pitfalls
 
+- **Deletion needs explicit scope approval.** Re-read the target clip and describe what is removed before `clipit clips delete <id> --confirm` or the REST fallback.
 - **Transcript required for AI suggestions.** `suggest_clips.py` will fail if the video isn't transcribed. Always transcribe first.
 - **Rendering takes time.** Use `--wait` to block until done, or poll the returned `jobId`. Don't try to download before rendering completes.
 - **Changing clip timing invalidates the render.** If you update start/end times with `update_clip.py`, the previous render is stale — re-render before downloading.
 - **Download URLs expire.** Each call to `download_clip.py` generates a fresh signed URL. Don't cache them.
-- **Credits vary by render duration and quality.** A 60-second 4K render costs more than a 15-second standard render. Use account-insights before bulk renders.
+- **Do not use remembered costs.** Preflight the current render duration, quality, profile, and provider route before approval.
 - **Enterprise exactness is acceptance, not best effort.** The normalized caption object/hash, snapshot identity, source binding, outro policy, and final duration must all match before delivery.
 - **A workspace ID is not enough by itself.** Enterprise initialization and the exact recipe must pass the named-profile identity preflight; never fall back to a personal key.
 

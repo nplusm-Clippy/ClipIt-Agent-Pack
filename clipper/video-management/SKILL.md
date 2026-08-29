@@ -1,27 +1,18 @@
 ---
 name: clipper-video-management
-description: Use enterprise library sources, upload, import, list, delete, and transcribe videos in ClipIt
-version: 1.3.0
-author: nplusm-Clippy
+description: Inspect, import, upload, register, transcribe, and safely remove ClipIt source videos and reusable assets. Use at ingest, when selecting an enterprise library source, diagnosing readiness/audio health, or preparing transcript-grounded editing.
 license: MIT
-platforms: [macos, linux, windows]
 metadata:
+  version: "2.0.0"
   tags: [Video, ClipIt, Upload, Import, Transcription, YouTube, Vimeo]
   hermes:
     tags: [Video, ClipIt, Upload, Import, Transcription, YouTube, Vimeo]
     requires_toolsets: [terminal]
-required_environment_variables:
-  - name: CLIPPER_API_KEY
-    prompt: "Enter your ClipIt API key"
-    help: "Get one at https://clipit.dev -> Settings -> API Keys -> Quick Connect"
-    required_for: "ClipIt API access"
-  - name: CLIPPER_BASE_URL
-    prompt: "Enter the ClipIt base URL (default: https://clipit.dev)"
-    default: "https://clipit.dev"
-    required_for: "Routing API requests"
 ---
 
 # ClipIt Video Management
+
+Use with `clipit-operator`. Prefer current `clipit videos`/`clipit assets` commands or discovered MCP tools; the Python scripts below remain REST and enterprise-library fallbacks. Record returned source/asset/video/job IDs and never repeat an uncertain ingest through another transport.
 
 ## When to Use
 
@@ -83,9 +74,9 @@ Continue only when the response has `"verified": true` for the expected workspac
 3. Save the `videoId` — you'll need it for transcription and clip creation
 
 **Important notes:**
-- YouTube imports use a residential proxy and can take 30-120 seconds depending on video length
-- Age-restricted, region-locked, or live stream URLs will fail — the error explains why
-- The `--wait` flag polls until complete. Without it, you get a `jobId` to poll manually with `wait_for_job.py`
+- URL imports are asynchronous. Use returned phase, heartbeat, retryability, and stalled fields rather than assuming a fixed runtime.
+- Unsupported, restricted, or live sources may fail with a classified job error; preserve the request ID and retryability fields.
+- The `--wait` flag polls until complete. Without it, retain the `jobId` and poll with the matching job waiter.
 
 **Example:**
 ```bash
@@ -150,20 +141,21 @@ This operation is idempotent: retrying the same asset returns the same `videoId`
    - If it returns data, the transcript already exists — skip to next step
    - If it returns 404, proceed to transcribe
 2. Trigger transcription: `python scripts/transcribe_video.py --video-id <id> --wait`
-3. Transcription uses Deepgram Nova-3 and typically takes 10-60 seconds depending on video length
+3. Transcription uses ClipIt's current Deepgram Nova-3 route; retain the job ID and wait/resume rather than assuming a duration.
 4. The transcript includes word-level timestamps and speaker diarization (when multiple speakers are detected)
 
-**Cost:** Ordinary accounts spend 1 $CLIP per minute of audio. Enterprise workspace keys record the same measured usage without debiting the client.
+**Spend:** Run the current preflight for the exact audio duration and profile. Enterprise workspace keys record measured usage without debiting the client.
 
 ### Deleting a Video
 
 **When to use:** The user wants to remove a video and all its associated clips.
 
 **Steps:**
-1. Run `python scripts/delete_video.py --video-id <id>`
-2. This cascades — all clips, thumbnails, and renders associated with the video are also deleted
-3. For an Enterprise Source Library video, the processing video is removed but the client's original library asset is retained and can be registered again
-4. This action is permanent for the deleted processing work and cannot be undone
+1. Re-read the exact video and summarize the cascade (clips, thumbnails, and renders) to the user.
+2. Obtain explicit approval naming that video ID and scope.
+3. Prefer `clipit videos delete <id> --confirm --json`; use `python scripts/delete_video.py --video-id <id>` only as the approved REST fallback.
+4. For an Enterprise Source Library video, the processing video is removed but the client's original library asset is retained and can be registered again.
+5. This action is permanent for the deleted processing work and cannot be undone.
 
 ## Pitfalls
 
@@ -175,7 +167,7 @@ This operation is idempotent: retrying the same asset returns the same `videoId`
 - **Don't trust a successful personal-library response as enterprise proof.** Match the named profile to the expected workspace with `verify_enterprise_workspace.py` before every client session.
 - **Don't delete a source asset while its processing video is active.** Delete the processing video first; ClipIt retains the original enterprise library asset until the asset itself is explicitly deleted.
 - **YouTube imports can fail** for age-restricted, region-locked, or live stream videos. Check the error message in the job result.
-- **Large file uploads** (>2GB) may timeout. For very large videos, consider uploading to YouTube first and importing via URL.
+- **Large local uploads must stay resumable.** Prefer the CLI's resumable multipart upload, retain its upload/job identity, and resume that same transfer after interruption. Do not rehost private footage on YouTube as an upload workaround.
 
 ## Verification
 

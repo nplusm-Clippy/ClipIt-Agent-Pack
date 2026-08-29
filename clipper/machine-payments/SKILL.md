@@ -1,23 +1,18 @@
 ---
 name: clipper-machine-payments
-description: Discover and prepare ClipIt credit top-ups through direct x402, Stripe-managed x402, or Stripe Link MPP
-version: 1.0.1
-author: nplusm-Clippy
+description: Discover current ClipIt payment capabilities and prepare an explicitly approved credit top-up through a live supported rail. Use only when the user asks to buy credits or a paid operation is blocked and the user authorizes a product, amount, rail, and budget.
 license: MIT
-platforms: [macos, linux, windows]
 metadata:
+  version: "2.0.0"
   tags: [ClipIt, Billing, x402, Stripe, Link, MPP, Credits]
   hermes:
     tags: [ClipIt, Billing, x402, Stripe, Link, MPP, Credits]
     requires_toolsets: [terminal]
-required_environment_variables:
-  - name: CLIPPER_API_KEY
-    prompt: "Enter your ClipIt API key"
-    help: "Get one at https://clipit.dev -> Settings -> API Keys -> Connect an Agent"
-    required_for: "Owned payment attempts and receipts"
 ---
 
 # ClipIt Machine Payments
+
+Use with `clipit-operator`. Discover the live catalog and ready rails for the active profile; never infer availability, price, or signing fields from this document. The Python scripts below are the supported fallback bindings.
 
 ## When to Use
 

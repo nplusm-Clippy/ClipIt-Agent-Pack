@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Generate B-Roll for a clip (Flux 2 Max image + Veo 3.1 video pipeline).
+"""Generate B-Roll through ClipIt's GPT Image 2 + H3 Max pipeline.
 
 Usage:
   python generate_broll.py --clip-id <id> --start <s> --end <s>
   [--prompt <prompt>] [--mode single_image|start_end_frame]
   [--end-frame-description <desc>] [--transition-description <desc>]
-  [--duration 4|6|8] [--with-audio] [--wait]
+  [--duration 5..15] [--resolution 480p|768p]
+  [--image-quality low|medium|high|auto] [--wait]
+
+ClipIt preserves the source clip audio; generated provider audio is not used.
 """
 
 import argparse
@@ -23,10 +26,22 @@ def main():
     parser.add_argument("--mode", default="single_image", choices=["single_image", "start_end_frame"])
     parser.add_argument("--end-frame-description", help="Required for start_end_frame mode: how the end frame differs")
     parser.add_argument("--transition-description", help="Optional: describes motion between start and end frames")
-    parser.add_argument("--duration", type=int, default=6, choices=[4, 6, 8], help="Video duration in seconds")
-    parser.add_argument("--with-audio", action="store_true", help="Include AI-generated audio (2x cost)")
-    parser.add_argument("--wait", action="store_true", help="Wait for generation (can take 2-4 minutes)")
+    parser.add_argument("--duration", type=int, default=6, help="Generated video duration in seconds (5-15)")
+    parser.add_argument("--resolution", default="768p", choices=["480p", "768p"])
+    parser.add_argument("--image-quality", default="high", choices=["low", "medium", "high", "auto"])
+    parser.add_argument("--wait", action="store_true", help="Wait for generation to finish")
     args = parser.parse_args()
+
+    if not 5 <= args.duration <= 15:
+        parser.error("--duration must be between 5 and 15 seconds")
+    if args.start < 0:
+        parser.error("--start must be zero or greater")
+    if args.end <= args.start:
+        parser.error("--end must be greater than --start")
+    if args.end - args.start > args.duration:
+        parser.error("B-Roll placement (--end - --start) cannot exceed --duration")
+    if args.mode == "start_end_frame" and not args.end_frame_description:
+        parser.error("--end-frame-description is required for start_end_frame mode")
 
     body = {
         "clipId": args.clip_id,
@@ -34,7 +49,8 @@ def main():
         "endTimeInClip": args.end,
         "mode": args.mode,
         "durationSeconds": args.duration,
-        "withAudio": args.with_audio,
+        "resolution": args.resolution,
+        "imageQuality": args.image_quality,
     }
     if args.prompt:
         body["promptOverride"] = args.prompt

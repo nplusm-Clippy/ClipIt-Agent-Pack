@@ -1,23 +1,18 @@
 ---
 name: clipper-caption-generation
-description: Generate and style word-level captions for ClipIt clips
-version: 1.0.0
-author: nplusm-Clippy
+description: Generate, update, and verify word-timed ClipIt captions, presets, and exact canonical enterprise caption styles. Use for subtitles, transcript-aligned caption edits, typography/layout changes, or exact style-hash delivery work.
 license: MIT
-platforms: [macos, linux, windows]
 metadata:
+  version: "2.0.0"
   tags: [Video, ClipIt, Captions, Subtitles, Styling, Typography]
   hermes:
     tags: [Video, ClipIt, Captions, Subtitles, Styling, Typography]
     requires_toolsets: [terminal]
-required_environment_variables:
-  - name: CLIPPER_API_KEY
-    prompt: "Enter your ClipIt API key"
-    help: "Get one at https://clipit.dev -> Settings -> API Keys -> Quick Connect"
-    required_for: "ClipIt API access"
 ---
 
 # ClipIt Caption Generation
+
+Use with `clipit-operator`. Discover current caption tools before mutation; the Python scripts below remain the exact REST fallback, including the enterprise style contract. Re-read caption/editor state and preview safe areas after every style change.
 
 ## When to Use
 
@@ -30,11 +25,10 @@ Use this skill when the user wants to:
 
 ## Quick Reference
 
-| Operation | Script | Cost |
-|-----------|--------|------|
-| Generate captions | `generate_captions.py --clip-id <id> [--preset bold]` | Minimal |
-| Update caption style | `update_captions.py --clip-id <id> [--preset neon]` | Free |
-| Set exact enterprise style | `set_caption_style.py --workspace-id <id> --clip-id <id> --profile <name> (--style-json @style.json | --directive "caption size 200% single") --expected-editor-version <n> --expected-editor-state-hash <hash> --expected-clip-settings-revision <n>` | Free |
+| Operation | Preferred path | REST fallback |
+|-----------|----------------|---------------|
+| Generate/update captions | discovered caption tool | `generate_captions.py`; `update_captions.py` |
+| Set exact enterprise style | enterprise exact contract | `set_caption_style.py --workspace-id <id> --clip-id <id> --profile <name> ...` |
 
 ## Procedure
 

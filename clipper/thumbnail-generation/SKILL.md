@@ -1,23 +1,18 @@
 ---
 name: clipper-thumbnail-generation
-description: Generate AI thumbnails for clips using Google Nano Banana Pro
-version: 1.0.0
-author: nplusm-Clippy
+description: Plan, generate, inspect, and attach ClipIt thumbnails through the current GPT Image 2 create/edit pipeline. Use for clip-based or standalone thumbnails, exact short visible text, brand/reference composition, and destination crop-safe image work.
 license: MIT
-platforms: [macos, linux, windows]
 metadata:
-  tags: [Video, ClipIt, Thumbnail, AI, Image Generation, Nano Banana Pro]
+  version: "2.0.0"
+  tags: [Video, ClipIt, Thumbnail, AI, Image Generation, GPT Image 2]
   hermes:
-    tags: [Video, ClipIt, Thumbnail, AI, Image Generation, Nano Banana Pro]
+    tags: [Video, ClipIt, Thumbnail, AI, Image Generation, GPT Image 2]
     requires_toolsets: [terminal]
-required_environment_variables:
-  - name: CLIPPER_API_KEY
-    prompt: "Enter your ClipIt API key"
-    help: "Get one at https://clipit.dev -> Settings -> API Keys -> Quick Connect"
-    required_for: "ClipIt API access"
 ---
 
 # ClipIt Thumbnail Generation
+
+Use with `clipit-operator`. Before generation, read [../clipit-operator/references/media-prompting.md](../clipit-operator/references/media-prompting.md) and [../clipit-operator/references/media-qa.md](../clipit-operator/references/media-qa.md). Prefer `clipit thumbnails` or discovered MCP tools; use `generate_thumbnail.py` as the REST fallback.
 
 ## When to Use
 
@@ -26,16 +21,15 @@ Use this skill when the user wants to:
 - Generate a standalone thumbnail from a text prompt
 - Get a specific style, mood, or text overlay on their thumbnail
 
-Powered by Google Nano Banana Pro — supports 4K resolution, accurate text rendering, and reference image composition.
-
-Use the account-insights skill before generation when the user is cost-sensitive: check balance with `get_credits_balance.py` and estimate with `estimate_cost.py` when provider/model metrics are known.
+ClipIt currently routes thumbnail create/edit work through GPT Image 2. With a clip ID, the current thumbnail can remain an authoritative edit reference; without one, the request is a create operation. Plan/preflight every generation and use the live estimate rather than a remembered price.
 
 ## Quick Reference
 
-| Operation | Script | Cost |
-|-----------|--------|------|
-| Generate for clip | `generate_thumbnail.py --clip-id <id> --prompt "..." [--wait]` | ~19.5 $CLIP |
-| Generate standalone | `generate_thumbnail.py --prompt "..." [--wait]` | ~19.5 $CLIP |
+| Operation | Preferred path | REST fallback |
+|-----------|----------------|---------------|
+| Generate for clip | `clipit thumbnails generate --clip-id <id> --prompt "..." --confirm --max-credits <cap> --json` | `generate_thumbnail.py --clip-id <id> --prompt "..."` |
+| Generate standalone | discovered `createImage`/thumbnail tool | `generate_thumbnail.py --prompt "..."` |
+| Wait/resume | `clipit jobs wait <jobId> --stream` | `wait_for_job.py --job-id <id>` |
 
 ## Procedure
 
@@ -44,26 +38,35 @@ Use the account-insights skill before generation when the user is cost-sensitive
 **When to use:** The user has a clip and wants a scroll-stopping thumbnail.
 
 **Steps:**
-1. Run `python scripts/generate_thumbnail.py --clip-id <id> --prompt "description" --wait`
-2. When `clipId` is provided, the system extracts a frame from the clip and uses it as the image-to-image edit base
-3. The result includes the generated thumbnail URL
-4. The thumbnail is automatically linked to the clip
+1. Read the clip, creator style when relevant, current thumbnail, destination aspect, and crop-safe needs.
+2. Choose create or edit mode. If the current thumbnail/frame owns identity or composition, keep `useExistingThumbnail` enabled and state one requested delta plus invariants.
+3. Write the GPT Image 2 prompt in the shared provider order; map every reference to one role.
+4. Describe the live tool, preflight, set an approved cap, and generate once.
+5. Save the job/thumbnail IDs, inspect the actual image, and confirm it is linked to the intended clip when requested.
 
-**Prompt engineering tips:**
-- Be specific about lighting: "golden hour side-lighting", "dramatic rim light"
-- Include composition: "rule of thirds", "centered subject", "negative space on left for text overlay"
-- For text in thumbnails: include the exact text in quotes, e.g., `--prompt 'shocked face reacting, text: "YOU WON'T BELIEVE THIS"'`
-- For YouTube: emphasize facial expressions, high contrast, bold text overlays
-- Quality keywords: "cinematic lighting, professional photograph, sharp focus, vibrant colors"
-- Keep prompts under 500 characters
+**Prompt rules:**
+- Name intended use and create/edit/composite mode.
+- Put the single primary request first; map references by identity/product/style role.
+- Describe one focal hierarchy and destination crop-safe placement.
+- Put required visible text in exact quotes with placement and contrast.
+- For a real person/product/logo edit, list identity and layout invariants explicitly.
+- Keep resolution and quality in API fields; do not replace them with “high quality” prose.
 
 **Example:**
 ```bash
 python scripts/generate_thumbnail.py \
   --clip-id clip_xyz \
-  --prompt 'excited person reacting with wide eyes, dramatic rim lighting, text: "INSANE PLAY", bold red and white composition, YouTube thumbnail style' \
+  --prompt 'Intended use: 16:9 YouTube thumbnail.
+Mode: edit the supplied clip frame.
+Primary request: intensify the genuine reaction with dramatic rim lighting and a bold red-and-white editorial treatment.
+Invariants: preserve the same person, facial identity, expression anatomy, clothing, and source-camera perspective.
+Composition: face on the left third; clean negative space on the right; keep all critical content inside crop-safe margins.
+Exact visible text: "INSANE PLAY" in large high-contrast type on the right, spelled and capitalized exactly.
+Avoid: identity drift, extra people, altered hands or teeth, duplicate text, logos, watermarks, and clutter.' \
   --aspect-ratio 16:9 \
   --resolution 4K \
+  --quality high \
+  --use-existing-thumbnail \
   --wait
 ```
 
@@ -72,19 +75,21 @@ python scripts/generate_thumbnail.py \
 **When to use:** The user wants a thumbnail image that isn't based on an existing clip frame.
 
 **Steps:**
-1. Run `python scripts/generate_thumbnail.py --prompt "description" --wait` (no `--clip-id`)
-2. This produces a pure text-to-image generation
-3. The result includes the generated image URL
+1. Run `python scripts/generate_thumbnail.py --prompt "description" --no-use-existing-thumbnail --wait` without `--clip-id`.
+2. Make the subject/scene/composition self-contained; do not imply a missing reference.
+3. Inspect and retain the returned image/thumbnail identity.
 
 ## Pitfalls
 
-- **19.5 $CLIP per generation.** This is the most expensive per-image operation. Check account-insights first and don't generate multiple variants unless the user asks.
+- **No remembered prices.** Use the current plan/preflight for aspect, resolution, quality, and account.
 - **Aspect ratio matters.** YouTube thumbnails should be `16:9`, TikTok profile images `1:1`. Default is `16:9`.
-- **Text rendering works but isn't perfect.** Keep text short (1-5 words) for best results. Nano Banana Pro handles text better than most models, but very long text may still have artifacts.
-- **The prompt should describe what you WANT, not what you don't want.** Positive descriptions only.
+- **Exact text needs inspection.** Keep it short, quote it verbatim, and reject spelling/casing/layout drift.
+- **Preserve identity.** A provider success does not prove a referenced real person, product, or logo stayed accurate.
+- **Resume, do not duplicate.** Query the returned job before starting a replacement after timeout.
 
 ## Verification
 
-- **Generation succeeded:** Job status is `completed` and `result.url` is a valid image URL
+- **Generation captured:** Job status is completed and the returned asset can be opened
+- **Image QA passed:** Requested delta, identity/product/logo, exact text, anatomy, composition, crop, and invariants were inspected
 - **Thumbnail linked to clip:** The clip's `thumbnailUrl` field is updated (check with `get_clip.py`)
 - **Image is correct size:** The URL returns an image matching the requested aspect ratio

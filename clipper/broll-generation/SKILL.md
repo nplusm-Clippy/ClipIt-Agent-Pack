@@ -1,55 +1,51 @@
 ---
 name: clipper-broll-generation
-description: Plan and generate AI B-Roll video overlays using Flux 2 Max + Veo 3.1
-version: 1.0.0
-author: nplusm-Clippy
+description: Plan, generate, inspect, and apply ClipIt B-Roll overlays using the current GPT Image 2 still and MiniMax H3 Max image-to-video pipeline. Use for story-relevant cutaways, visual proof, pacing resets, or start/end-frame transitions.
 license: MIT
-platforms: [macos, linux, windows]
 metadata:
-  tags: [Video, ClipIt, B-Roll, AI Video, Flux, Veo, Visual Effects, Overlay]
+  version: "2.0.0"
+  tags: [Video, ClipIt, B-Roll, AI Video, GPT Image 2, H3 Max, Overlay]
   hermes:
-    tags: [Video, ClipIt, B-Roll, AI Video, Flux, Veo, Visual Effects, Overlay]
+    tags: [Video, ClipIt, B-Roll, AI Video, GPT Image 2, H3 Max, Overlay]
     requires_toolsets: [terminal]
-required_environment_variables:
-  - name: CLIPPER_API_KEY
-    prompt: "Enter your ClipIt API key"
-    help: "Get one at https://clipit.dev -> Settings -> API Keys -> Quick Connect"
-    required_for: "ClipIt API access"
 ---
 
 # ClipIt B-Roll Generation
 
+Use with `clipit-operator`. Before generation, read [../clipit-operator/references/media-prompting.md](../clipit-operator/references/media-prompting.md) and [../clipit-operator/references/media-qa.md](../clipit-operator/references/media-qa.md). Prefer `clipit broll` or discovered MCP tools; use the Python scripts as REST fallbacks.
+
 ## When to Use
 
 Use this skill when the user wants to:
-- Add visual B-Roll overlays to a clip (stock-footage-style AI-generated video)
+- Add a story-relevant visual cutaway or overlay to a clip
 - Plan multiple B-Roll concepts for a clip before committing to generation
 - Create transition effects between scenes using start/end frame interpolation
 
 B-Roll is generated in two stages:
-1. **Image generation** (Flux 2 Max) — creates the visual frame(s)
-2. **Video generation** (Veo 3.1) — animates the frame into a 4-8 second video clip
+1. **Still generation** (GPT Image 2) creates the source frame or compatible start/end frames.
+2. **Image-to-video** (MiniMax H3 Max on fal) animates the approved frame intent.
 
-This is the most expensive operation. Use account-insights for a balance/cost preflight, plan first, and generate only what the user approves.
+ClipIt mutes generated provider audio; the source clip audio remains authoritative. Always plan first, use the live estimate and an approved spend cap, then generate only selected concepts.
 
 ## Quick Reference
 
-| Operation | Script | Cost |
-|-----------|--------|------|
-| Plan concepts | `plan_broll.py --clip-id <id> [--count 3]` | ~5 $CLIP |
-| Generate B-Roll | `generate_broll.py --clip-id <id> --start <s> --end <s> [--wait]` | ~220-420 $CLIP |
+| Operation | Preferred path | REST fallback |
+|-----------|----------------|---------------|
+| Plan concepts | `clipit broll plan <clipId> --count 3 --confirm --json` | `plan_broll.py --clip-id <id> --count 3` |
+| Generate B-Roll | `clipit broll generate <clipId> --concept-index <n> --confirm --max-credits <cap> --json` | `generate_broll.py --clip-id <id> --start <s> --end <s>` |
+| Wait/resume | `clipit jobs wait <jobId> --stream` | `wait_for_job.py --job-id <id>` |
 
 ## Procedure
 
 ### Planning B-Roll Concepts
 
-**When to use:** The user wants B-Roll ideas before spending credits on generation. Always recommend this step first, after checking credits with `get_credits_balance.py`.
+**When to use:** The user wants B-Roll ideas or an applied cutaway. Planning grounds the visual in transcript context and does not authorize generation.
 
 **Steps:**
-1. Run `python scripts/plan_broll.py --clip-id <id> --count 3 --wait`
-2. The AI generates concept descriptions with image and video prompts for each
-3. Present the concepts to the user and let them choose which to generate
-4. Use the chosen concept's index with `generate_broll.py --concept-index N`
+1. Read the target clip/transcript and identify the spoken moment and editorial purpose.
+2. Run `clipit broll plan <clipId> --count 3 --confirm --json` or the fallback script.
+3. Present each concept with its purpose, clip-local placement, still intent, and motion intent.
+4. Select one concept, describe the live generate schema, preflight its exact cost, and obtain approval under a cap.
 
 **Example:**
 ```bash
@@ -58,13 +54,13 @@ python scripts/plan_broll.py --clip-id clip_xyz --count 3 --theme "technology" -
 
 ### Generating B-Roll (Single Image Mode)
 
-**When to use:** Standard B-Roll — one starting image animated into video. Best for atmosphere shots, slow reveals, ambient motion.
+**When to use:** One source frame can support a coherent continuation such as a detail, atmosphere shot, controlled reveal, or simple action.
 
 **Steps:**
-1. Run `python scripts/generate_broll.py --clip-id <id> --start 10 --end 16 --prompt "city skyline at sunset, golden light, cinematic" --wait`
-2. `--start` and `--end` define WHERE in the clip the B-Roll overlay appears (in seconds)
-3. Generation takes 2-4 minutes (Flux image ~15s + Veo 3.1 video ~2-3 min)
-4. The result includes both `imageUrl` (the generated frame) and `videoUrl` (the animated B-Roll)
+1. Structure the still intent and motion intent separately for review. Prefer a planned concept; when using the REST `promptOverride`, provide the concise creative outcome and let ClipIt compile the provider-specific still and motion prompts.
+2. Run `python scripts/generate_broll.py --clip-id <id> --start 10 --end 16 --prompt "..." --duration 6 --resolution 768p --image-quality high --wait`.
+3. Treat `--start` and `--end` as clip-local placement and ensure the placement duration does not exceed generated duration.
+4. Save the job/result IDs, inspect the actual still and sampled video frames, and confirm application to the intended range.
 
 ### Generating B-Roll (Start/End Frame Mode)
 
@@ -80,43 +76,35 @@ python scripts/plan_broll.py --clip-id clip_xyz --count 3 --theme "technology" -
      --transition-description "smooth time-lapse transition from empty to full" \
      --duration 8 --wait
    ```
-2. This generates TWO Flux images (start and end frame), then Veo 3.1 interpolates between them
-3. Costs approximately 2x the image generation (two Flux calls) but the same video cost
-4. `--transition-description` is optional but recommended — it tells Veo how to animate between frames
+2. ClipIt creates compatible GPT Image 2 start/end frames and H3 Max animates one continuous transformation.
+3. Describe a physically plausible transition; do not use this mode for an unrelated cut.
+4. Inspect both endpoint fidelity and temporal continuity before applying.
 
 ### Generation Options
 
 - `--mode` — `single_image` (default) or `start_end_frame`
-- `--duration` — `4` (quick cutaway), `6` (standard), or `8` (establishing shot) seconds
-- `--with-audio` — include AI-generated audio (doubles the video generation cost)
+- `--duration` — current REST contract accepts 5-15 seconds; use the shortest duration that communicates the beat
+- `--resolution` — `480p` or `768p`
+- `--image-quality` — `low`, `medium`, `high`, or `auto`
 - `--concept-index` — use a concept from `plan_broll.py` output (skips `--prompt`)
 - `--prompt` — custom visual description (overrides planned concepts)
 
-### Cost Breakdown
-
-| Component | Cost |
-|-----------|------|
-| Flux 2 Max image (single_image) | ~9.1 $CLIP |
-| Flux 2 Max images (start_end_frame) | ~18.2 $CLIP |
-| Veo 3.1 video, 8s, no audio | ~208 $CLIP |
-| Veo 3.1 video, 8s, with audio | ~416 $CLIP |
-| **Total (typical, single_image, 8s, no audio)** | **~217 $CLIP** |
-| **Total (start_end_frame, 8s, with audio)** | **~434 $CLIP** |
-
-Always plan first, check account-insights, and confirm with the user before generating.
+Never provide a remembered cost table. Use the plan/preflight returned for the current mode, duration, resolution, image quality, account, and provider route.
 
 ## Pitfalls
 
-- **This is expensive.** A single B-Roll generation costs 200-400+ $CLIP. Always use account-insights and `plan_broll.py` first, then get user approval before generating.
-- **Generation takes 2-4 minutes.** Use `--wait` to block, or poll the jobId. Don't timeout prematurely.
+- **Planning is not approval.** Present the live estimate and cap before generation.
+- **Resume the same job.** Use the returned `jobId`; unchanged progress alone is not failure.
 - **`start_end_frame` mode requires `--end-frame-description`.** Without it, the script will fail.
-- **Keep motion prompts concise.** Veo 3.1 responds best to under 200 characters of motion description.
-- **Duration affects cost.** 4-second clips are cheaper than 8-second clips. Use shorter durations for quick cutaways.
+- **Prompt motion, not the still.** H3 Max already receives the source frame; use one camera idea and one plausible action.
+- **Protect real people.** Name identity/clothing/body/action invariants and use restrained motion.
+- **No generated audio direction.** ClipIt preserves the source clip audio.
 - **Re-render after adding B-Roll.** The B-Roll overlay is applied during the next clip render. Use `render_clip.py` after generating B-Roll.
 
 ## Verification
 
 - **Plan succeeded:** Response contains a non-empty `concepts` array with `description`, `imagePrompt`, `videoPrompt` for each
-- **Generation succeeded:** Job status is `completed` and result has both `imageUrl` and `videoUrl`
-- **B-Roll visible in render:** After re-rendering the clip, the B-Roll appears at the specified start/end times
+- **Generation captured:** Job status is completed and current state references the generated still/video asset
+- **Media QA passed:** Identity, anatomy, motion, continuity, crop, and prompt intent were inspected
+- **B-Roll visible in render:** The current render shows it at the exact clip-local start/end while source audio remains correct
 - **Start/end frame mode:** The video shows a clear visual transformation from start to end state
