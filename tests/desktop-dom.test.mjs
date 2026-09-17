@@ -137,6 +137,7 @@ test('modern Activity uses names, verifies fresh approval, preserves exact targe
   })
   try {
     assert.match(f.text(), /Fieldwork Studio/); assert.doesNotMatch(f.text(), /private-account-id|private-key-id|private-run-id/)
+    assert.match(document.querySelector('.clipit-control-room style').textContent, /\.clipit-control-room dialog\{margin:auto;/)
     assert.equal(f.calls.filter(call => /catalog|recipes|tool$/.test(call.route)).length, 0)
     await f.selectTask(); assert.match(f.text(), /Launch walkthrough · 12:40/); assert.doesNotMatch(f.text(), /40%/)
     const trigger = await f.click('Review proposed actions')
@@ -233,4 +234,63 @@ test('modern view exposes degraded reads and exact parameters without historical
     assert.doesNotMatch(f.text(), /internal-plan-id|internal-signature/)
     assert.match(document.querySelector('dialog details').textContent, /internal-plan-id/)
   } finally { await f.close() }
+})
+
+test('Outputs groups resource identity by newest association while retaining distinct same-name resources', async () => {
+  const output = { kind: 'clip', resourceId: 'clip-one', presentation: { role: 'output', label: 'Opening highlight', readiness: 'draft', durationSeconds: 15 } }
+  const values = [
+    { ...output, id: 'older', createdAt: '2026-09-17 05:00:00' },
+    { ...output, id: 'newer', createdAt: '2026-09-17 06:00:00', presentation: { ...output.presentation, sourceLabel: 'Newest association' } },
+    { ...output, id: 'other-clip', resourceId: 'clip-two', createdAt: '2026-09-17T07:00:00Z', presentation: { ...output.presentation, durationSeconds: 30 } },
+    { ...output, id: 'other-kind', kind: 'video', createdAt: '2026-09-17T08:00:00Z' },
+    { id: 'unknown', kind: 'clip', presentation: { role: 'unknown', label: 'Unavailable reference' } }
+  ]
+  const run = { id: 'run', name: 'Prepared highlights', status: 'completed' }
+  const f = await modernFixture(route => {
+    if (route === '/operations/library') return { items: values }
+    if (route === '/operations/runs') return { items: [run] }
+    if (route === '/operations/run') return run
+    if (route === '/operations/artifacts') return { items: values }
+  })
+  try {
+    await f.click('Outputs')
+    assert.equal(document.querySelectorAll('.cr-output').length, 3)
+    assert.match(f.text(), /Newest association/); assert.match(f.text(), /0:15/); assert.match(f.text(), /0:30/); assert.match(f.text(), /Associated/)
+    assert.match(f.text(), /Some associated resources are unavailable to this connection or have no confirmed output role/)
+    await React.act(async () => { document.querySelector('.cr-output').click(); await new Promise(resolve => setImmediate(resolve)) })
+    assert.match(document.querySelector('dialog details').textContent, /"id": "newer"/)
+    await f.click('Close Opening highlight')
+    await f.click('Activity'); await f.selectTask()
+    assert.equal(document.querySelectorAll('.cr-detail .cr-output').length, 4, 'workflow associations stay intact')
+    const headings = [...document.querySelectorAll('.cr-detail h3')].map(node => node.textContent)
+    assert.ok(headings.indexOf('Outputs') < headings.indexOf('Activity'))
+  } finally { await f.close() }
+})
+
+test('SQL UTC timestamps match explicit offsets in a non-UTC timezone and event creation time is usable', async () => {
+  const originalTZ = process.env.TZ
+  process.env.TZ = 'America/Chicago'
+  let f
+  try {
+    const expected = new Date('2026-09-17T05:39:00Z').toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+    const run = { id: 'run', name: 'Finished at midnight', status: 'completed', updatedAt: '2026-09-17 05:39:00.000000' }
+    f = await modernFixture(route => {
+      if (route === '/operations/runs') return { items: [run] }
+      if (route === '/operations/run') return run
+      if (route === '/operations/events') return { items: [
+        { sequence: 1, type: 'status_changed', occurredAt: '2026-09-17T00:39:00-05:00' },
+        { sequence: 2, type: 'status_changed', createdAt: '2026-09-17 05:39:00' },
+        { sequence: 3, type: 'status_changed', occurredAt: '2026-09-17T05:39:00' }
+      ] }
+    })
+    await f.selectTask()
+    assert.ok(document.querySelector('.cr-detail header').textContent.includes(`Updated ${expected}`))
+    const eventTimes = [...document.querySelectorAll('.cr-timeline .cr-small')].map(node => node.textContent)
+    assert.deepEqual(eventTimes, [expected, expected, expected])
+    assert.doesNotMatch(f.text(), /Time unavailable/)
+  } finally {
+    if (f) await f.close()
+    if (originalTZ === undefined) delete process.env.TZ
+    else process.env.TZ = originalTZ
+  }
 })
