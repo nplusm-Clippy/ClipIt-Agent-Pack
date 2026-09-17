@@ -162,7 +162,7 @@ test('Outputs excludes unknown associations and loads only the explicitly chosen
   const exportValue = { exportId: 'exact-export', format: 'mp4', width: 1080, height: 1920, editorVersion: 3, exactlyMatchesEditor: true, inspectionStatus: 'verified', blockers: [] }
   const f = await modernFixture(route => {
     if (route === '/operations/library') return { items: [output, { id: 'unknown', kind: 'clip', presentation: { role: 'unknown', label: 'Not an output' } }] }
-    if (route === '/operations/delivery_state') return { selection: { selectedExportId: 'exact-export' }, selectedExport: { ...exportValue, exactlyMatchesEditor: !stale }, exports: [exportValue] }
+    if (route === '/operations/delivery_state') return { guidance: 'Call applyClipFitAndRender with a canonical snapshot.', selection: { selectedExportId: 'exact-export' }, selectedExport: { ...exportValue, exactlyMatchesEditor: !stale }, exports: [exportValue] }
     if (route === '/operations/download') return { exportId: 'exact-export', downloadUrl: 'https://signed.example.test/export', expiresAt: '2099-01-01T00:00:00Z' }
   })
   try {
@@ -173,6 +173,9 @@ test('Outputs excludes unknown associations and loads only the explicitly chosen
     assert.equal(document.querySelector('video'), null)
     assert.equal(f.calls.filter(call => /download|delivery_state/.test(call.route)).length, 0)
     await f.click('Inspect available exports')
+    const ordinary = document.querySelector('dialog').cloneNode(true); ordinary.querySelectorAll('details').forEach(node => node.remove())
+    assert.doesNotMatch(ordinary.textContent, /applyClipFitAndRender|canonical snapshot/)
+    assert.match(document.querySelector('dialog details').textContent, /applyClipFitAndRender/)
     assert.match(document.querySelector('dialog select').textContent, /1080 × 1920/)
     assert.doesNotMatch(document.querySelector('dialog select').textContent, /exact-export/)
     await f.click('Preview exact export')
