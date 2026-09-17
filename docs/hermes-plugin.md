@@ -50,6 +50,16 @@ Rotate or revoke keys in ClipIt, update the gateway secret environment, restart/
 
 Disable the Desktop plugin and run `hermes plugins disable clipit` before update/rollback. Install the reviewed replacement commit through Hermes with `--force --ref`, then rerun Doctor and the connection/read checks. Existing server jobs continue independently. An older UI must fail closed on unsupported protocol rather than reinterpreting new states. `hermes plugins remove clipit` removes the native package; remove receipt metadata or legacy skill copies only if you intend to, and preserve unrelated profiles/skills/plugins.
 
+## Control Room 3.1
+
+Activity is the default view: search work, filter Needs you/In progress/Finished, inspect its source and observed phase, and review recorded actions. Percentages supplied by the workflow are estimates and are not presented as measured completion. Outputs includes only resources explicitly recorded as workflow outputs; historical unclassified associations remain available in technical details.
+
+New brief searches authorized named sources. Source and clip access still require the existing `video_processing` and `clip_generation` permissions. The additive `/agent/platform/resources` endpoint, optional `presentation` fields and structured events also work through the shared HTTP API and standalone Python bridge; no Hermes dependency was added to the server.
+
+Approvals show exact supplied action fields and revalidate the current digest before submission. Pause/cancel show requested state until confirmed. Export review selects an exact export identity and refreshes temporary media links on demand. A change request is a local draft that can be copied or attached to the current Hermes composer; it never sends automatically or claims to control an unrelated session.
+
+Advanced contains live tool schemas, connection diagnostics and a per-profile Classic interface switch for rollback. Polling uses one shared budget while the view is mounted, with slower checks while hidden; closing the view does not provide background monitoring. Unknown operation receipts continue to block new mutations until reconciled.
+
 ## Local verification
 
 Use an isolated Python environment with `requirements.txt` plus `requirements-test.txt`:
@@ -61,7 +71,7 @@ npm ci --ignore-scripts
 npm test
 python tooling/build_parity_inventory.py --check
 python tooling/package_release.py --output dist
-python -m zipfile -e dist/clipit-agent-pack-3.0.0.zip dist/extracted
+python -m zipfile -e dist/clipit-agent-pack-3.1.0.zip dist/extracted
 hermes plugins doctor dist/extracted/clipit --ci
 ```
 

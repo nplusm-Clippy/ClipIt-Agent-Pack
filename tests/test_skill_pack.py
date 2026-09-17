@@ -58,7 +58,7 @@ class SkillPackTests(unittest.TestCase):
         self.assertEqual(manifest_skills, EXPECTED_SKILLS)
         self.assertEqual(directory_skills, EXPECTED_SKILLS)
         self.assertEqual(self.manifest["alwaysInstall"], ["clipit-operator"])
-        self.assertEqual(self.manifest["packVersion"], "3.0.0")
+        self.assertEqual(self.manifest["packVersion"], "3.1.0")
         self.assertEqual(self.manifest["minimumCliVersion"], "0.3.0")
         self.assertEqual(self.manifest["capabilityContractVersion"], "clipit-agent-capabilities.v1")
         self.assertEqual(self.manifest["mediaPromptingContract"], "media-prompting-contract.v2")

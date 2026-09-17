@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "packVersion": "3.0.0",
+  "packVersion": "3.1.0",
   "platformContractVersion": "2026-09-16",
   "nativePlugin": {
     "id": "clipit",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "testedHermesRelease": "v2026.9.14",
     "testedHermesCommit": "345cd2b057a452236de401d3534b8502a7465e8d",
     "minimumHermesRuntime": "0.21.3",

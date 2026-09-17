@@ -1,7 +1,7 @@
 manifest_version: 2
 name: clipit
 label: ClipIt
-version: 3.0.0
+version: 3.1.0
 description: ClipIt video editing tools, durable Clippy runs, portable skills and an optional Desktop Control Room.
 author: ClipIt
 license: MIT

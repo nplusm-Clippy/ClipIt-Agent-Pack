@@ -1,6 +1,6 @@
 {
   "schema": "clipit-capability-inventory.v1",
-  "packVersion": "3.0.0",
+  "packVersion": "3.1.0",
   "capabilityContract": "clipit-agent-capabilities.v1",
   "skillCount": 18,
   "pythonFileCount": 60,

@@ -110,7 +110,7 @@ _GET = {
     "catalog": "/agent/platform/catalog", "overview": "/agent/platform/overview", "recipes": "/agent/platform/recipes",
     "tools": "/agent/tools", "skills": "/agent/skills", "manifest": "/agent/capability-manifest",
     "media_guides": "/agent/media-guides", "runs": "/agent/platform/runs",
-    "library": "/agent/platform/library", "videos": "/videos",
+    "library": "/agent/platform/library", "videos": "/videos", "resources": "/agent/platform/resources",
 }
 _RESOURCE_GET = {
     "tool": "/agent/platform/tools/{id}", "run": "/agent/platform/runs/{id}", "events": "/agent/platform/runs/{id}/events",
@@ -128,8 +128,9 @@ _RESOURCE_POST = {"control": "/agent/platform/runs/{id}/control",
 OPERATIONS = frozenset(_GET) | frozenset(_RESOURCE_GET) | frozenset(_POST) | frozenset(_RESOURCE_POST) | {"upload_abort"}
 _QUERY = {
     "runs": {"limit", "cursor", "status", "search"}, "events": {"limit", "cursor"},
-    "artifacts": {"limit", "cursor", "kind", "status"},
-    "library": {"limit", "cursor", "kind", "status", "search"},
+    "artifacts": {"limit", "cursor", "kind", "status", "role", "readiness", "search"},
+    "library": {"limit", "cursor", "kind", "status", "search", "role", "readiness"},
+    "resources": {"limit", "cursor", "kind", "search"},
     "tools": {"skill", "category"}, "operation": {"operation"}, "videos": {"limit", "offset"},
     "delivery_state": {"exportId"}, "download": {"exportId"},
 }

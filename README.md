@@ -2,7 +2,7 @@
 
 ClipIt Agent Pack equips a shell- or MCP-capable agent to act as a practical video editor: ingest footage, understand transcripts, shape a story, assemble timelines, frame subjects, caption, generate supporting media, mix audio, render, deliver, publish, and prove the result is ready.
 
-Pack version `3.0.0` is described by [`agent-pack.manifest.json`](agent-pack.manifest.json). It retains capability contract `clipit-agent-capabilities.v1`, requires ClipIt CLI `0.3.0` or newer, and keeps `clipit-operator` active for every ClipIt task. The optional native Hermes plugin uses the additive platform contract `2026-09-16`. Existing CLI, MCP and Python workflows run independently of Hermes.
+Pack version `3.1.0` is described by [`agent-pack.manifest.json`](agent-pack.manifest.json). It retains capability contract `clipit-agent-capabilities.v1`, requires ClipIt CLI `0.3.0` or newer, and keeps `clipit-operator` active for every ClipIt task. The optional native Hermes plugin uses the additive platform contract `2026-09-16`. Existing CLI, MCP and Python workflows run independently of Hermes.
 
 The native plugin is a local release candidate. Publishing, authenticated staging acceptance and mixed-client production acceptance are separate release gates. The [generated capability inventory](docs/capability-inventory.json) records all 18 skills and 52 executable scripts plus eight support modules. See [native installation and operations](docs/hermes-plugin.md) and [shared platform contract](docs/platform-client.md).
 

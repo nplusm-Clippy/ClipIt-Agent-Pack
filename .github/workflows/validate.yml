@@ -28,8 +28,8 @@ jobs:
         run: |
           python tooling/package_release.py --output dist/first
           python tooling/package_release.py --output dist/second
-          cmp dist/first/clipit-agent-pack-3.0.0.zip dist/second/clipit-agent-pack-3.0.0.zip
-          python -m zipfile -e dist/first/clipit-agent-pack-3.0.0.zip dist/extracted
+          cmp dist/first/clipit-agent-pack-3.1.0.zip dist/second/clipit-agent-pack-3.1.0.zip
+          python -m zipfile -e dist/first/clipit-agent-pack-3.1.0.zip dist/extracted
       - name: Check actual released Hermes loader
         run: |
           git init "$RUNNER_TEMP/hermes-source"

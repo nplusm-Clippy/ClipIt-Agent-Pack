@@ -181,6 +181,28 @@ class NativeRuntimeTests(unittest.TestCase):
         self.assertTrue(result["permissions"]["clippy_agent"])
         self.assertNotIn("test-secret", json.dumps(result))
 
+    def test_named_workspace_and_credential_labels_are_bounded_and_private(self):
+        runtime = Runtime(lambda: Settings("https://clipit.dev", "test-secret"))
+        runtime.call = Mock(side_effect=[{"user": {"id": "user", "username": "Personal name", "email": "private@example.test"},
+            "apiKey": {"id": "key", "keyName": "  QA   connection  "}, "scope": {"workspaceName": " Studio   Équipe "}},
+            {"contractVersion": "2026-09-16"}])
+        value = runtime.status()
+        self.assertEqual(value["accountLabel"], "Studio Équipe")
+        self.assertEqual(value["credentialLabel"], "QA connection")
+        self.assertNotIn("private@example.test", json.dumps(value))
+        runtime.call = Mock(side_effect=[{"user": {"username": "x" * 300}, "apiKey": {}, "scope": {}}, {}])
+        self.assertEqual(len(runtime.status()["accountLabel"]), 240)
+        runtime.call = Mock(side_effect=[{"user": {}, "apiKey": {}, "scope": {}}, {}])
+        self.assertEqual(runtime.status()["accountLabel"], "Personal workspace")
+
+    def test_resource_search_remains_a_bounded_portable_read(self):
+        method, path, query, body = operation_request("resources", {"query": {"kind": "clip", "search": "Interview", "limit": 25}})
+        self.assertEqual((method, path), ("GET", "/api/v1/agent/platform/resources"))
+        self.assertEqual(query, {"kind": "clip", "search": "Interview", "limit": 25})
+        self.assertEqual(body, {})
+        with self.assertRaises(ClipItError):
+            operation_request("resources", {"url": "https://unapproved.invalid"})
+
     def test_registration_is_inert_and_complete(self):
         context = Mock()
         with patch.object(requests.Session, "request", side_effect=AssertionError("registration performed network IO")):

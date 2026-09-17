@@ -1,6 +1,6 @@
 {
   "format": "clipit-portable-skills.v1",
-  "packVersion": "3.0.0",
+  "packVersion": "3.1.0",
   "skills": [
     {
       "bytes": 30218,
@@ -147,5 +147,5 @@
       "sourcePath": "clipper/video-management"
     }
   ],
-  "sourceManifestSha256": "c50b493fb95f55be630de35e11449cb6203d909d2d90a3f8abec35eb73bafcb9"
+  "sourceManifestSha256": "e3bd519270737c18c521a7ce8e0dc9166da5ee6329c475f5c11e5a5d642f3393"
 }

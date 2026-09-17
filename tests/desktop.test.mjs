@@ -40,7 +40,7 @@ test('registration contributes expected native areas with no requests until view
   assert.equal(f.calls.length, 0)
   assert.equal(f.module.namespace.default.defaultEnabled, false)
   assert.ok(f.contributions.some(value => value.area === 'routes' && value.data.path === '/clipit'))
-  assert.equal(f.contributions.filter(value => value.area === 'palette').length, 4)
+  assert.equal(f.contributions.filter(value => value.area === 'palette').length, 5)
   for (const dispose of f.disposers) dispose()
   assert.equal(f.profileListeners.size, 0)
 })
@@ -336,4 +336,107 @@ test('one snapshot poll updates terminal runs, retains cursor and honors shared 
   assert.equal(c.snapshot().error, null)
   unmount(); c.close()
   assert.equal(f.timers.size, 0)
+})
+
+test('completed selection keeps shared attention polling active without detailed follow-up reads', async () => {
+  const f = await fixture((path, options) => {
+    if (path === '/operations/run') return { id: options.body.id, status: 'completed' }
+    if (path === '/operations/runs') return { items: [{ id: 'done', status: 'completed' }] }
+    if (path === '/operations/poll_budget') return { intervalMs: 5000, overview: { runs: [{ id: 'another', status: 'awaiting_approval' }] }, runs: [] }
+    return { items: [] }
+  })
+  const rest = f.ctx.rest
+  f.ctx.rest = async (...args) => { const data = await rest(...args); if (args[0] === '/status') data.compatibility.features.coordinatedPolling = true; return data }
+  const c = f.module.namespace.createController(f.ctx), unmount = c.mount()
+  await new Promise(resolve => setImmediate(resolve)); await c.select('done')
+  const before = f.calls.length, timer = [...f.timers.values()][0]
+  assert.ok(timer, 'terminal selection must retain polling')
+  f.timers.clear(); await timer.fn()
+  assert.equal(f.calls.length - before, 1)
+  assert.equal(f.calls.at(-1).options.body.body.runId, undefined)
+  assert.equal(c.snapshot().overview.runs[0].id, 'another')
+  assert.equal(c.snapshot().selected.id, 'done')
+  unmount(); c.close()
+})
+
+test('late selected-run poll data cannot replace another selection and repeated events are deduplicated', async () => {
+  let resolvePoll
+  const f = await fixture((path, options) => {
+    if (path === '/operations/run') return { id: options.body.id, status: 'running' }
+    if (path === '/operations/events') return { items: [{ sequence: 1, message: options.body.id }], page: { resumeCursor: 'event-1' } }
+    if (path === '/operations/poll_budget') return new Promise(resolve => { resolvePoll = resolve })
+    return { items: [] }
+  })
+  const rest = f.ctx.rest
+  f.ctx.rest = async (...args) => { const data = await rest(...args); if (args[0] === '/status') data.compatibility.features.coordinatedPolling = true; return data }
+  const c = f.module.namespace.createController(f.ctx), unmount = c.mount()
+  await new Promise(resolve => setImmediate(resolve)); await c.select('one')
+  const timer = [...f.timers.values()][0]; f.timers.clear(); const polling = timer.fn()
+  await c.select('two')
+  resolvePoll({ overview: { runs: [] }, runs: [], run: { id: 'one', status: 'completed' }, events: { items: [{ sequence: 2, message: 'wrong selection' }] } })
+  await polling
+  assert.equal(c.snapshot().selected.id, 'two'); assert.equal(c.snapshot().events[0].message, 'two')
+  await c.loadRun('two', true)
+  assert.equal(c.snapshot().events.length, 1)
+  unmount(); c.close()
+})
+
+test('workflow filters survive refresh and cursor paging; later filters win over old responses', async () => {
+  let resolveFirst, queries = []
+  const f = await fixture((path, options) => {
+    if (path === '/operations/runs') {
+      const query = options.body.query; queries.push(query)
+      if (query.search === 'slow') return new Promise(resolve => { resolveFirst = resolve })
+      return { items: [{ id: query.cursor ? 'next' : 'first' }], page: { nextCursor: 'cursor-first' } }
+    }
+    return { items: [] }
+  })
+  const c = f.module.namespace.createController(f.ctx); await c.refresh()
+  const old = c.loadRuns({ search: 'slow' }); await c.loadRuns({ search: 'launch', status: 'attention' })
+  resolveFirst({ items: [{ id: 'obsolete' }], page: {} }); await old
+  await c.loadRuns({ more: true })
+  assert.equal(queries.at(-1).search, 'launch'); assert.equal(queries.at(-1).status, 'attention'); assert.equal(queries.at(-1).cursor, 'cursor-first')
+  assert.equal(c.snapshot().runs.length, 2)
+  await c.tab('Runs'); assert.equal(queries.at(-1).search, 'launch'); assert.equal(queries.at(-1).cursor, undefined)
+  c.close()
+})
+
+test('fresh approval rejects changed digest and invalid expiry before any mutation', async () => {
+  const approval = { approvalId: 'approval', actionDigest: 'new', expiresAt: '2099-01-01T00:00:00Z' }
+  const f = await fixture(path => path === '/operations/run' ? { id: 'run', status: 'awaiting_approval', currentApproval: approval } : { items: [] })
+  const c = f.module.namespace.createController(f.ctx); await c.refresh()
+  await assert.rejects(c.respondToApproval({ id: 'run' }, { ...approval, actionDigest: 'old' }, 'approved'), /changed or expired/)
+  approval.expiresAt = 'invalid'
+  await assert.rejects(c.respondToApproval({ id: 'run' }, approval, 'approved'), /changed or expired/)
+  assert.equal(f.calls.filter(call => call.path === '/operations/approval').length, 0)
+  c.close()
+})
+
+test('pause is requested until observed confirmation and definitive rejection releases pending indicator', async () => {
+  let status = 'running', reject = false
+  const f = await fixture(path => {
+    if (path === '/operations/run') return { id: 'run', status, allowedControls: ['pause'] }
+    if (path === '/operations/control') return reject ? { ok: false, error: { status: 409, code: 'STALE', message: 'Changed' } } : { runId: 'run', status: 'running' }
+    return { items: [] }
+  })
+  const c = f.module.namespace.createController(f.ctx); await c.refresh()
+  await c.control({ id: 'run', status: 'running' }, 'pause')
+  assert.equal(c.snapshot().controlRequests.run, 'pause'); assert.equal(c.snapshot().selected.status, 'running')
+  status = 'paused'; await c.loadRun('run'); assert.equal(c.snapshot().controlRequests.run, undefined)
+  status = 'running'; reject = true
+  await assert.rejects(c.control({ id: 'run', status }, 'pause'), /Changed/)
+  assert.equal(c.snapshot().controlRequests.run, undefined)
+  c.close()
+})
+
+test('read navigation stays usable during a serialized write and profile-scoped view preference survives', async () => {
+  let finish
+  const f = await fixture(path => path === '/operations/run' ? { id: 'selected', status: 'completed' } : { items: [] })
+  const c = f.module.namespace.createController(f.ctx); await c.refresh()
+  const writing = c.perform(() => new Promise(resolve => { finish = resolve }))
+  await c.select('selected'); assert.equal(c.snapshot().selected.id, 'selected'); assert.equal(c.snapshot().busy, true)
+  await c.setMode('classic'); assert.equal(f.storage.get('control-room-mode:default'), 'classic')
+  f.switchProfile('different'); c.profileChanged(); assert.equal(c.snapshot().uiMode, 'modern')
+  f.switchProfile('default'); c.profileChanged(); assert.equal(c.snapshot().uiMode, 'classic')
+  finish(); await writing; c.close()
 })

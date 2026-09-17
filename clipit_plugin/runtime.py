@@ -140,10 +140,15 @@ class Runtime:
             compatibility = {"contractVersion": None, "features": {}, "upgradeRequired": True}
         clock = _clock_check(compatibility.get("serverTime"), wall_start, time.time(), time.monotonic() - mono_start)
         key = identity.get("apiKey", {})
+        scope = identity.get("scope") or {}
+        account_label = scope.get("workspaceName") or identity.get("user", {}).get("username") or "Personal workspace"
+        credential_label = key.get("keyName") or "Connected API key"
         return {"connected": True, "pluginVersion": VERSION, "contractVersion": CONTRACT_VERSION,
                 "connectionId": settings.scope,
                 "appOrigin": settings.base_url,
                 "scope": identity.get("scope"), "accountId": identity.get("user", {}).get("id"),
+                "accountLabel": " ".join(str(account_label).split())[:240],
+                "credentialLabel": " ".join(str(credential_label).split())[:240],
                 "credentialId": key.get("id"), "permissions": key.get("permissions", {}),
                 "rateLimit": key.get("rateLimit"), "spendLimits": key.get("spendLimits"),
                 "compatibility": compatibility, "clock": clock}
