@@ -939,7 +939,7 @@ function ModernControlRoom({ controller }) {
   const toActivity = () => controller.tab('Runs')
   const toOutputs = () => controller.tab('Library')
   return h('main', { className: 'clipit-control-room', 'aria-label': 'ClipIt Control Room' }, h('style', null, CONTROL_STYLE),
-    h('header', { className: 'cr-header' }, h('div', null, h('p', { className: 'cr-small cr-muted' }, 'CLIPIT CONTROL ROOM'), h('h1', null, workspace), h('p', { className: 'cr-small cr-muted' }, 'Work from this connection')),
+    h('header', { className: 'cr-header' }, h('div', null, h('p', { className: 'cr-small cr-muted' }, 'CLIPIT CONTROL ROOM'), h('h1', null, workspace), h('p', { className: 'cr-small cr-muted' }, ['Work from this connection', state.status?.credentialLabel].filter(Boolean).join(' · ')), state.lastSuccessAt ? h('p', { className: 'cr-small cr-muted' }, `Last refreshed ${dateLabel(state.lastSuccessAt)}`) : null),
       h('div', { className: 'cr-row' }, crButton('Connection', () => open({ type: 'advanced' }), { className: 'cr-button quiet' }), crButton('New brief', () => open({ type: 'brief' }), { className: 'cr-button primary', disabled: !actionable(state) || !state.status?.permissions?.clippy_agent }))),
     h('nav', { className: 'cr-nav', 'aria-label': 'ClipIt views' }, crButton('Activity', toActivity, { 'aria-current': !outputs ? 'page' : undefined }), crButton('Outputs', toOutputs, { 'aria-current': outputs ? 'page' : undefined }),
       attention.length ? h('span', { className: 'cr-small cr-muted' }, 'Needs your attention') : null, crButton(state.loading ? 'Refreshing…' : 'Refresh', () => controller.read(controller.refresh), { style: { marginLeft: 'auto' }, disabled: state.loading })),
