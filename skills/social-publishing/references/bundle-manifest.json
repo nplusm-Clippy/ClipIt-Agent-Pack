@@ -1,0 +1,91 @@
+{
+  "files": {
+    "SKILL.md": {
+      "bytes": 11818,
+      "sha256": "edd34fbbcac5f9bd00b69a3113d3af89d8d3567e8a857851beb8200a234c3890",
+      "source": "clipper/social-publishing/SKILL.md",
+      "sourceSha256": "0475ebc8654cb39003ddf0e33492d900200e448acc3bf68e941f58eb21e435b3"
+    },
+    "references/LICENSE": {
+      "bytes": 1070,
+      "sha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3",
+      "source": "LICENSE",
+      "sourceSha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3"
+    },
+    "requirements.txt": {
+      "bytes": 38,
+      "sha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80",
+      "source": "requirements.txt",
+      "sourceSha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80"
+    },
+    "scripts/cancel_social_post.py": {
+      "bytes": 582,
+      "sha256": "a738d460d8ee8993609e49dfac97c841560a0401af627b96379660db6236a3db",
+      "source": "scripts/cancel_social_post.py",
+      "sourceSha256": "a738d460d8ee8993609e49dfac97c841560a0401af627b96379660db6236a3db"
+    },
+    "scripts/clipper_client.py": {
+      "bytes": 13698,
+      "sha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f",
+      "source": "scripts/clipper_client.py",
+      "sourceSha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f"
+    },
+    "scripts/deliver_export.py": {
+      "bytes": 1192,
+      "sha256": "17377456a04efb77e450c5eab460c5cde9ab72cea77ecb66c5a1878e2e5c4400",
+      "source": "scripts/deliver_export.py",
+      "sourceSha256": "17377456a04efb77e450c5eab460c5cde9ab72cea77ecb66c5a1878e2e5c4400"
+    },
+    "scripts/enterprise_delivery_contract.py": {
+      "bytes": 11251,
+      "sha256": "e5dae217cc243f2b10301b10938d9649f85c70e6e0fd853395cff5077db3bd91",
+      "source": "scripts/enterprise_delivery_contract.py",
+      "sourceSha256": "e5dae217cc243f2b10301b10938d9649f85c70e6e0fd853395cff5077db3bd91"
+    },
+    "scripts/get_social_post.py": {
+      "bytes": 561,
+      "sha256": "7cd276df871ea425b1b6e2efacd7998ff9c417e72dc1fd00d7a7d4dc402e4d85",
+      "source": "scripts/get_social_post.py",
+      "sourceSha256": "7cd276df871ea425b1b6e2efacd7998ff9c417e72dc1fd00d7a7d4dc402e4d85"
+    },
+    "scripts/list_deliverables.py": {
+      "bytes": 1383,
+      "sha256": "38ed0d21ddc6bb07d226906c3c2901e506e27ebe817722f669d92b5a66261b0c",
+      "source": "scripts/list_deliverables.py",
+      "sourceSha256": "38ed0d21ddc6bb07d226906c3c2901e506e27ebe817722f669d92b5a66261b0c"
+    },
+    "scripts/list_social_accounts.py": {
+      "bytes": 450,
+      "sha256": "99d1213f9553b6c494599a0adaa3cbe63e15c931f8c0adc599729fd138fcb951",
+      "source": "scripts/list_social_accounts.py",
+      "sourceSha256": "99d1213f9553b6c494599a0adaa3cbe63e15c931f8c0adc599729fd138fcb951"
+    },
+    "scripts/post_to_social.py": {
+      "bytes": 3266,
+      "sha256": "0f0df537b30ccb4dc788e5051ed0f63b38243546d70ef5c4a8a2ba8c01b499e0",
+      "source": "scripts/post_to_social.py",
+      "sourceSha256": "0f0df537b30ccb4dc788e5051ed0f63b38243546d70ef5c4a8a2ba8c01b499e0"
+    },
+    "scripts/schedule_social_post.py": {
+      "bytes": 3422,
+      "sha256": "5627a2bdd4972f458700abca3b75098ff5f1b2ab72660edfb39a9e9648db45b3",
+      "source": "scripts/schedule_social_post.py",
+      "sourceSha256": "5627a2bdd4972f458700abca3b75098ff5f1b2ab72660edfb39a9e9648db45b3"
+    },
+    "scripts/social_publish_contract.py": {
+      "bytes": 10889,
+      "sha256": "1d022cc779cbbdc26b099cd4994e4134c83d8ffb0471bdc7cd0648bbd514d2fe",
+      "source": "scripts/social_publish_contract.py",
+      "sourceSha256": "1d022cc779cbbdc26b099cd4994e4134c83d8ffb0471bdc7cd0648bbd514d2fe"
+    },
+    "scripts/verify_enterprise_workspace.py": {
+      "bytes": 1476,
+      "sha256": "ca233e58528e2f57a8500263e612e6bb2508a1cb8ad3000967baedab00ca2ff4",
+      "source": "scripts/verify_enterprise_workspace.py",
+      "sourceSha256": "ca233e58528e2f57a8500263e612e6bb2508a1cb8ad3000967baedab00ca2ff4"
+    }
+  },
+  "format": "clipit-portable-skills.v1",
+  "skillId": "social-publishing",
+  "sourcePath": "clipper/social-publishing"
+}

@@ -1,0 +1,31 @@
+manifest_version: 2
+name: clipit
+label: ClipIt
+version: 3.0.0
+description: ClipIt video editing tools, durable Clippy runs, portable skills and an optional Desktop Control Room.
+author: ClipIt
+license: MIT
+homepage: https://clipit.dev
+kind: standalone
+requires_hermes: '>=0.21.3'
+requires_env:
+  - name: CLIPPER_API_KEY
+    description: Least-privilege ClipIt API key for this Hermes gateway profile
+    url: https://clipit.dev
+    secret: true
+optional_env:
+  - CLIPPER_BASE_URL
+  - CLIPPER_ALLOWED_HOSTS
+python_dependencies:
+  - requests>=2.32.0,<3
+provides_tools:
+  - clipit_status
+  - clipit_discover
+  - clipit_execute
+  - clipit_orchestrate
+  - clipit_runs
+  - clipit_control_run
+  - clipit_respond_to_approval
+  - clipit_artifacts
+provides_hooks: []
+capabilities: []

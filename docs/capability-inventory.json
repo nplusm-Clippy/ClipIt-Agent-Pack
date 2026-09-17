@@ -1,0 +1,3454 @@
+{
+  "schema": "clipit-capability-inventory.v1",
+  "packVersion": "3.0.0",
+  "capabilityContract": "clipit-agent-capabilities.v1",
+  "skillCount": 18,
+  "pythonFileCount": 60,
+  "scriptCount": 52,
+  "executionPolicy": "One mutation owner. A native receipt never licenses replay through a legacy transport.",
+  "skills": [
+    {
+      "id": "clipit-operator",
+      "path": "clipper/clipit-operator",
+      "category": "core",
+      "canonicalSha256": "470272f932b45cd0026e937f4db7a7bb0790aedc96a3d76bd7ee42d4c6fa8a46",
+      "nativeSkill": "clipit:clipit-operator",
+      "portableSkill": "skills/clipit-operator",
+      "includedScripts": [
+        "scripts/approve_workflow.py",
+        "scripts/clipper_client.py",
+        "scripts/deliver_export.py",
+        "scripts/enterprise_delivery_contract.py",
+        "scripts/enterprise_exact_delivery_contract.py",
+        "scripts/exact_caption_style_contract.py",
+        "scripts/get_agent_instructions.py",
+        "scripts/initialize_editor_snapshot.py",
+        "scripts/list_assets.py",
+        "scripts/list_deliverables.py",
+        "scripts/list_videos.py",
+        "scripts/orchestrate.py",
+        "scripts/render_clip.py",
+        "scripts/run_enterprise_exact_delivery.py",
+        "scripts/set_caption_style.py",
+        "scripts/use_library_video.py",
+        "scripts/verify_enterprise_workspace.py"
+      ],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    },
+    {
+      "id": "video-management",
+      "path": "clipper/video-management",
+      "category": "ingest",
+      "canonicalSha256": "f219e90dc040b51f2ce6ca67dd5a09d446c7eafa389dfc2c797e3564af3c4cb1",
+      "nativeSkill": "clipit:video-management",
+      "portableSkill": "skills/video-management",
+      "includedScripts": [
+        "scripts/asset_upload_contract.py",
+        "scripts/clipper_client.py",
+        "scripts/delete_video.py",
+        "scripts/get_transcript.py",
+        "scripts/get_video.py",
+        "scripts/import_video_from_url.py",
+        "scripts/list_assets.py",
+        "scripts/list_videos.py",
+        "scripts/suggest_clips.py",
+        "scripts/transcribe_video.py",
+        "scripts/upload_asset.py",
+        "scripts/upload_video.py",
+        "scripts/use_library_video.py",
+        "scripts/verify_enterprise_workspace.py",
+        "scripts/wait_for_job.py"
+      ],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    },
+    {
+      "id": "clip-creation",
+      "path": "clipper/clip-creation",
+      "category": "editing",
+      "canonicalSha256": "015b08748e8a50073e31b99c21aa4903bc0d235940af4f8b9cbee912ca6f3c58",
+      "nativeSkill": "clipit:clip-creation",
+      "portableSkill": "skills/clip-creation",
+      "includedScripts": [
+        "scripts/clipper_client.py",
+        "scripts/create_clip.py",
+        "scripts/download_clip.py",
+        "scripts/enterprise_exact_delivery_contract.py",
+        "scripts/exact_caption_style_contract.py",
+        "scripts/initialize_editor_snapshot.py",
+        "scripts/list_assets.py",
+        "scripts/list_videos.py",
+        "scripts/render_clip.py",
+        "scripts/run_enterprise_exact_delivery.py",
+        "scripts/suggest_clips.py",
+        "scripts/transcribe_video.py",
+        "scripts/update_clip.py",
+        "scripts/use_library_video.py",
+        "scripts/verify_enterprise_workspace.py"
+      ],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    },
+    {
+      "id": "timeline-editing",
+      "path": "clipper/timeline-editing",
+      "category": "editing",
+      "canonicalSha256": "055b4648cbdc551ad72be2825dd325510a487207886b751294490f3ceb9132ca",
+      "nativeSkill": "clipit:timeline-editing",
+      "portableSkill": "skills/timeline-editing",
+      "includedScripts": [],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    },
+    {
+      "id": "project-sequence-management",
+      "path": "clipper/project-sequence-management",
+      "category": "editing",
+      "canonicalSha256": "2fd025054d022e97d341737c38c19f6b7ded78a7ffc9f96c95630c19514b913c",
+      "nativeSkill": "clipit:project-sequence-management",
+      "portableSkill": "skills/project-sequence-management",
+      "includedScripts": [],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    },
+    {
+      "id": "creator-style",
+      "path": "clipper/creator-style",
+      "category": "creative-context",
+      "canonicalSha256": "e175a6d28f90559750c4473f9dff3618562729771f8fb232d7b98cf3d6f3bb73",
+      "nativeSkill": "clipit:creator-style",
+      "portableSkill": "skills/creator-style",
+      "includedScripts": [],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    },
+    {
+      "id": "crop-reframing",
+      "path": "clipper/crop-reframing",
+      "category": "editing",
+      "canonicalSha256": "333f11921e950c7443e4278b415af5a7ec10a66779d6f659fb1dd9bcbff1008c",
+      "nativeSkill": "clipit:crop-reframing",
+      "portableSkill": "skills/crop-reframing",
+      "includedScripts": [],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    },
+    {
+      "id": "caption-generation",
+      "path": "clipper/caption-generation",
+      "category": "editing",
+      "canonicalSha256": "2254499cd1fb30c79a928f1563c28568e9aff767788ef9187f9ab6207bb948f3",
+      "nativeSkill": "clipit:caption-generation",
+      "portableSkill": "skills/caption-generation",
+      "includedScripts": [
+        "scripts/clipper_client.py",
+        "scripts/enterprise_exact_delivery_contract.py",
+        "scripts/exact_caption_style_contract.py",
+        "scripts/generate_captions.py",
+        "scripts/render_clip.py",
+        "scripts/run_enterprise_exact_delivery.py",
+        "scripts/set_caption_style.py",
+        "scripts/transcribe_video.py",
+        "scripts/update_captions.py"
+      ],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    },
+    {
+      "id": "thumbnail-generation",
+      "path": "clipper/thumbnail-generation",
+      "category": "media-generation",
+      "canonicalSha256": "2b2118d4569bb380c2b22b30b70c4df33bb0f15172d37bfcb5ee2bbe1f3dceaa",
+      "nativeSkill": "clipit:thumbnail-generation",
+      "portableSkill": "skills/thumbnail-generation",
+      "includedScripts": [
+        "scripts/clipper_client.py",
+        "scripts/generate_thumbnail.py",
+        "scripts/get_clip.py",
+        "scripts/wait_for_job.py"
+      ],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    },
+    {
+      "id": "broll-generation",
+      "path": "clipper/broll-generation",
+      "category": "media-generation",
+      "canonicalSha256": "e31b2da859ca500fd5cc6ecadec91f6fca33820b8b1a0b3961d38bd9c52c28ba",
+      "nativeSkill": "clipit:broll-generation",
+      "portableSkill": "skills/broll-generation",
+      "includedScripts": [
+        "scripts/clipper_client.py",
+        "scripts/generate_broll.py",
+        "scripts/plan_broll.py",
+        "scripts/render_clip.py",
+        "scripts/wait_for_job.py"
+      ],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    },
+    {
+      "id": "scene-alter",
+      "path": "clipper/scene-alter",
+      "category": "media-generation",
+      "canonicalSha256": "9bde1c8337f665484a79ebb3d6839d90f179fad055492ea88c58fbf3bff4ea38",
+      "nativeSkill": "clipit:scene-alter",
+      "portableSkill": "skills/scene-alter",
+      "includedScripts": [],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    },
+    {
+      "id": "audio-production",
+      "path": "clipper/audio-production",
+      "category": "media-generation",
+      "canonicalSha256": "ec65ce06677056f00cf91a987410d2b8d65f696fd99c78c1a9807ced8b8919b4",
+      "nativeSkill": "clipit:audio-production",
+      "portableSkill": "skills/audio-production",
+      "includedScripts": [],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    },
+    {
+      "id": "blueprint-to-edit",
+      "path": "clipper/blueprint-to-edit",
+      "category": "workflow",
+      "canonicalSha256": "f5a11752a5201ecfa9c08d1f149a619e08f9e3f4dc8037c7934178ac99d9ca63",
+      "nativeSkill": "clipit:blueprint-to-edit",
+      "portableSkill": "skills/blueprint-to-edit",
+      "includedScripts": [],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    },
+    {
+      "id": "delivery-qa",
+      "path": "clipper/delivery-qa",
+      "category": "quality",
+      "canonicalSha256": "5c4e7ccb173f3937878f0a7e54033336ff9451a0ceb7a6683e2126e193ac1c32",
+      "nativeSkill": "clipit:delivery-qa",
+      "portableSkill": "skills/delivery-qa",
+      "includedScripts": [],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    },
+    {
+      "id": "export-rendering",
+      "path": "clipper/export-rendering",
+      "category": "delivery",
+      "canonicalSha256": "6d3727868b148e3d3cf3480b673f8be2c5ca0a6137c228265cdfde559082d53c",
+      "nativeSkill": "clipit:export-rendering",
+      "portableSkill": "skills/export-rendering",
+      "includedScripts": [
+        "scripts/clipper_client.py",
+        "scripts/create_clip.py",
+        "scripts/deliver_export.py",
+        "scripts/download_export.py",
+        "scripts/enterprise_delivery_contract.py",
+        "scripts/enterprise_exact_delivery_contract.py",
+        "scripts/exact_caption_style_contract.py",
+        "scripts/export_contract.py",
+        "scripts/initialize_editor_snapshot.py",
+        "scripts/list_assets.py",
+        "scripts/list_deliverables.py",
+        "scripts/list_videos.py",
+        "scripts/render_clip.py",
+        "scripts/run_enterprise_exact_delivery.py",
+        "scripts/start_export.py",
+        "scripts/transcribe_video.py",
+        "scripts/use_library_video.py",
+        "scripts/verify_enterprise_workspace.py",
+        "scripts/wait_for_export.py",
+        "scripts/wait_for_job.py"
+      ],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    },
+    {
+      "id": "social-publishing",
+      "path": "clipper/social-publishing",
+      "category": "delivery",
+      "canonicalSha256": "0475ebc8654cb39003ddf0e33492d900200e448acc3bf68e941f58eb21e435b3",
+      "nativeSkill": "clipit:social-publishing",
+      "portableSkill": "skills/social-publishing",
+      "includedScripts": [
+        "scripts/cancel_social_post.py",
+        "scripts/clipper_client.py",
+        "scripts/deliver_export.py",
+        "scripts/enterprise_delivery_contract.py",
+        "scripts/get_social_post.py",
+        "scripts/list_deliverables.py",
+        "scripts/list_social_accounts.py",
+        "scripts/post_to_social.py",
+        "scripts/schedule_social_post.py",
+        "scripts/social_publish_contract.py",
+        "scripts/verify_enterprise_workspace.py"
+      ],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    },
+    {
+      "id": "account-insights",
+      "path": "clipper/account-insights",
+      "category": "account",
+      "canonicalSha256": "403ff39bde32beb99a04f4f34323fd2cefa9473f3897009e3630d1f64f0e4755",
+      "nativeSkill": "clipit:account-insights",
+      "portableSkill": "skills/account-insights",
+      "includedScripts": [
+        "scripts/clipper_client.py",
+        "scripts/estimate_cost.py",
+        "scripts/get_analytics_overview.py",
+        "scripts/get_credits_balance.py",
+        "scripts/get_post_metrics.py",
+        "scripts/get_top_clips.py"
+      ],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    },
+    {
+      "id": "machine-payments",
+      "path": "clipper/machine-payments",
+      "category": "account",
+      "canonicalSha256": "d98f2a17368da1cf371ce8cf9e009b351458d26982d40b2b359706e9f357d896",
+      "nativeSkill": "clipit:machine-payments",
+      "portableSkill": "skills/machine-payments",
+      "includedScripts": [
+        "scripts/clipper_client.py",
+        "scripts/create_payment_attempt.py",
+        "scripts/get_billing_catalog.py",
+        "scripts/get_billing_subscription.py",
+        "scripts/get_credits_balance.py",
+        "scripts/get_payment_attempt.py",
+        "scripts/get_payment_capabilities.py",
+        "scripts/get_payment_receipt.py"
+      ],
+      "nativeRoute": "clipit_discover -> live capability; clipit_execute or clipit_orchestrate; retain exact Python fallback when no equivalent live tool exists."
+    }
+  ],
+  "scripts": [
+    {
+      "path": "scripts/__init__.py",
+      "sha256": "c6a890d6f2f172dc53c9bed72bda1a1d27016c783e6b467d327e9b6df5b61691",
+      "entrypoint": false,
+      "arguments": [],
+      "requests": [],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/approve_workflow.py",
+      "sha256": "f2206f3b7c88b569601832751e6560eab96093bc1f846fa8138e31b3820e8f31",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--job-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Workflow job ID awaiting approval'"
+          }
+        },
+        {
+          "flags": [
+            "--approval-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Pending approval ID'"
+          }
+        },
+        {
+          "flags": [
+            "--decision"
+          ],
+          "options": {
+            "required": "True",
+            "choices": "['approved', 'cheaper', 'cancelled']"
+          }
+        },
+        {
+          "flags": [
+            "--wait"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Wait for the continuation workflow'"
+          }
+        },
+        {
+          "flags": [
+            "--timeout"
+          ],
+          "options": {
+            "type": "float",
+            "default": "900",
+            "help": "'Max wait in seconds'"
+          }
+        },
+        {
+          "flags": [
+            "--poll-interval"
+          ],
+          "options": {
+            "type": "float",
+            "default": "3",
+            "help": "'Poll interval in seconds'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "f'/api/v1/agent/workflows/{args.job_id}/approval'",
+          "line": 30
+        },
+        {
+          "method": "GET",
+          "pathExpression": "f'/api/v1/agent/workflows/{continuation_id}'",
+          "line": 46
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/asset_upload_contract.py",
+      "sha256": "c434892d9aed1325b9d27d504bc5050eef092cc6c53b5292ead47eab4d767590",
+      "entrypoint": false,
+      "arguments": [],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "f'/api/v1/assets/{signed['assetId']}/finalize'",
+          "line": 107
+        },
+        {
+          "method": "POST",
+          "pathExpression": "'/api/v1/assets/sign-upload'",
+          "line": 84
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/cancel_social_post.py",
+      "sha256": "a738d460d8ee8993609e49dfac97c841560a0401af627b96379660db6236a3db",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--post-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Post ID to cancel'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "DELETE",
+          "pathExpression": "f'/api/v1/social/posts/{args.post_id}'",
+          "line": 19
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/clipper_client.py",
+      "sha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f",
+      "entrypoint": false,
+      "arguments": [],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "'/api/v1/agent/me'",
+          "line": 194
+        },
+        {
+          "method": "GET",
+          "pathExpression": "f'/api/v1/jobs/{job_id}'",
+          "line": 287
+        },
+        {
+          "method": "GET",
+          "pathExpression": "f'/api/v1/exports/{job_id}'",
+          "line": 325
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/create_clip.py",
+      "sha256": "1c7fb7b259a73867d28437cc76bf9889bfc2e72166a9e38985042ccdffe4ed08",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--video-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Source video ID'"
+          }
+        },
+        {
+          "flags": [
+            "--start"
+          ],
+          "options": {
+            "type": "float",
+            "required": "True",
+            "help": "'Start time in seconds'"
+          }
+        },
+        {
+          "flags": [
+            "--end"
+          ],
+          "options": {
+            "type": "float",
+            "required": "True",
+            "help": "'End time in seconds'"
+          }
+        },
+        {
+          "flags": [
+            "--title"
+          ],
+          "options": {
+            "help": "'Clip title'"
+          }
+        },
+        {
+          "flags": [
+            "--caption"
+          ],
+          "options": {
+            "help": "'Clip caption text'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "'/api/v1/clips'",
+          "line": 34
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/create_payment_attempt.py",
+      "sha256": "b6fa27fc45434fb7b205ffc09de1775f5875c0a5d15b7082c754b91db1ebea8f",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--product-key"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Product key from get_billing_catalog.py'"
+          }
+        },
+        {
+          "flags": [
+            "--provider"
+          ],
+          "options": {
+            "required": "True",
+            "choices": "['x402_direct', 'stripe_x402', 'stripe_mpp']",
+            "help": "'Ready payment rail selected from the live catalog'"
+          }
+        },
+        {
+          "flags": [
+            "--idempotency-key"
+          ],
+          "options": {
+            "help": "'Stable retry key, maximum 160 characters'"
+          }
+        },
+        {
+          "flags": [
+            "--confirm"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Confirm that the human approved the product, amount, rail, and budget'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "'/api/v1/billing/agent-payments'",
+          "line": 37
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/delete_clip.py",
+      "sha256": "a6efb586ee77bd71619a71a7a3090007b3ae1d19fd4de14a74693af139c75ace",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--clip-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Clip ID to delete'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "DELETE",
+          "pathExpression": "f'/api/v1/clips/{args.clip_id}'",
+          "line": 19
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/delete_video.py",
+      "sha256": "8a98c9fdc33d6c4a214eb9ff47e4c75ae11d05c36a09b90b751d407a0201f0dd",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--video-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Video ID to delete'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "DELETE",
+          "pathExpression": "f'/api/v1/videos/{args.video_id}'",
+          "line": 19
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/deliver_export.py",
+      "sha256": "17377456a04efb77e450c5eab460c5cde9ab72cea77ecb66c5a1878e2e5c4400",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--workspace-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Expected workspace ID from the ClipIt admin dashboard'"
+          }
+        },
+        {
+          "flags": [
+            "--export-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Completed export ID'"
+          }
+        },
+        {
+          "flags": [
+            "--profile"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Named ClipIt CLI profile'"
+          }
+        }
+      ],
+      "requests": [],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/download_clip.py",
+      "sha256": "3dbb7afc890c3f9cb338320ad5e7c4ef073c234677a4a8240a549a15de68c7d8",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--clip-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Clip ID (must be rendered)'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "f'/api/v1/clips/{args.clip_id}/download'",
+          "line": 19
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/download_export.py",
+      "sha256": "bfa9d6e7180031588379bfb8bb09790a8b7a7a56d8255c3cf85e41a56ddd7ae9",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--job-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Export job ID'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "f'/api/v1/exports/{args.job_id}/download'",
+          "line": 19
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/enterprise_delivery_contract.py",
+      "sha256": "e5dae217cc243f2b10301b10938d9649f85c70e6e0fd853395cff5077db3bd91",
+      "entrypoint": false,
+      "arguments": [],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "f'/api/v1/exports/{export_id}'",
+          "line": 107
+        },
+        {
+          "method": "GET",
+          "pathExpression": "'/api/v1/deliverables'",
+          "line": 198
+        },
+        {
+          "method": "POST",
+          "pathExpression": "'/api/v1/deliverables'",
+          "line": 263
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/enterprise_exact_delivery_contract.py",
+      "sha256": "97622d3227ec16db8c749550f7f2ed134e67c0c94e88264442757068bddebce4",
+      "entrypoint": false,
+      "arguments": [],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "'/api/v1/agent/execute'",
+          "line": 34
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/estimate_cost.py",
+      "sha256": "3f92d47a8e5d35b06bf3c167ce10e86ee29511975a8e4da7fa04a38618d9ba5b",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--profile"
+          ],
+          "options": {
+            "help": "'Named ClipIt CLI profile'"
+          }
+        },
+        {
+          "flags": [
+            "--operation-type"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Operation type, e.g. transcription'"
+          }
+        },
+        {
+          "flags": [
+            "--provider"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Provider name, e.g. deepgram'"
+          }
+        },
+        {
+          "flags": [
+            "--model-id"
+          ],
+          "options": {
+            "help": "'Optional provider model ID'"
+          }
+        },
+        {
+          "flags": [
+            "--max-credits"
+          ],
+          "options": {
+            "type": "float",
+            "help": "'Optional approval cap; this does not expose the account balance'"
+          }
+        },
+        {
+          "flags": [
+            "metrics"
+          ],
+          "options": {
+            "nargs": "'*'",
+            "type": "parse_metric",
+            "help": "'Metric key=value pairs'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "'/api/v1/credits/preflight'",
+          "line": 31
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/exact_caption_style_contract.py",
+      "sha256": "58addefed9a71eea58090e7bfe0e487034845f0ff8e02f5d80ddd31823f27372",
+      "entrypoint": false,
+      "arguments": [],
+      "requests": [
+        {
+          "method": "PATCH",
+          "pathExpression": "f'/api/v1/clips/{clip_id}/editor-snapshot/caption-style'",
+          "line": 139
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/export_contract.py",
+      "sha256": "9a4f29c2176944bbd7a83721e21a10484a46ce4def801b1433d6fa37d2febb6d",
+      "entrypoint": false,
+      "arguments": [],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "f'/api/v1/clips/{clip_id}/delivery-state'",
+          "line": 101
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/generate_broll.py",
+      "sha256": "fbe1273a7be6e244653027bb2ef24a33ab5896bcd001ec425f4bd57859a9d5f5",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--clip-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Clip ID'"
+          }
+        },
+        {
+          "flags": [
+            "--start"
+          ],
+          "options": {
+            "type": "float",
+            "required": "True",
+            "help": "'B-Roll start time within clip (seconds)'"
+          }
+        },
+        {
+          "flags": [
+            "--end"
+          ],
+          "options": {
+            "type": "float",
+            "required": "True",
+            "help": "'B-Roll end time within clip (seconds)'"
+          }
+        },
+        {
+          "flags": [
+            "--prompt"
+          ],
+          "options": {
+            "help": "'Custom visual prompt (overrides plan concepts)'"
+          }
+        },
+        {
+          "flags": [
+            "--concept-index"
+          ],
+          "options": {
+            "type": "int",
+            "help": "'Index from plan_broll output to use'"
+          }
+        },
+        {
+          "flags": [
+            "--mode"
+          ],
+          "options": {
+            "default": "'single_image'",
+            "choices": "['single_image', 'start_end_frame']"
+          }
+        },
+        {
+          "flags": [
+            "--end-frame-description"
+          ],
+          "options": {
+            "help": "'Required for start_end_frame mode: how the end frame differs'"
+          }
+        },
+        {
+          "flags": [
+            "--transition-description"
+          ],
+          "options": {
+            "help": "'Optional: describes motion between start and end frames'"
+          }
+        },
+        {
+          "flags": [
+            "--duration"
+          ],
+          "options": {
+            "type": "int",
+            "default": "6",
+            "help": "'Generated video duration in seconds (5-15)'"
+          }
+        },
+        {
+          "flags": [
+            "--resolution"
+          ],
+          "options": {
+            "default": "'768p'",
+            "choices": "['480p', '768p']"
+          }
+        },
+        {
+          "flags": [
+            "--image-quality"
+          ],
+          "options": {
+            "default": "'high'",
+            "choices": "['low', 'medium', 'high', 'auto']"
+          }
+        },
+        {
+          "flags": [
+            "--wait"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Wait for generation to finish'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "f'/api/v1/clips/{args.clip_id}/broll/generate'",
+          "line": 65
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/generate_captions.py",
+      "sha256": "946c0cad4022ea972e2227a7101578333aaa9eceb5e1ecbde3e49cdc33f77bf2",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--clip-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Clip ID'"
+          }
+        },
+        {
+          "flags": [
+            "--preset"
+          ],
+          "options": {
+            "choices": "['bold', 'minimal', 'neon', 'classic', 'tiktok-viral']"
+          }
+        },
+        {
+          "flags": [
+            "--font"
+          ],
+          "options": {
+            "help": "'Font name (Inter, Arial, Bangers, Oswald, Roboto)'"
+          }
+        },
+        {
+          "flags": [
+            "--font-size"
+          ],
+          "options": {
+            "type": "int",
+            "help": "'Font size (12-120)'"
+          }
+        },
+        {
+          "flags": [
+            "--color"
+          ],
+          "options": {
+            "help": "'Text color as hex (e.g., \"#FFFFFF\")'"
+          }
+        },
+        {
+          "flags": [
+            "--position"
+          ],
+          "options": {
+            "choices": "['top', 'center', 'bottom']"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "f'/api/v1/clips/{args.clip_id}/captions'",
+          "line": 40
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/generate_thumbnail.py",
+      "sha256": "d5f185ba28ef038968da9ee7cfb882f1e0dcfec63f945e379f716309243b6e70",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--prompt"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Description of the thumbnail'"
+          }
+        },
+        {
+          "flags": [
+            "--clip-id"
+          ],
+          "options": {
+            "help": "'Clip to base the thumbnail on (image-to-image)'"
+          }
+        },
+        {
+          "flags": [
+            "--aspect-ratio"
+          ],
+          "options": {
+            "default": "'16:9'",
+            "choices": "['16:9', '9:16', '1:1', '4:5', '3:4', '3:2', '2:3']"
+          }
+        },
+        {
+          "flags": [
+            "--resolution"
+          ],
+          "options": {
+            "default": "'2K'",
+            "choices": "['2K', '4K']"
+          }
+        },
+        {
+          "flags": [
+            "--quality"
+          ],
+          "options": {
+            "choices": "['low', 'medium', 'high', 'auto']"
+          }
+        },
+        {
+          "flags": [
+            "--use-existing-thumbnail"
+          ],
+          "options": {
+            "action": "argparse.BooleanOptionalAction",
+            "default": "True",
+            "help": "\"Use the clip's current thumbnail/frame as an edit reference (default: true)\""
+          }
+        },
+        {
+          "flags": [
+            "--wait"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Wait for generation to complete'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "'/api/v1/thumbnails'",
+          "line": 47
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/get_agent_instructions.py",
+      "sha256": "eaa8eed2155ca080175ba2edb2c69c61c878b73595171aa5454575ea5c4ea152",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--target"
+          ],
+          "options": {
+            "default": "'generic'",
+            "choices": "['generic', 'codex', 'claude', 'hermes']"
+          }
+        },
+        {
+          "flags": [
+            "--format"
+          ],
+          "options": {
+            "default": "'markdown'",
+            "choices": "['markdown', 'json']"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "f'{client.base_url}/api/v1/agent/instructions'",
+          "line": 21
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/get_analytics_overview.py",
+      "sha256": "a673a1937e9fa16593a5226e3975428d9302c7c19a3756879fb0ba442b79173e",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--days"
+          ],
+          "options": {
+            "type": "int",
+            "help": "'Lookback window in days (1-365)'"
+          }
+        },
+        {
+          "flags": [
+            "--by-platform"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Group analytics by platform'"
+          }
+        }
+      ],
+      "requests": [],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/get_billing_catalog.py",
+      "sha256": "bd99d77ce2cf4e1ac9eeb2454139eb8bed8967b166218d9235ef647d3d098819",
+      "entrypoint": true,
+      "arguments": [],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "'/api/v1/billing/catalog'",
+          "line": 14
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/get_billing_subscription.py",
+      "sha256": "bf866f2de3ca593233a59c2b142529cedb8f888b609c563232a7e2a80cf187ff",
+      "entrypoint": true,
+      "arguments": [],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "'/api/v1/billing/subscription'",
+          "line": 14
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/get_clip.py",
+      "sha256": "33af8b38d4e171860ab13632e0d67ecd891ae8f03e3aae3279ff4dc5adbc2cc5",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--clip-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Clip ID'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "f'/api/v1/clips/{args.clip_id}'",
+          "line": 19
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/get_credits_balance.py",
+      "sha256": "a2c81867f9d10d26319ee672d6010c81a8af6f08457f178e036310005a2ba795",
+      "entrypoint": true,
+      "arguments": [],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "'/api/v1/credits/balance'",
+          "line": 18
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/get_payment_attempt.py",
+      "sha256": "361bff080ce86dbd2c57507410047fc6f5ef774a2693e412aaa308955ac52118",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--attempt-id"
+          ],
+          "options": {
+            "required": "True"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "f'/api/v1/billing/agent-payments/{attempt_id}'",
+          "line": 17
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/get_payment_capabilities.py",
+      "sha256": "8838cca93151cf044c9e5def2d703793143ff3d07ff6034c6011dd3901afe8f6",
+      "entrypoint": true,
+      "arguments": [],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "'/api/v1/agent/payment-capabilities'",
+          "line": 14
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/get_payment_receipt.py",
+      "sha256": "eacec4447f870b0031776e4cadeb885e4ef4aa82367f0fd96be2064642b0d8ba",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--attempt-id"
+          ],
+          "options": {
+            "required": "True"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "f'/api/v1/billing/agent-payments/{attempt_id}/receipt'",
+          "line": 17
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/get_post_metrics.py",
+      "sha256": "1b749fd97a5a121143095458578c6706da13640dd49e538a4572f2b771b13b47",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--post-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Social post ID'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "f'/api/v1/analytics/posts/{args.post_id}/metrics'",
+          "line": 19
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/get_social_post.py",
+      "sha256": "7cd276df871ea425b1b6e2efacd7998ff9c417e72dc1fd00d7a7d4dc402e4d85",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--post-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Post ID'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "f'/api/v1/social/posts/{args.post_id}'",
+          "line": 19
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/get_top_clips.py",
+      "sha256": "05ba0182b2af7822cdea77ec6a28bb27b8221db04c20ae01ef92c67531507161",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--days"
+          ],
+          "options": {
+            "type": "int",
+            "help": "'Lookback window in days (1-365)'"
+          }
+        },
+        {
+          "flags": [
+            "--limit"
+          ],
+          "options": {
+            "type": "int",
+            "help": "'Maximum results (1-100)'"
+          }
+        },
+        {
+          "flags": [
+            "--metric"
+          ],
+          "options": {
+            "choices": "['views', 'likes', 'comments', 'shares', 'saves', 'reach', 'impressions', 'watchTimeSeconds', 'revenueCents']",
+            "help": "'Metric to rank by'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "'/api/v1/analytics/top-clips'",
+          "line": 43
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/get_transcript.py",
+      "sha256": "dc4e69d1bb3d4188837b411d6709770ae1a12f18fbbc393543e66c5d3d23df57",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--video-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Video ID'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "f'/api/v1/videos/{args.video_id}/transcript'",
+          "line": 19
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/get_video.py",
+      "sha256": "c68d138e0ba218e01f2ed31932de8199f9316b16c6fd66b454989427d8eb6a38",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--video-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Video ID'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "f'/api/v1/videos/{args.video_id}'",
+          "line": 19
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/import_video_from_url.py",
+      "sha256": "27ea7942b01d18a3782d42f7038d39e76466bad4814565522f9d290c117b190b",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--url"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Video URL to import'"
+          }
+        },
+        {
+          "flags": [
+            "--title"
+          ],
+          "options": {
+            "help": "'Optional title override'"
+          }
+        },
+        {
+          "flags": [
+            "--wait"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Wait for processing to complete'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "'/api/v1/videos/from-url'",
+          "line": 25
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/initialize_editor_snapshot.py",
+      "sha256": "45b04c2f5f2793b92695abfec04425758d1f6b27286cd7cb568a355c6a8413ec",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--workspace-id"
+          ],
+          "options": {
+            "required": "True"
+          }
+        },
+        {
+          "flags": [
+            "--clip-id"
+          ],
+          "options": {
+            "required": "True"
+          }
+        },
+        {
+          "flags": [
+            "--profile"
+          ],
+          "options": {
+            "help": "'Named ClipIt CLI profile'"
+          }
+        },
+        {
+          "flags": [
+            "--aspect-ratio"
+          ],
+          "options": {
+            "default": "'9:16'",
+            "choices": "['16:9', '9:16', '1:1', '4:5']"
+          }
+        },
+        {
+          "flags": [
+            "--fit-background"
+          ],
+          "options": {
+            "default": "'blur'",
+            "choices": "['black', 'blur']"
+          }
+        },
+        {
+          "flags": [
+            "--quality"
+          ],
+          "options": {
+            "default": "'high'",
+            "choices": "['standard', 'high', '4k']"
+          }
+        },
+        {
+          "flags": [
+            "--captions"
+          ],
+          "options": {
+            "dest": "'include_captions'",
+            "action": "'store_true'",
+            "help": "'Initialize canonical captions (requires a transcript)'"
+          }
+        },
+        {
+          "flags": [
+            "--no-captions"
+          ],
+          "options": {
+            "dest": "'include_captions'",
+            "action": "'store_false'",
+            "help": "'Initialize without captions (default)'"
+          }
+        },
+        {
+          "flags": [
+            "--caption-style"
+          ],
+          "options": {
+            "choices": "['bold', 'minimal', 'neon', 'classic']",
+            "help": "'Legacy coarse caption style'"
+          }
+        },
+        {
+          "flags": [
+            "--caption-preset-id"
+          ],
+          "options": {
+            "choices": "['hormozi', 'mrbeast', 'minimal-white', 'netflix', 'tiktok-viral', 'podcast', 'gaming-neon', 'karaoke']",
+            "help": "'Named canonical caption preset'"
+          }
+        },
+        {
+          "flags": [
+            "--caption-style-json"
+          ],
+          "options": {
+            "help": "'Exact style JSON object or @path/to/style.json'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "f'/api/v1/clips/{clip_id}/editor-snapshot/initialize'",
+          "line": 48
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/list_assets.py",
+      "sha256": "973d005dde09bef3c327d358ceefaf7394612fe3bc2fcfba8d234fea77dd9bc9",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--type"
+          ],
+          "options": {
+            "choices": "['image', 'video', 'audio', 'raw']",
+            "help": "'Filter by asset type'"
+          }
+        },
+        {
+          "flags": [
+            "--limit"
+          ],
+          "options": {
+            "type": "int",
+            "help": "'Maximum assets to return (1-200)'"
+          }
+        },
+        {
+          "flags": [
+            "--offset"
+          ],
+          "options": {
+            "type": "int",
+            "help": "'Pagination offset'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "'/api/v1/assets'",
+          "line": 29
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/list_clips.py",
+      "sha256": "5b96b150a307882dc8afbd8dd1eb7a72f26511e0f7dc8012fb1c31c76241e4c6",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--video-id"
+          ],
+          "options": {
+            "help": "'Filter by video ID'"
+          }
+        },
+        {
+          "flags": [
+            "--limit"
+          ],
+          "options": {
+            "type": "int",
+            "default": "20"
+          }
+        },
+        {
+          "flags": [
+            "--offset"
+          ],
+          "options": {
+            "type": "int",
+            "default": "0"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "'/api/v1/clips'",
+          "line": 25
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/list_deliverables.py",
+      "sha256": "38ed0d21ddc6bb07d226906c3c2901e506e27ebe817722f669d92b5a66261b0c",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--profile"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Named ClipIt CLI profile'"
+          }
+        },
+        {
+          "flags": [
+            "--workspace-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Expected workspace ID from the ClipIt admin dashboard'"
+          }
+        },
+        {
+          "flags": [
+            "--status"
+          ],
+          "options": {
+            "choices": "['ready', 'selected']"
+          }
+        },
+        {
+          "flags": [
+            "--export-id"
+          ],
+          "options": {
+            "help": "'Filter by exact completed export ID'"
+          }
+        },
+        {
+          "flags": [
+            "--limit"
+          ],
+          "options": {
+            "type": "int",
+            "default": "50",
+            "help": "'Maximum rows (1-100)'"
+          }
+        },
+        {
+          "flags": [
+            "--offset"
+          ],
+          "options": {
+            "type": "int",
+            "default": "0",
+            "help": "'Pagination offset'"
+          }
+        }
+      ],
+      "requests": [],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/list_social_accounts.py",
+      "sha256": "99d1213f9553b6c494599a0adaa3cbe63e15c931f8c0adc599729fd138fcb951",
+      "entrypoint": true,
+      "arguments": [],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "'/api/v1/social/accounts'",
+          "line": 16
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/list_videos.py",
+      "sha256": "da56625ebffb4dafda8a97907b54700e1b545558b782dbf662816efd4fe0c112",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--limit"
+          ],
+          "options": {
+            "type": "int",
+            "default": "20"
+          }
+        },
+        {
+          "flags": [
+            "--offset"
+          ],
+          "options": {
+            "type": "int",
+            "default": "0"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "'/api/v1/videos'",
+          "line": 20
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/orchestrate.py",
+      "sha256": "936e7f4d89a22327df87d9dc79527d8bc9507b6636c3ba4fd7bc772ddc129f1d",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "goal"
+          ],
+          "options": {
+            "nargs": "'+'",
+            "help": "'Free-text goal for the ClipIt agent'"
+          }
+        },
+        {
+          "flags": [
+            "--conversation-id"
+          ],
+          "options": {
+            "help": "'Optional conversation/session ID'"
+          }
+        },
+        {
+          "flags": [
+            "--video-id"
+          ],
+          "options": {
+            "help": "'Optional video context ID'"
+          }
+        },
+        {
+          "flags": [
+            "--clip-id"
+          ],
+          "options": {
+            "help": "'Optional clip context ID'"
+          }
+        },
+        {
+          "flags": [
+            "--project-id"
+          ],
+          "options": {
+            "help": "'Optional project context ID'"
+          }
+        },
+        {
+          "flags": [
+            "--sequence-id"
+          ],
+          "options": {
+            "help": "'Optional sequence context ID'"
+          }
+        },
+        {
+          "flags": [
+            "--quick-mode"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Ask the orchestrator for a faster workflow'"
+          }
+        },
+        {
+          "flags": [
+            "--max-subagent-calls"
+          ],
+          "options": {
+            "type": "int",
+            "help": "'Maximum subagent calls, 1-10'"
+          }
+        },
+        {
+          "flags": [
+            "--trace"
+          ],
+          "options": {
+            "dest": "'trace_enabled'",
+            "action": "'store_true'",
+            "help": "'Enable trace output server-side'"
+          }
+        },
+        {
+          "flags": [
+            "--timeout"
+          ],
+          "options": {
+            "type": "float",
+            "default": "900",
+            "help": "'Max wait in seconds'"
+          }
+        },
+        {
+          "flags": [
+            "--poll-interval"
+          ],
+          "options": {
+            "type": "float",
+            "default": "3",
+            "help": "'Poll interval in seconds'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "'/api/v1/agent/orchestrate'",
+          "line": 61
+        },
+        {
+          "method": "GET",
+          "pathExpression": "f'/api/v1/agent/workflows/{job_id}'",
+          "line": 67
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/plan_broll.py",
+      "sha256": "e30918d0aaaf78609693919bba4de541b02e8584be1fa22f901e4a39b080cb63",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--clip-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Clip ID'"
+          }
+        },
+        {
+          "flags": [
+            "--count"
+          ],
+          "options": {
+            "type": "int",
+            "default": "3",
+            "help": "'Number of concepts (1-8)'"
+          }
+        },
+        {
+          "flags": [
+            "--theme"
+          ],
+          "options": {
+            "help": "'Optional theme hint'"
+          }
+        },
+        {
+          "flags": [
+            "--wait"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Wait for planning to complete'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "f'/api/v1/clips/{args.clip_id}/broll/plan'",
+          "line": 26
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/post_to_social.py",
+      "sha256": "0f0df537b30ccb4dc788e5051ed0f63b38243546d70ef5c4a8a2ba8c01b499e0",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--clip-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Rendered clip ID'"
+          }
+        },
+        {
+          "flags": [
+            "--platform"
+          ],
+          "options": {
+            "help": "'One exact target platform (required for enterprise keys)'"
+          }
+        },
+        {
+          "flags": [
+            "--platforms"
+          ],
+          "options": {
+            "help": "'Comma-separated platforms for ordinary keys'"
+          }
+        },
+        {
+          "flags": [
+            "--account-id"
+          ],
+          "options": {
+            "help": "'Exact accountId for a single --platform'"
+          }
+        },
+        {
+          "flags": [
+            "--account-ids"
+          ],
+          "options": {
+            "help": "'platform=accountId pairs or a JSON object'"
+          }
+        },
+        {
+          "flags": [
+            "--caption"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Post caption'"
+          }
+        },
+        {
+          "flags": [
+            "--title"
+          ],
+          "options": {
+            "help": "'Title (required for YouTube)'"
+          }
+        },
+        {
+          "flags": [
+            "--hashtags"
+          ],
+          "options": {
+            "help": "'Comma-separated hashtags'"
+          }
+        },
+        {
+          "flags": [
+            "--export-id"
+          ],
+          "options": {
+            "help": "'Exact completed export ID (required if delivery-state is ambiguous)'"
+          }
+        },
+        {
+          "flags": [
+            "--enterprise-deliverable-id"
+          ],
+          "options": {
+            "help": "'Optional selected enterprise deliverable ID'"
+          }
+        },
+        {
+          "flags": [
+            "--wait"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Wait for posting to complete'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "'/api/v1/social/post'",
+          "line": 66
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/render_clip.py",
+      "sha256": "691acfca3925f3887d0a9c4f93a6c02ee2c3280757ea9f52b6df7c0917b2327f",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--clip-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Clip ID to render'"
+          }
+        },
+        {
+          "flags": [
+            "--workspace-id"
+          ],
+          "options": {
+            "help": "'Expected enterprise workspace ID'"
+          }
+        },
+        {
+          "flags": [
+            "--profile"
+          ],
+          "options": {
+            "help": "'Named ClipIt CLI profile'"
+          }
+        },
+        {
+          "flags": [
+            "--aspect-ratio"
+          ],
+          "options": {
+            "default": "'9:16'",
+            "choices": "['16:9', '9:16', '1:1', '4:5']"
+          }
+        },
+        {
+          "flags": [
+            "--quality"
+          ],
+          "options": {
+            "default": "'high'",
+            "choices": "['standard', 'high', '4k']"
+          }
+        },
+        {
+          "flags": [
+            "--captions"
+          ],
+          "options": {
+            "dest": "'include_captions'",
+            "action": "'store_true'",
+            "help": "'Render captions for personal clips; enterprise captions use the exact recipe'"
+          }
+        },
+        {
+          "flags": [
+            "--no-captions"
+          ],
+          "options": {
+            "dest": "'include_captions'",
+            "action": "'store_false'",
+            "help": "'Render without captions; allowed for a matching enterprise snapshot'"
+          }
+        },
+        {
+          "flags": [
+            "--caption-style"
+          ],
+          "options": {
+            "choices": "sorted(CAPTION_STYLES)",
+            "help": "'Legacy coarse caption style for personal renders'"
+          }
+        },
+        {
+          "flags": [
+            "--watermark"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "default": "False"
+          }
+        },
+        {
+          "flags": [
+            "--auto-reframe"
+          ],
+          "options": {
+            "dest": "'auto_reframe'",
+            "action": "'store_true'",
+            "help": "'Automatically frame the subject (personal default)'"
+          }
+        },
+        {
+          "flags": [
+            "--no-auto-reframe"
+          ],
+          "options": {
+            "dest": "'auto_reframe'",
+            "action": "'store_false'",
+            "help": "'Preserve canonical full-frame authority (required for enterprise)'"
+          }
+        },
+        {
+          "flags": [
+            "--wait"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Wait for render to complete'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "f'/api/v1/clips/{clip_id}/render'",
+          "line": 47
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/run_enterprise_exact_delivery.py",
+      "sha256": "21f66743909d0abef9aec3c630dd46ee38ec0cf85ae4e50eae85c83ce3eaecb0",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--workspace-id"
+          ],
+          "options": {
+            "required": "True"
+          }
+        },
+        {
+          "flags": [
+            "--clip-id"
+          ],
+          "options": {
+            "required": "True"
+          }
+        },
+        {
+          "flags": [
+            "--profile"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Named ClipIt CLI profile'"
+          }
+        },
+        {
+          "flags": [
+            "--style-json"
+          ],
+          "options": {
+            "required": "True",
+            "type": "parse_style",
+            "help": "'Exact caption style JSON object or @path/to/style.json'"
+          }
+        },
+        {
+          "flags": [
+            "--expected-editor-version"
+          ],
+          "options": {
+            "required": "True",
+            "type": "int"
+          }
+        },
+        {
+          "flags": [
+            "--expected-editor-state-hash"
+          ],
+          "options": {
+            "required": "True"
+          }
+        },
+        {
+          "flags": [
+            "--expected-clip-settings-revision"
+          ],
+          "options": {
+            "required": "True",
+            "type": "int"
+          }
+        },
+        {
+          "flags": [
+            "--max-credits"
+          ],
+          "options": {
+            "required": "True",
+            "type": "float"
+          }
+        },
+        {
+          "flags": [
+            "--include-outro"
+          ],
+          "options": {
+            "dest": "'include_outro'",
+            "action": "'store_true'"
+          }
+        },
+        {
+          "flags": [
+            "--no-outro"
+          ],
+          "options": {
+            "dest": "'include_outro'",
+            "action": "'store_false'"
+          }
+        },
+        {
+          "flags": [
+            "--confirm"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Advance the exact plan returned by preflight'"
+          }
+        },
+        {
+          "flags": [
+            "--idempotency-key"
+          ],
+          "options": {
+            "help": "'Stable first-advance key; generated when omitted'"
+          }
+        },
+        {
+          "flags": [
+            "--resume-token"
+          ],
+          "options": {
+            "help": "'Durable token from a processing receipt'"
+          }
+        },
+        {
+          "flags": [
+            "--plan-hash"
+          ],
+          "options": {
+            "help": "'Original plan hash; required with --resume-token'"
+          }
+        },
+        {
+          "flags": [
+            "--caption-style-hash"
+          ],
+          "options": {
+            "help": "'Original approved caption-style hash; required with --resume-token'"
+          }
+        },
+        {
+          "flags": [
+            "--expected-final-duration"
+          ],
+          "options": {
+            "type": "float",
+            "help": "'Approved final duration from receipt lineage; required with --resume-token'"
+          }
+        },
+        {
+          "flags": [
+            "--wait"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Resume until completed or blocked'"
+          }
+        },
+        {
+          "flags": [
+            "--timeout"
+          ],
+          "options": {
+            "type": "float",
+            "default": "1200"
+          }
+        },
+        {
+          "flags": [
+            "--poll-interval"
+          ],
+          "options": {
+            "type": "float",
+            "default": "3"
+          }
+        }
+      ],
+      "requests": [],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/schedule_social_post.py",
+      "sha256": "5627a2bdd4972f458700abca3b75098ff5f1b2ab72660edfb39a9e9648db45b3",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--clip-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Rendered clip ID'"
+          }
+        },
+        {
+          "flags": [
+            "--platform"
+          ],
+          "options": {
+            "help": "'One exact target platform (required for enterprise keys)'"
+          }
+        },
+        {
+          "flags": [
+            "--platforms"
+          ],
+          "options": {
+            "help": "'Comma-separated platforms for ordinary keys'"
+          }
+        },
+        {
+          "flags": [
+            "--account-id"
+          ],
+          "options": {
+            "help": "'Exact accountId for a single --platform'"
+          }
+        },
+        {
+          "flags": [
+            "--account-ids"
+          ],
+          "options": {
+            "help": "'platform=accountId pairs or a JSON object'"
+          }
+        },
+        {
+          "flags": [
+            "--caption"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Post caption'"
+          }
+        },
+        {
+          "flags": [
+            "--scheduled-for"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'ISO 8601 datetime (must be in the future)'"
+          }
+        },
+        {
+          "flags": [
+            "--title"
+          ],
+          "options": {
+            "help": "'Title (required for YouTube)'"
+          }
+        },
+        {
+          "flags": [
+            "--hashtags"
+          ],
+          "options": {
+            "help": "'Comma-separated hashtags'"
+          }
+        },
+        {
+          "flags": [
+            "--export-id"
+          ],
+          "options": {
+            "help": "'Exact completed export ID (required if delivery-state is ambiguous)'"
+          }
+        },
+        {
+          "flags": [
+            "--enterprise-deliverable-id"
+          ],
+          "options": {
+            "help": "'Optional selected enterprise deliverable ID'"
+          }
+        },
+        {
+          "flags": [
+            "--wait"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Wait for enterprise schedule registration'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "'/api/v1/social/schedule'",
+          "line": 67
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/set_caption_style.py",
+      "sha256": "0a547fa9a0475fb3e4d4965c0089bacfba8c514df2b7c7af5b4c60a2dc74fe5b",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--workspace-id"
+          ],
+          "options": {
+            "required": "True"
+          }
+        },
+        {
+          "flags": [
+            "--clip-id"
+          ],
+          "options": {
+            "required": "True"
+          }
+        },
+        {
+          "flags": [
+            "--profile"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Named ClipIt CLI profile'"
+          }
+        },
+        {
+          "flags": [
+            "--style-json"
+          ],
+          "options": {
+            "type": "parse_style",
+            "help": "'Exact style JSON object or @path/to/style.json'"
+          }
+        },
+        {
+          "flags": [
+            "--directive"
+          ],
+          "options": {
+            "help": "\"Strict shorthand such as 'caption size 200%% single'\""
+          }
+        },
+        {
+          "flags": [
+            "--expected-editor-version"
+          ],
+          "options": {
+            "required": "True",
+            "type": "int"
+          }
+        },
+        {
+          "flags": [
+            "--expected-editor-state-hash"
+          ],
+          "options": {
+            "required": "True"
+          }
+        },
+        {
+          "flags": [
+            "--expected-clip-settings-revision"
+          ],
+          "options": {
+            "required": "True",
+            "type": "int"
+          }
+        }
+      ],
+      "requests": [],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/social_publish_contract.py",
+      "sha256": "1d022cc779cbbdc26b099cd4994e4134c83d8ffb0471bdc7cd0648bbd514d2fe",
+      "entrypoint": false,
+      "arguments": [],
+      "requests": [
+        {
+          "method": "GET",
+          "pathExpression": "'/api/v1/agent/me'",
+          "line": 252
+        },
+        {
+          "method": "GET",
+          "pathExpression": "f'/api/v1/clips/{clip_id}/delivery-state'",
+          "line": 263
+        },
+        {
+          "method": "GET",
+          "pathExpression": "'/api/v1/social/accounts'",
+          "line": 272
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/start_export.py",
+      "sha256": "a892c59ebb8d8ac83adc2799a97a89cf3e965b4c37bec9c603a0ebf0f14e9db4",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--clip-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Clip ID to export'"
+          }
+        },
+        {
+          "flags": [
+            "--profile"
+          ],
+          "options": {
+            "help": "'Named ClipIt CLI profile'"
+          }
+        },
+        {
+          "flags": [
+            "--project-id"
+          ],
+          "options": {
+            "help": "'Optional project ID'"
+          }
+        },
+        {
+          "flags": [
+            "--sequence-id"
+          ],
+          "options": {
+            "help": "'Optional sequence ID'"
+          }
+        },
+        {
+          "flags": [
+            "--start"
+          ],
+          "options": {
+            "type": "float",
+            "help": "'Export start time in seconds'"
+          }
+        },
+        {
+          "flags": [
+            "--end"
+          ],
+          "options": {
+            "type": "float",
+            "help": "'Export end time in seconds'"
+          }
+        },
+        {
+          "flags": [
+            "--format"
+          ],
+          "options": {
+            "default": "'mp4'",
+            "choices": "['mp4', 'mov', 'avi', 'webm', 'mkv']"
+          }
+        },
+        {
+          "flags": [
+            "--aspect-ratio"
+          ],
+          "options": {
+            "default": "'16:9'",
+            "choices": "['original', '16:9', '9:16', '1:1', '4:3', '4:5', '2:3']"
+          }
+        },
+        {
+          "flags": [
+            "--reframe-mode"
+          ],
+          "options": {
+            "default": "'fill'",
+            "choices": "['fit', 'fill', 'custom']"
+          }
+        },
+        {
+          "flags": [
+            "--fit-background"
+          ],
+          "options": {
+            "choices": "['black', 'blur']"
+          }
+        },
+        {
+          "flags": [
+            "--reframe-x"
+          ],
+          "options": {
+            "type": "float",
+            "help": "'Custom reframe x position (0-1)'"
+          }
+        },
+        {
+          "flags": [
+            "--reframe-y"
+          ],
+          "options": {
+            "type": "float",
+            "help": "'Custom reframe y position (0-1)'"
+          }
+        },
+        {
+          "flags": [
+            "--hide-video"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Export audio/captions without video'"
+          }
+        },
+        {
+          "flags": [
+            "--resolution"
+          ],
+          "options": {
+            "default": "'1080p'",
+            "choices": "['2160p', '1080p', '720p', '480p', '360p', 'original']"
+          }
+        },
+        {
+          "flags": [
+            "--bitrate"
+          ],
+          "options": {
+            "type": "int",
+            "default": "8000000",
+            "help": "'Video bitrate'"
+          }
+        },
+        {
+          "flags": [
+            "--framerate"
+          ],
+          "options": {
+            "type": "int",
+            "default": "30",
+            "help": "'Frames per second'"
+          }
+        },
+        {
+          "flags": [
+            "--codec"
+          ],
+          "options": {
+            "default": "'h264'",
+            "choices": "['h264', 'h265', 'vp9', 'av1', 'prores']"
+          }
+        },
+        {
+          "flags": [
+            "--quality-preset"
+          ],
+          "options": {
+            "default": "'medium'",
+            "choices": "['ultrafast', 'superfast', 'veryfast', 'faster', 'fast', 'medium', 'slow', 'slower', 'veryslow']"
+          }
+        },
+        {
+          "flags": [
+            "--hardware-acceleration"
+          ],
+          "options": {
+            "dest": "'hardware_acceleration'",
+            "action": "'store_true'",
+            "default": "True"
+          }
+        },
+        {
+          "flags": [
+            "--no-hardware-acceleration"
+          ],
+          "options": {
+            "dest": "'hardware_acceleration'",
+            "action": "'store_false'"
+          }
+        },
+        {
+          "flags": [
+            "--color-space"
+          ],
+          "options": {
+            "default": "'sdr'",
+            "choices": "['sdr', 'hdr']"
+          }
+        },
+        {
+          "flags": [
+            "--audio-codec"
+          ],
+          "options": {
+            "default": "'aac'",
+            "choices": "['aac', 'mp3', 'opus', 'pcm']"
+          }
+        },
+        {
+          "flags": [
+            "--audio-bitrate"
+          ],
+          "options": {
+            "type": "int",
+            "default": "192000"
+          }
+        },
+        {
+          "flags": [
+            "--audio-sample-rate"
+          ],
+          "options": {
+            "type": "int",
+            "default": "48000"
+          }
+        },
+        {
+          "flags": [
+            "--include-audio"
+          ],
+          "options": {
+            "dest": "'include_audio'",
+            "action": "'store_true'",
+            "default": "True"
+          }
+        },
+        {
+          "flags": [
+            "--no-audio"
+          ],
+          "options": {
+            "dest": "'include_audio'",
+            "action": "'store_false'"
+          }
+        },
+        {
+          "flags": [
+            "--include-outro"
+          ],
+          "options": {
+            "dest": "'include_outro'",
+            "action": "'store_true'",
+            "help": "'Append the four-second ClipIt outro (default)'"
+          }
+        },
+        {
+          "flags": [
+            "--no-outro"
+          ],
+          "options": {
+            "dest": "'include_outro'",
+            "action": "'store_false'",
+            "help": "'Preserve the exact content duration without the ClipIt outro'"
+          }
+        },
+        {
+          "flags": [
+            "--audio-volume"
+          ],
+          "options": {
+            "type": "float",
+            "help": "'Audio volume 0-100'"
+          }
+        },
+        {
+          "flags": [
+            "--audio-muted"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Mute exported audio'"
+          }
+        },
+        {
+          "flags": [
+            "--playback-rate"
+          ],
+          "options": {
+            "type": "float",
+            "help": "'Playback speed 0.25-4'"
+          }
+        },
+        {
+          "flags": [
+            "--watermark-text"
+          ],
+          "options": {
+            "help": "'Watermark text'"
+          }
+        },
+        {
+          "flags": [
+            "--watermark-image-url"
+          ],
+          "options": {
+            "help": "'Watermark image URL'"
+          }
+        },
+        {
+          "flags": [
+            "--watermark-position"
+          ],
+          "options": {
+            "choices": "['top-left', 'top-right', 'bottom-left', 'bottom-right', 'center']",
+            "default": "'bottom-right'"
+          }
+        },
+        {
+          "flags": [
+            "--watermark-opacity"
+          ],
+          "options": {
+            "type": "float",
+            "default": "0.5"
+          }
+        },
+        {
+          "flags": [
+            "--watermark-font-size"
+          ],
+          "options": {
+            "type": "float"
+          }
+        },
+        {
+          "flags": [
+            "--watermark-color"
+          ],
+          "options": {}
+        },
+        {
+          "flags": [
+            "--output-filename"
+          ],
+          "options": {
+            "help": "'Output file name'"
+          }
+        },
+        {
+          "flags": [
+            "--title"
+          ],
+          "options": {
+            "help": "'Export metadata title'"
+          }
+        },
+        {
+          "flags": [
+            "--description"
+          ],
+          "options": {
+            "help": "'Export metadata description'"
+          }
+        },
+        {
+          "flags": [
+            "--tags"
+          ],
+          "options": {
+            "help": "'Comma-separated export metadata tags'"
+          }
+        },
+        {
+          "flags": [
+            "--options-json"
+          ],
+          "options": {
+            "type": "parse_json_object",
+            "help": "'Additional exportStart JSON fields'"
+          }
+        },
+        {
+          "flags": [
+            "--idempotency-key"
+          ],
+          "options": {
+            "help": "'Stable key to reuse only when retrying the same export after an unknown outcome'"
+          }
+        },
+        {
+          "flags": [
+            "--wait"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Wait for export completion'"
+          }
+        },
+        {
+          "flags": [
+            "--timeout"
+          ],
+          "options": {
+            "type": "float",
+            "default": "600",
+            "help": "'Max wait in seconds'"
+          }
+        },
+        {
+          "flags": [
+            "--poll-interval"
+          ],
+          "options": {
+            "type": "float",
+            "default": "3",
+            "help": "'Poll interval in seconds'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "'/api/v1/exports'",
+          "line": 184
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/suggest_clips.py",
+      "sha256": "6aae8c2e26cb57256419c3f18c3827a6632643154461e5275bae141463c375f0",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--video-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Video ID'"
+          }
+        },
+        {
+          "flags": [
+            "--count"
+          ],
+          "options": {
+            "type": "int",
+            "default": "5",
+            "help": "'Number of suggestions (1-20)'"
+          }
+        },
+        {
+          "flags": [
+            "--platforms"
+          ],
+          "options": {
+            "help": "'Comma-separated target platforms'"
+          }
+        },
+        {
+          "flags": [
+            "--min-duration"
+          ],
+          "options": {
+            "type": "float",
+            "help": "'Minimum clip duration (seconds)'"
+          }
+        },
+        {
+          "flags": [
+            "--max-duration"
+          ],
+          "options": {
+            "type": "float",
+            "help": "'Maximum clip duration (seconds)'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "f'/api/v1/videos/{args.video_id}/suggest-clips'",
+          "line": 35
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/transcribe_video.py",
+      "sha256": "11725bac8fadb274d48220159d0044f5c5d635f202cc29f4debe06eaacdbdc55",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--video-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Video ID to transcribe'"
+          }
+        },
+        {
+          "flags": [
+            "--wait"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Wait for transcription to complete'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "f'/api/v1/videos/{args.video_id}/transcribe'",
+          "line": 20
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/update_captions.py",
+      "sha256": "f446beed23457c94a528c015b3da31a4ebfebe2d8a6daa53fad67edadad0fc92",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--clip-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Clip ID'"
+          }
+        },
+        {
+          "flags": [
+            "--preset"
+          ],
+          "options": {
+            "choices": "['bold', 'minimal', 'neon', 'classic', 'tiktok-viral']"
+          }
+        },
+        {
+          "flags": [
+            "--font"
+          ],
+          "options": {}
+        },
+        {
+          "flags": [
+            "--font-size"
+          ],
+          "options": {
+            "type": "int"
+          }
+        },
+        {
+          "flags": [
+            "--color"
+          ],
+          "options": {}
+        },
+        {
+          "flags": [
+            "--position"
+          ],
+          "options": {
+            "choices": "['top', 'center', 'bottom']"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "PATCH",
+          "pathExpression": "f'/api/v1/clips/{args.clip_id}/captions'",
+          "line": 41
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/update_clip.py",
+      "sha256": "f8e441909a36870eecec3eba3ec25b213e3484582208378d593f1f43a33ca8a4",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--clip-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Clip ID'"
+          }
+        },
+        {
+          "flags": [
+            "--start"
+          ],
+          "options": {
+            "type": "float",
+            "help": "'New start time (seconds)'"
+          }
+        },
+        {
+          "flags": [
+            "--end"
+          ],
+          "options": {
+            "type": "float",
+            "help": "'New end time (seconds)'"
+          }
+        },
+        {
+          "flags": [
+            "--title"
+          ],
+          "options": {
+            "help": "'New title'"
+          }
+        },
+        {
+          "flags": [
+            "--caption"
+          ],
+          "options": {
+            "help": "'New caption'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "PATCH",
+          "pathExpression": "f'/api/v1/clips/{args.clip_id}'",
+          "line": 37
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/upload_asset.py",
+      "sha256": "4bcab6d994051da65ff6a0bff80602b3115fd065d14ef8c71cf93f85d5b60e11",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--file"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Path to the asset file'"
+          }
+        },
+        {
+          "flags": [
+            "--content-type"
+          ],
+          "options": {
+            "help": "'MIME type, guessed from file when omitted'"
+          }
+        },
+        {
+          "flags": [
+            "--idempotency-key"
+          ],
+          "options": {
+            "help": "'Stable key to reuse only when retrying this exact upload after an unknown outcome'"
+          }
+        },
+        {
+          "flags": [
+            "--duration"
+          ],
+          "options": {
+            "type": "float",
+            "help": "argparse.SUPPRESS"
+          }
+        }
+      ],
+      "requests": [],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/upload_video.py",
+      "sha256": "bb7ef3d2090312eed6424b4fafcb83e14882940fd78c81f105b1fb62c5ad581c",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--file"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Path to the video file'"
+          }
+        },
+        {
+          "flags": [
+            "--wait"
+          ],
+          "options": {
+            "action": "'store_true'",
+            "help": "'Wait for processing to complete'"
+          }
+        }
+      ],
+      "requests": [],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/use_library_video.py",
+      "sha256": "5292aade3069859b31ec466deb858af155fd1cbdfaf3c40f16ad2a99b03dad47",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--asset-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Video asset ID returned by list_assets.py'"
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "POST",
+          "pathExpression": "f'/api/v1/assets/{args.asset_id}/video'",
+          "line": 25
+        }
+      ],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/verify_enterprise_workspace.py",
+      "sha256": "ca233e58528e2f57a8500263e612e6bb2508a1cb8ad3000967baedab00ca2ff4",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--workspace-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Expected enterprise workspace ID from the ClipIt admin dashboard'"
+          }
+        },
+        {
+          "flags": [
+            "--profile"
+          ],
+          "options": {
+            "help": "'Named ClipIt CLI profile (or set CLIPIT_PROFILE)'"
+          }
+        }
+      ],
+      "requests": [],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/wait_for_export.py",
+      "sha256": "e0c5afe88f701e731f301268e40570293a4702b0cc700cbd832548b7ce4e2ac2",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--job-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Export job ID to poll'"
+          }
+        },
+        {
+          "flags": [
+            "--timeout"
+          ],
+          "options": {
+            "type": "float",
+            "default": "600",
+            "help": "'Max wait in seconds'"
+          }
+        },
+        {
+          "flags": [
+            "--poll-interval"
+          ],
+          "options": {
+            "type": "float",
+            "default": "3",
+            "help": "'Poll interval in seconds'"
+          }
+        }
+      ],
+      "requests": [],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    },
+    {
+      "path": "scripts/wait_for_job.py",
+      "sha256": "c6e06f92071cd6d1ff660592fe08d08b92c095b44830730781329a6eb8422ae6",
+      "entrypoint": true,
+      "arguments": [
+        {
+          "flags": [
+            "--job-id"
+          ],
+          "options": {
+            "required": "True",
+            "help": "'Job ID to poll'"
+          }
+        },
+        {
+          "flags": [
+            "--timeout"
+          ],
+          "options": {
+            "type": "float",
+            "default": "600",
+            "help": "'Max wait in seconds'"
+          }
+        },
+        {
+          "flags": [
+            "--poll-interval"
+          ],
+          "options": {
+            "type": "float",
+            "default": "3",
+            "help": "'Poll interval in seconds'"
+          }
+        }
+      ],
+      "requests": [],
+      "retainedFallback": "Run this unchanged Python entrypoint with its existing CLI profile and arguments.",
+      "policy": "Existing public endpoint permission, cost, confirmation and exact-result rules remain authoritative."
+    }
+  ]
+}

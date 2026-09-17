@@ -1,0 +1,61 @@
+{
+  "files": {
+    "SKILL.md": {
+      "bytes": 5891,
+      "sha256": "59503b0ec38642a90ecc9dd0fa144a943f9111c646c848afca1d4c326c6904a6",
+      "source": "clipper/account-insights/SKILL.md",
+      "sourceSha256": "403ff39bde32beb99a04f4f34323fd2cefa9473f3897009e3630d1f64f0e4755"
+    },
+    "references/LICENSE": {
+      "bytes": 1070,
+      "sha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3",
+      "source": "LICENSE",
+      "sourceSha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3"
+    },
+    "requirements.txt": {
+      "bytes": 38,
+      "sha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80",
+      "source": "requirements.txt",
+      "sourceSha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80"
+    },
+    "scripts/clipper_client.py": {
+      "bytes": 13698,
+      "sha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f",
+      "source": "scripts/clipper_client.py",
+      "sourceSha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f"
+    },
+    "scripts/estimate_cost.py": {
+      "bytes": 3418,
+      "sha256": "3f92d47a8e5d35b06bf3c167ce10e86ee29511975a8e4da7fa04a38618d9ba5b",
+      "source": "scripts/estimate_cost.py",
+      "sourceSha256": "3f92d47a8e5d35b06bf3c167ce10e86ee29511975a8e4da7fa04a38618d9ba5b"
+    },
+    "scripts/get_analytics_overview.py": {
+      "bytes": 853,
+      "sha256": "a673a1937e9fa16593a5226e3975428d9302c7c19a3756879fb0ba442b79173e",
+      "source": "scripts/get_analytics_overview.py",
+      "sourceSha256": "a673a1937e9fa16593a5226e3975428d9302c7c19a3756879fb0ba442b79173e"
+    },
+    "scripts/get_credits_balance.py": {
+      "bytes": 799,
+      "sha256": "a2c81867f9d10d26319ee672d6010c81a8af6f08457f178e036310005a2ba795",
+      "source": "scripts/get_credits_balance.py",
+      "sourceSha256": "a2c81867f9d10d26319ee672d6010c81a8af6f08457f178e036310005a2ba795"
+    },
+    "scripts/get_post_metrics.py": {
+      "bytes": 575,
+      "sha256": "1b749fd97a5a121143095458578c6706da13640dd49e538a4572f2b771b13b47",
+      "source": "scripts/get_post_metrics.py",
+      "sourceSha256": "1b749fd97a5a121143095458578c6706da13640dd49e538a4572f2b771b13b47"
+    },
+    "scripts/get_top_clips.py": {
+      "bytes": 1239,
+      "sha256": "05ba0182b2af7822cdea77ec6a28bb27b8221db04c20ae01ef92c67531507161",
+      "source": "scripts/get_top_clips.py",
+      "sourceSha256": "05ba0182b2af7822cdea77ec6a28bb27b8221db04c20ae01ef92c67531507161"
+    }
+  },
+  "format": "clipit-portable-skills.v1",
+  "skillId": "account-insights",
+  "sourcePath": "clipper/account-insights"
+}

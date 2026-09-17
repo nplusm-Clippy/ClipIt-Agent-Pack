@@ -1,0 +1,115 @@
+{
+  "files": {
+    "SKILL.md": {
+      "bytes": 13178,
+      "sha256": "5feb307b55b2fe90baf0f1558a047eb6ffa5e5321c9ae29235d7ed43efe7bc8d",
+      "source": "clipper/video-management/SKILL.md",
+      "sourceSha256": "f219e90dc040b51f2ce6ca67dd5a09d446c7eafa389dfc2c797e3564af3c4cb1"
+    },
+    "references/LICENSE": {
+      "bytes": 1070,
+      "sha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3",
+      "source": "LICENSE",
+      "sourceSha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3"
+    },
+    "requirements.txt": {
+      "bytes": 38,
+      "sha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80",
+      "source": "requirements.txt",
+      "sourceSha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80"
+    },
+    "scripts/asset_upload_contract.py": {
+      "bytes": 3519,
+      "sha256": "c434892d9aed1325b9d27d504bc5050eef092cc6c53b5292ead47eab4d767590",
+      "source": "scripts/asset_upload_contract.py",
+      "sourceSha256": "c434892d9aed1325b9d27d504bc5050eef092cc6c53b5292ead47eab4d767590"
+    },
+    "scripts/clipper_client.py": {
+      "bytes": 13698,
+      "sha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f",
+      "source": "scripts/clipper_client.py",
+      "sourceSha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f"
+    },
+    "scripts/delete_video.py": {
+      "bytes": 554,
+      "sha256": "8a98c9fdc33d6c4a214eb9ff47e4c75ae11d05c36a09b90b751d407a0201f0dd",
+      "source": "scripts/delete_video.py",
+      "sourceSha256": "8a98c9fdc33d6c4a214eb9ff47e4c75ae11d05c36a09b90b751d407a0201f0dd"
+    },
+    "scripts/get_transcript.py": {
+      "bytes": 603,
+      "sha256": "dc4e69d1bb3d4188837b411d6709770ae1a12f18fbbc393543e66c5d3d23df57",
+      "source": "scripts/get_transcript.py",
+      "sourceSha256": "dc4e69d1bb3d4188837b411d6709770ae1a12f18fbbc393543e66c5d3d23df57"
+    },
+    "scripts/get_video.py": {
+      "bytes": 549,
+      "sha256": "c68d138e0ba218e01f2ed31932de8199f9316b16c6fd66b454989427d8eb6a38",
+      "source": "scripts/get_video.py",
+      "sourceSha256": "c68d138e0ba218e01f2ed31932de8199f9316b16c6fd66b454989427d8eb6a38"
+    },
+    "scripts/import_video_from_url.py": {
+      "bytes": 1025,
+      "sha256": "27ea7942b01d18a3782d42f7038d39e76466bad4814565522f9d290c117b190b",
+      "source": "scripts/import_video_from_url.py",
+      "sourceSha256": "27ea7942b01d18a3782d42f7038d39e76466bad4814565522f9d290c117b190b"
+    },
+    "scripts/list_assets.py": {
+      "bytes": 966,
+      "sha256": "973d005dde09bef3c327d358ceefaf7394612fe3bc2fcfba8d234fea77dd9bc9",
+      "source": "scripts/list_assets.py",
+      "sourceSha256": "973d005dde09bef3c327d358ceefaf7394612fe3bc2fcfba8d234fea77dd9bc9"
+    },
+    "scripts/list_videos.py": {
+      "bytes": 636,
+      "sha256": "da56625ebffb4dafda8a97907b54700e1b545558b782dbf662816efd4fe0c112",
+      "source": "scripts/list_videos.py",
+      "sourceSha256": "da56625ebffb4dafda8a97907b54700e1b545558b782dbf662816efd4fe0c112"
+    },
+    "scripts/suggest_clips.py": {
+      "bytes": 1583,
+      "sha256": "6aae8c2e26cb57256419c3f18c3827a6632643154461e5275bae141463c375f0",
+      "source": "scripts/suggest_clips.py",
+      "sourceSha256": "6aae8c2e26cb57256419c3f18c3827a6632643154461e5275bae141463c375f0"
+    },
+    "scripts/transcribe_video.py": {
+      "bytes": 919,
+      "sha256": "11725bac8fadb274d48220159d0044f5c5d635f202cc29f4debe06eaacdbdc55",
+      "source": "scripts/transcribe_video.py",
+      "sourceSha256": "11725bac8fadb274d48220159d0044f5c5d635f202cc29f4debe06eaacdbdc55"
+    },
+    "scripts/upload_asset.py": {
+      "bytes": 1621,
+      "sha256": "4bcab6d994051da65ff6a0bff80602b3115fd065d14ef8c71cf93f85d5b60e11",
+      "source": "scripts/upload_asset.py",
+      "sourceSha256": "4bcab6d994051da65ff6a0bff80602b3115fd065d14ef8c71cf93f85d5b60e11"
+    },
+    "scripts/upload_video.py": {
+      "bytes": 819,
+      "sha256": "bb7ef3d2090312eed6424b4fafcb83e14882940fd78c81f105b1fb62c5ad581c",
+      "source": "scripts/upload_video.py",
+      "sourceSha256": "bb7ef3d2090312eed6424b4fafcb83e14882940fd78c81f105b1fb62c5ad581c"
+    },
+    "scripts/use_library_video.py": {
+      "bytes": 692,
+      "sha256": "5292aade3069859b31ec466deb858af155fd1cbdfaf3c40f16ad2a99b03dad47",
+      "source": "scripts/use_library_video.py",
+      "sourceSha256": "5292aade3069859b31ec466deb858af155fd1cbdfaf3c40f16ad2a99b03dad47"
+    },
+    "scripts/verify_enterprise_workspace.py": {
+      "bytes": 1476,
+      "sha256": "ca233e58528e2f57a8500263e612e6bb2508a1cb8ad3000967baedab00ca2ff4",
+      "source": "scripts/verify_enterprise_workspace.py",
+      "sourceSha256": "ca233e58528e2f57a8500263e612e6bb2508a1cb8ad3000967baedab00ca2ff4"
+    },
+    "scripts/wait_for_job.py": {
+      "bytes": 908,
+      "sha256": "c6e06f92071cd6d1ff660592fe08d08b92c095b44830730781329a6eb8422ae6",
+      "source": "scripts/wait_for_job.py",
+      "sourceSha256": "c6e06f92071cd6d1ff660592fe08d08b92c095b44830730781329a6eb8422ae6"
+    }
+  },
+  "format": "clipit-portable-skills.v1",
+  "skillId": "video-management",
+  "sourcePath": "clipper/video-management"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "clipit-agent-pack-validation",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-vm-modules --test tests/desktop.test.mjs tests/desktop-dom.test.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "26.0.0",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

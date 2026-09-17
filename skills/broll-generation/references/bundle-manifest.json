@@ -1,0 +1,67 @@
+{
+  "files": {
+    "SKILL.md": {
+      "bytes": 7693,
+      "sha256": "a07357fc4bc4a094dea46d24673cf3edf8f29b082adff4106679cd7c9daca967",
+      "source": "clipper/broll-generation/SKILL.md",
+      "sourceSha256": "e31b2da859ca500fd5cc6ecadec91f6fca33820b8b1a0b3961d38bd9c52c28ba"
+    },
+    "references/LICENSE": {
+      "bytes": 1070,
+      "sha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3",
+      "source": "LICENSE",
+      "sourceSha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3"
+    },
+    "references/clipit-operator--media-prompting.md": {
+      "bytes": 8621,
+      "sha256": "ae26780eff3cea978222e3bf4e620321dd272ae02c17f9a216fa5ca69efba4eb",
+      "source": "clipper/clipit-operator/references/media-prompting.md",
+      "sourceSha256": "ae26780eff3cea978222e3bf4e620321dd272ae02c17f9a216fa5ca69efba4eb"
+    },
+    "references/clipit-operator--media-qa.md": {
+      "bytes": 4416,
+      "sha256": "66b139a5bf50e9b0229eee0d468032f33bf10778e760f5555e2dd441fac82c79",
+      "source": "clipper/clipit-operator/references/media-qa.md",
+      "sourceSha256": "66b139a5bf50e9b0229eee0d468032f33bf10778e760f5555e2dd441fac82c79"
+    },
+    "requirements.txt": {
+      "bytes": 38,
+      "sha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80",
+      "source": "requirements.txt",
+      "sourceSha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80"
+    },
+    "scripts/clipper_client.py": {
+      "bytes": 13698,
+      "sha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f",
+      "source": "scripts/clipper_client.py",
+      "sourceSha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f"
+    },
+    "scripts/generate_broll.py": {
+      "bytes": 3404,
+      "sha256": "fbe1273a7be6e244653027bb2ef24a33ab5896bcd001ec425f4bd57859a9d5f5",
+      "source": "scripts/generate_broll.py",
+      "sourceSha256": "fbe1273a7be6e244653027bb2ef24a33ab5896bcd001ec425f4bd57859a9d5f5"
+    },
+    "scripts/plan_broll.py": {
+      "bytes": 1149,
+      "sha256": "e30918d0aaaf78609693919bba4de541b02e8584be1fa22f901e4a39b080cb63",
+      "source": "scripts/plan_broll.py",
+      "sourceSha256": "e30918d0aaaf78609693919bba4de541b02e8584be1fa22f901e4a39b080cb63"
+    },
+    "scripts/render_clip.py": {
+      "bytes": 3973,
+      "sha256": "691acfca3925f3887d0a9c4f93a6c02ee2c3280757ea9f52b6df7c0917b2327f",
+      "source": "scripts/render_clip.py",
+      "sourceSha256": "691acfca3925f3887d0a9c4f93a6c02ee2c3280757ea9f52b6df7c0917b2327f"
+    },
+    "scripts/wait_for_job.py": {
+      "bytes": 908,
+      "sha256": "c6e06f92071cd6d1ff660592fe08d08b92c095b44830730781329a6eb8422ae6",
+      "source": "scripts/wait_for_job.py",
+      "sourceSha256": "c6e06f92071cd6d1ff660592fe08d08b92c095b44830730781329a6eb8422ae6"
+    }
+  },
+  "format": "clipit-portable-skills.v1",
+  "skillId": "broll-generation",
+  "sourcePath": "clipper/broll-generation"
+}

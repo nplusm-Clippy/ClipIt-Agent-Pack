@@ -1,0 +1,145 @@
+{
+  "files": {
+    "SKILL.md": {
+      "bytes": 12484,
+      "sha256": "18f4f96938d68ead84f1e56721bea7ae84bc44b9cf34f1f111229d9069dbb848",
+      "source": "clipper/export-rendering/SKILL.md",
+      "sourceSha256": "6d3727868b148e3d3cf3480b673f8be2c5ca0a6137c228265cdfde559082d53c"
+    },
+    "references/LICENSE": {
+      "bytes": 1070,
+      "sha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3",
+      "source": "LICENSE",
+      "sourceSha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3"
+    },
+    "requirements.txt": {
+      "bytes": 38,
+      "sha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80",
+      "source": "requirements.txt",
+      "sourceSha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80"
+    },
+    "scripts/clipper_client.py": {
+      "bytes": 13698,
+      "sha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f",
+      "source": "scripts/clipper_client.py",
+      "sourceSha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f"
+    },
+    "scripts/create_clip.py": {
+      "bytes": 1170,
+      "sha256": "1c7fb7b259a73867d28437cc76bf9889bfc2e72166a9e38985042ccdffe4ed08",
+      "source": "scripts/create_clip.py",
+      "sourceSha256": "1c7fb7b259a73867d28437cc76bf9889bfc2e72166a9e38985042ccdffe4ed08"
+    },
+    "scripts/deliver_export.py": {
+      "bytes": 1192,
+      "sha256": "17377456a04efb77e450c5eab460c5cde9ab72cea77ecb66c5a1878e2e5c4400",
+      "source": "scripts/deliver_export.py",
+      "sourceSha256": "17377456a04efb77e450c5eab460c5cde9ab72cea77ecb66c5a1878e2e5c4400"
+    },
+    "scripts/download_export.py": {
+      "bytes": 562,
+      "sha256": "bfa9d6e7180031588379bfb8bb09790a8b7a7a56d8255c3cf85e41a56ddd7ae9",
+      "source": "scripts/download_export.py",
+      "sourceSha256": "bfa9d6e7180031588379bfb8bb09790a8b7a7a56d8255c3cf85e41a56ddd7ae9"
+    },
+    "scripts/enterprise_delivery_contract.py": {
+      "bytes": 11251,
+      "sha256": "e5dae217cc243f2b10301b10938d9649f85c70e6e0fd853395cff5077db3bd91",
+      "source": "scripts/enterprise_delivery_contract.py",
+      "sourceSha256": "e5dae217cc243f2b10301b10938d9649f85c70e6e0fd853395cff5077db3bd91"
+    },
+    "scripts/enterprise_exact_delivery_contract.py": {
+      "bytes": 10864,
+      "sha256": "97622d3227ec16db8c749550f7f2ed134e67c0c94e88264442757068bddebce4",
+      "source": "scripts/enterprise_exact_delivery_contract.py",
+      "sourceSha256": "97622d3227ec16db8c749550f7f2ed134e67c0c94e88264442757068bddebce4"
+    },
+    "scripts/exact_caption_style_contract.py": {
+      "bytes": 5996,
+      "sha256": "58addefed9a71eea58090e7bfe0e487034845f0ff8e02f5d80ddd31823f27372",
+      "source": "scripts/exact_caption_style_contract.py",
+      "sourceSha256": "58addefed9a71eea58090e7bfe0e487034845f0ff8e02f5d80ddd31823f27372"
+    },
+    "scripts/export_contract.py": {
+      "bytes": 4706,
+      "sha256": "9a4f29c2176944bbd7a83721e21a10484a46ce4def801b1433d6fa37d2febb6d",
+      "source": "scripts/export_contract.py",
+      "sourceSha256": "9a4f29c2176944bbd7a83721e21a10484a46ce4def801b1433d6fa37d2febb6d"
+    },
+    "scripts/initialize_editor_snapshot.py": {
+      "bytes": 5605,
+      "sha256": "45b04c2f5f2793b92695abfec04425758d1f6b27286cd7cb568a355c6a8413ec",
+      "source": "scripts/initialize_editor_snapshot.py",
+      "sourceSha256": "45b04c2f5f2793b92695abfec04425758d1f6b27286cd7cb568a355c6a8413ec"
+    },
+    "scripts/list_assets.py": {
+      "bytes": 966,
+      "sha256": "973d005dde09bef3c327d358ceefaf7394612fe3bc2fcfba8d234fea77dd9bc9",
+      "source": "scripts/list_assets.py",
+      "sourceSha256": "973d005dde09bef3c327d358ceefaf7394612fe3bc2fcfba8d234fea77dd9bc9"
+    },
+    "scripts/list_deliverables.py": {
+      "bytes": 1383,
+      "sha256": "38ed0d21ddc6bb07d226906c3c2901e506e27ebe817722f669d92b5a66261b0c",
+      "source": "scripts/list_deliverables.py",
+      "sourceSha256": "38ed0d21ddc6bb07d226906c3c2901e506e27ebe817722f669d92b5a66261b0c"
+    },
+    "scripts/list_videos.py": {
+      "bytes": 636,
+      "sha256": "da56625ebffb4dafda8a97907b54700e1b545558b782dbf662816efd4fe0c112",
+      "source": "scripts/list_videos.py",
+      "sourceSha256": "da56625ebffb4dafda8a97907b54700e1b545558b782dbf662816efd4fe0c112"
+    },
+    "scripts/render_clip.py": {
+      "bytes": 3973,
+      "sha256": "691acfca3925f3887d0a9c4f93a6c02ee2c3280757ea9f52b6df7c0917b2327f",
+      "source": "scripts/render_clip.py",
+      "sourceSha256": "691acfca3925f3887d0a9c4f93a6c02ee2c3280757ea9f52b6df7c0917b2327f"
+    },
+    "scripts/run_enterprise_exact_delivery.py": {
+      "bytes": 6007,
+      "sha256": "21f66743909d0abef9aec3c630dd46ee38ec0cf85ae4e50eae85c83ce3eaecb0",
+      "source": "scripts/run_enterprise_exact_delivery.py",
+      "sourceSha256": "21f66743909d0abef9aec3c630dd46ee38ec0cf85ae4e50eae85c83ce3eaecb0"
+    },
+    "scripts/start_export.py": {
+      "bytes": 8955,
+      "sha256": "a892c59ebb8d8ac83adc2799a97a89cf3e965b4c37bec9c603a0ebf0f14e9db4",
+      "source": "scripts/start_export.py",
+      "sourceSha256": "a892c59ebb8d8ac83adc2799a97a89cf3e965b4c37bec9c603a0ebf0f14e9db4"
+    },
+    "scripts/transcribe_video.py": {
+      "bytes": 919,
+      "sha256": "11725bac8fadb274d48220159d0044f5c5d635f202cc29f4debe06eaacdbdc55",
+      "source": "scripts/transcribe_video.py",
+      "sourceSha256": "11725bac8fadb274d48220159d0044f5c5d635f202cc29f4debe06eaacdbdc55"
+    },
+    "scripts/use_library_video.py": {
+      "bytes": 692,
+      "sha256": "5292aade3069859b31ec466deb858af155fd1cbdfaf3c40f16ad2a99b03dad47",
+      "source": "scripts/use_library_video.py",
+      "sourceSha256": "5292aade3069859b31ec466deb858af155fd1cbdfaf3c40f16ad2a99b03dad47"
+    },
+    "scripts/verify_enterprise_workspace.py": {
+      "bytes": 1476,
+      "sha256": "ca233e58528e2f57a8500263e612e6bb2508a1cb8ad3000967baedab00ca2ff4",
+      "source": "scripts/verify_enterprise_workspace.py",
+      "sourceSha256": "ca233e58528e2f57a8500263e612e6bb2508a1cb8ad3000967baedab00ca2ff4"
+    },
+    "scripts/wait_for_export.py": {
+      "bytes": 893,
+      "sha256": "e0c5afe88f701e731f301268e40570293a4702b0cc700cbd832548b7ce4e2ac2",
+      "source": "scripts/wait_for_export.py",
+      "sourceSha256": "e0c5afe88f701e731f301268e40570293a4702b0cc700cbd832548b7ce4e2ac2"
+    },
+    "scripts/wait_for_job.py": {
+      "bytes": 908,
+      "sha256": "c6e06f92071cd6d1ff660592fe08d08b92c095b44830730781329a6eb8422ae6",
+      "source": "scripts/wait_for_job.py",
+      "sourceSha256": "c6e06f92071cd6d1ff660592fe08d08b92c095b44830730781329a6eb8422ae6"
+    }
+  },
+  "format": "clipit-portable-skills.v1",
+  "skillId": "export-rendering",
+  "sourcePath": "clipper/export-rendering"
+}

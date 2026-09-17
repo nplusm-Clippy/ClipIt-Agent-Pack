@@ -1,0 +1,73 @@
+{
+  "files": {
+    "SKILL.md": {
+      "bytes": 7764,
+      "sha256": "c197198d793b7529caf3273baf25a8aaa8f4389c83c11c39588dc627ef2a7e6f",
+      "source": "clipper/machine-payments/SKILL.md",
+      "sourceSha256": "d98f2a17368da1cf371ce8cf9e009b351458d26982d40b2b359706e9f357d896"
+    },
+    "references/LICENSE": {
+      "bytes": 1070,
+      "sha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3",
+      "source": "LICENSE",
+      "sourceSha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3"
+    },
+    "requirements.txt": {
+      "bytes": 38,
+      "sha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80",
+      "source": "requirements.txt",
+      "sourceSha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80"
+    },
+    "scripts/clipper_client.py": {
+      "bytes": 13698,
+      "sha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f",
+      "source": "scripts/clipper_client.py",
+      "sourceSha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f"
+    },
+    "scripts/create_payment_attempt.py": {
+      "bytes": 1365,
+      "sha256": "b6fa27fc45434fb7b205ffc09de1775f5875c0a5d15b7082c754b91db1ebea8f",
+      "source": "scripts/create_payment_attempt.py",
+      "sourceSha256": "b6fa27fc45434fb7b205ffc09de1775f5875c0a5d15b7082c754b91db1ebea8f"
+    },
+    "scripts/get_billing_catalog.py": {
+      "bytes": 445,
+      "sha256": "bd99d77ce2cf4e1ac9eeb2454139eb8bed8967b166218d9235ef647d3d098819",
+      "source": "scripts/get_billing_catalog.py",
+      "sourceSha256": "bd99d77ce2cf4e1ac9eeb2454139eb8bed8967b166218d9235ef647d3d098819"
+    },
+    "scripts/get_billing_subscription.py": {
+      "bytes": 440,
+      "sha256": "bf866f2de3ca593233a59c2b142529cedb8f888b609c563232a7e2a80cf187ff",
+      "source": "scripts/get_billing_subscription.py",
+      "sourceSha256": "bf866f2de3ca593233a59c2b142529cedb8f888b609c563232a7e2a80cf187ff"
+    },
+    "scripts/get_credits_balance.py": {
+      "bytes": 799,
+      "sha256": "a2c81867f9d10d26319ee672d6010c81a8af6f08457f178e036310005a2ba795",
+      "source": "scripts/get_credits_balance.py",
+      "sourceSha256": "a2c81867f9d10d26319ee672d6010c81a8af6f08457f178e036310005a2ba795"
+    },
+    "scripts/get_payment_attempt.py": {
+      "bytes": 586,
+      "sha256": "361bff080ce86dbd2c57507410047fc6f5ef774a2693e412aaa308955ac52118",
+      "source": "scripts/get_payment_attempt.py",
+      "sourceSha256": "361bff080ce86dbd2c57507410047fc6f5ef774a2693e412aaa308955ac52118"
+    },
+    "scripts/get_payment_capabilities.py": {
+      "bytes": 454,
+      "sha256": "8838cca93151cf044c9e5def2d703793143ff3d07ff6034c6011dd3901afe8f6",
+      "source": "scripts/get_payment_capabilities.py",
+      "sourceSha256": "8838cca93151cf044c9e5def2d703793143ff3d07ff6034c6011dd3901afe8f6"
+    },
+    "scripts/get_payment_receipt.py": {
+      "bytes": 618,
+      "sha256": "eacec4447f870b0031776e4cadeb885e4ef4aa82367f0fd96be2064642b0d8ba",
+      "source": "scripts/get_payment_receipt.py",
+      "sourceSha256": "eacec4447f870b0031776e4cadeb885e4ef4aa82367f0fd96be2064642b0d8ba"
+    }
+  },
+  "format": "clipit-portable-skills.v1",
+  "skillId": "machine-payments",
+  "sourcePath": "clipper/machine-payments"
+}

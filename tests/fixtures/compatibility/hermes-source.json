@@ -1,0 +1,23 @@
+{
+  "commit": "345cd2b057a452236de401d3534b8502a7465e8d",
+  "files": {
+    "hermes-LICENSE": {
+      "sha256": "821556e6336796450ab852d375117b48a4887e71d255794fd6318d99982a5ab6",
+      "sourcePath": "LICENSE"
+    },
+    "hermes-skills-hub-github.py": {
+      "sha256": "e1ecc46a4fc4f025fdeb2f0da87680b979ce43600803c145f187471e96119708",
+      "sourcePath": "tools/skills_hub_github.py"
+    },
+    "hermes-skills-hub-models.py": {
+      "sha256": "5a8f3e6446e7e31aef4a5ea4beb25fcab0fd6c298f5c6ec23745f06e71528ba2",
+      "sourcePath": "tools/skills_hub_models.py"
+    },
+    "hermes-skills-parser.py": {
+      "sha256": "40ba69b7ecf79f75b4e68619567ea639bc16182cc7f7421558206feef9fa54d1",
+      "sourcePath": "hermes_cli/subcommands/skills.py"
+    }
+  },
+  "repository": "https://github.com/NousResearch/hermes-agent",
+  "version": "v2026.9.14"
+}

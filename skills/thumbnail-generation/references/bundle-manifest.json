@@ -1,0 +1,61 @@
+{
+  "files": {
+    "SKILL.md": {
+      "bytes": 6495,
+      "sha256": "88c44cc1ff2bc584efad5ef49db99f74e109db6b4d9f3eb4717b3ffcef0692ed",
+      "source": "clipper/thumbnail-generation/SKILL.md",
+      "sourceSha256": "2b2118d4569bb380c2b22b30b70c4df33bb0f15172d37bfcb5ee2bbe1f3dceaa"
+    },
+    "references/LICENSE": {
+      "bytes": 1070,
+      "sha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3",
+      "source": "LICENSE",
+      "sourceSha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3"
+    },
+    "references/clipit-operator--media-prompting.md": {
+      "bytes": 8621,
+      "sha256": "ae26780eff3cea978222e3bf4e620321dd272ae02c17f9a216fa5ca69efba4eb",
+      "source": "clipper/clipit-operator/references/media-prompting.md",
+      "sourceSha256": "ae26780eff3cea978222e3bf4e620321dd272ae02c17f9a216fa5ca69efba4eb"
+    },
+    "references/clipit-operator--media-qa.md": {
+      "bytes": 4416,
+      "sha256": "66b139a5bf50e9b0229eee0d468032f33bf10778e760f5555e2dd441fac82c79",
+      "source": "clipper/clipit-operator/references/media-qa.md",
+      "sourceSha256": "66b139a5bf50e9b0229eee0d468032f33bf10778e760f5555e2dd441fac82c79"
+    },
+    "requirements.txt": {
+      "bytes": 38,
+      "sha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80",
+      "source": "requirements.txt",
+      "sourceSha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80"
+    },
+    "scripts/clipper_client.py": {
+      "bytes": 13698,
+      "sha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f",
+      "source": "scripts/clipper_client.py",
+      "sourceSha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f"
+    },
+    "scripts/generate_thumbnail.py": {
+      "bytes": 2039,
+      "sha256": "d5f185ba28ef038968da9ee7cfb882f1e0dcfec63f945e379f716309243b6e70",
+      "source": "scripts/generate_thumbnail.py",
+      "sourceSha256": "d5f185ba28ef038968da9ee7cfb882f1e0dcfec63f945e379f716309243b6e70"
+    },
+    "scripts/get_clip.py": {
+      "bytes": 541,
+      "sha256": "33af8b38d4e171860ab13632e0d67ecd891ae8f03e3aae3279ff4dc5adbc2cc5",
+      "source": "scripts/get_clip.py",
+      "sourceSha256": "33af8b38d4e171860ab13632e0d67ecd891ae8f03e3aae3279ff4dc5adbc2cc5"
+    },
+    "scripts/wait_for_job.py": {
+      "bytes": 908,
+      "sha256": "c6e06f92071cd6d1ff660592fe08d08b92c095b44830730781329a6eb8422ae6",
+      "source": "scripts/wait_for_job.py",
+      "sourceSha256": "c6e06f92071cd6d1ff660592fe08d08b92c095b44830730781329a6eb8422ae6"
+    }
+  },
+  "format": "clipit-portable-skills.v1",
+  "skillId": "thumbnail-generation",
+  "sourcePath": "clipper/thumbnail-generation"
+}

@@ -2,7 +2,9 @@
 
 ClipIt Agent Pack equips a shell- or MCP-capable agent to act as a practical video editor: ingest footage, understand transcripts, shape a story, assemble timelines, frame subjects, caption, generate supporting media, mix audio, render, deliver, publish, and prove the result is ready.
 
-Pack version `2.0.0` is described by [`agent-pack.manifest.json`](agent-pack.manifest.json). It targets capability contract `clipit-agent-capabilities.v1`, requires ClipIt CLI `0.3.0` or newer, and keeps `clipit-operator` active for every ClipIt task.
+Pack version `3.0.0` is described by [`agent-pack.manifest.json`](agent-pack.manifest.json). It retains capability contract `clipit-agent-capabilities.v1`, requires ClipIt CLI `0.3.0` or newer, and keeps `clipit-operator` active for every ClipIt task. The optional native Hermes plugin uses the additive platform contract `2026-09-16`. Existing CLI, MCP and Python workflows run independently of Hermes.
+
+The native plugin is a local release candidate. Publishing, authenticated staging acceptance and mixed-client production acceptance are separate release gates. The [generated capability inventory](docs/capability-inventory.json) records all 18 skills and 52 executable scripts plus eight support modules. See [native installation and operations](docs/hermes-plugin.md) and [shared platform contract](docs/platform-client.md).
 
 ## Connect ClipIt
 
@@ -43,33 +45,28 @@ Clone the repository and work from its root. The agent reads [`AGENTS.md`](AGENT
 
 Clone the repository and work from its root. [`CLAUDE.md`](CLAUDE.md) routes Claude to the same operating and domain skills.
 
-### Hermes
+### Portable / legacy Hermes skills
+
+The generated [`skills/`](skills/manifest.json) bundles work without the native plugin. Each includes its referenced documents and Python fallbacks, with source hashes. The canonical authored skills remain in `clipper/`; other harnesses can copy a generated skill directory to their normal skill location without cloning the repository.
+
+Hermes installs one full repository/skill identifier per command:
 
 ```bash
 hermes skills tap add nplusm-Clippy/ClipIt-Agent-Pack
 
-hermes skills install \
-  clipper/clipit-operator \
-  clipper/video-management \
-  clipper/clip-creation \
-  clipper/timeline-editing \
-  clipper/project-sequence-management \
-  clipper/creator-style \
-  clipper/crop-reframing \
-  clipper/caption-generation \
-  clipper/thumbnail-generation \
-  clipper/broll-generation \
-  clipper/scene-alter \
-  clipper/audio-production \
-  clipper/blueprint-to-edit \
-  clipper/delivery-qa \
-  clipper/export-rendering \
-  clipper/social-publishing \
-  clipper/account-insights \
-  clipper/machine-payments
+for skill in \
+  clipit-operator video-management clip-creation timeline-editing \
+  project-sequence-management creator-style crop-reframing caption-generation \
+  thumbnail-generation broll-generation scene-alter audio-production \
+  blueprint-to-edit delivery-qa export-rendering social-publishing \
+  account-insights machine-payments; do
+  hermes skills install "nplusm-Clippy/ClipIt-Agent-Pack/skills/$skill" || break
+done
 ```
 
-`clipit-operator` is required. The remaining skills are installable domain modules; install the complete set for a general-purpose ClipIt editor.
+These repository installs become available when a release containing `skills/` is published. For local development or an immutable checkout, build and check the bundles with `python3 tooling/build_portable_skills.py` and `python3 tooling/build_portable_skills.py --check`, then copy only the chosen complete skill directories into your harness's skill directory. Do not replace an existing installed skill without reviewing that user's changes.
+
+`clipit-operator` is required. The remaining skills are installable domain modules; install the complete set for a general-purpose ClipIt editor. Run bundled Python commands from the installed skill directory, or use the script's absolute path, and install that bundle's `requirements.txt` in your chosen Python environment. CLI profiles and credentials work exactly as before; Hermes is optional.
 
 ## How an Agent Uses ClipIt
 
@@ -218,6 +215,7 @@ The complete authority-preserving sequence and recovery rules are in [enterprise
 
 ```bash
 python3 -m unittest discover -s tests -v
+python3 tooling/build_portable_skills.py --check
 
 for skill in clipper/*/SKILL.md; do
   python3 /mnt/c/Users/namas/.codex/skills/.system/skill-creator/scripts/quick_validate.py "$(dirname "$skill")"

@@ -1,0 +1,31 @@
+{
+  "files": {
+    "SKILL.md": {
+      "bytes": 3513,
+      "sha256": "ef23ed104ced0a4bba77cc49180fe96514b9fc94635461039ca9d312ef832ca7",
+      "source": "clipper/creator-style/SKILL.md",
+      "sourceSha256": "e175a6d28f90559750c4473f9dff3618562729771f8fb232d7b98cf3d6f3bb73"
+    },
+    "references/LICENSE": {
+      "bytes": 1070,
+      "sha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3",
+      "source": "LICENSE",
+      "sourceSha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3"
+    },
+    "references/creator-profile.md": {
+      "bytes": 3092,
+      "sha256": "87fe94531068ce89fbf3b25a833cf0fda9278569bbed95c1c177424f788cb163",
+      "source": "clipper/creator-style/references/creator-profile.md",
+      "sourceSha256": "87fe94531068ce89fbf3b25a833cf0fda9278569bbed95c1c177424f788cb163"
+    },
+    "requirements.txt": {
+      "bytes": 38,
+      "sha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80",
+      "source": "requirements.txt",
+      "sourceSha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80"
+    }
+  },
+  "format": "clipit-portable-skills.v1",
+  "skillId": "creator-style",
+  "sourcePath": "clipper/creator-style"
+}

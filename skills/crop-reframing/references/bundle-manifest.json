@@ -1,0 +1,43 @@
+{
+  "files": {
+    "SKILL.md": {
+      "bytes": 3739,
+      "sha256": "3934b3fd0050c0721921fcfcbad36c653dd9421fd7c1fa81b17211a9dd568b58",
+      "source": "clipper/crop-reframing/SKILL.md",
+      "sourceSha256": "333f11921e950c7443e4278b415af5a7ec10a66779d6f659fb1dd9bcbff1008c"
+    },
+    "references/LICENSE": {
+      "bytes": 1070,
+      "sha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3",
+      "source": "LICENSE",
+      "sourceSha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3"
+    },
+    "references/clipit-operator--media-qa.md": {
+      "bytes": 4416,
+      "sha256": "66b139a5bf50e9b0229eee0d468032f33bf10778e760f5555e2dd441fac82c79",
+      "source": "clipper/clipit-operator/references/media-qa.md",
+      "sourceSha256": "66b139a5bf50e9b0229eee0d468032f33bf10778e760f5555e2dd441fac82c79"
+    },
+    "references/clipit-operator--time-and-state.md": {
+      "bytes": 4425,
+      "sha256": "944359de44f221f8ea56e2a8b38e5ad6419f690b3cba87d0e5501664710c685d",
+      "source": "clipper/clipit-operator/references/time-and-state.md",
+      "sourceSha256": "944359de44f221f8ea56e2a8b38e5ad6419f690b3cba87d0e5501664710c685d"
+    },
+    "references/reframing-workflow.md": {
+      "bytes": 3118,
+      "sha256": "1e36bfbe4407a6cdba987ebdd6fc8331f949e44a27c0a87f6a0fc116bece1db7",
+      "source": "clipper/crop-reframing/references/reframing-workflow.md",
+      "sourceSha256": "1e36bfbe4407a6cdba987ebdd6fc8331f949e44a27c0a87f6a0fc116bece1db7"
+    },
+    "requirements.txt": {
+      "bytes": 38,
+      "sha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80",
+      "source": "requirements.txt",
+      "sourceSha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80"
+    }
+  },
+  "format": "clipit-portable-skills.v1",
+  "skillId": "crop-reframing",
+  "sourcePath": "clipper/crop-reframing"
+}

@@ -1,0 +1,49 @@
+{
+  "files": {
+    "SKILL.md": {
+      "bytes": 3768,
+      "sha256": "2782aca0cab05c3f6e52782a80b090f669bab241e6400120f9a3990b3dbf01eb",
+      "source": "clipper/scene-alter/SKILL.md",
+      "sourceSha256": "9bde1c8337f665484a79ebb3d6839d90f179fad055492ea88c58fbf3bff4ea38"
+    },
+    "references/LICENSE": {
+      "bytes": 1070,
+      "sha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3",
+      "source": "LICENSE",
+      "sourceSha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3"
+    },
+    "references/alter-workflow.md": {
+      "bytes": 2835,
+      "sha256": "8a9bbd8528ccc74ecb8599c0d9deb9a5d895ed7e895d26c110859568a4e3f0c5",
+      "source": "clipper/scene-alter/references/alter-workflow.md",
+      "sourceSha256": "8a9bbd8528ccc74ecb8599c0d9deb9a5d895ed7e895d26c110859568a4e3f0c5"
+    },
+    "references/clipit-operator--media-prompting.md": {
+      "bytes": 8621,
+      "sha256": "ae26780eff3cea978222e3bf4e620321dd272ae02c17f9a216fa5ca69efba4eb",
+      "source": "clipper/clipit-operator/references/media-prompting.md",
+      "sourceSha256": "ae26780eff3cea978222e3bf4e620321dd272ae02c17f9a216fa5ca69efba4eb"
+    },
+    "references/clipit-operator--media-qa.md": {
+      "bytes": 4416,
+      "sha256": "66b139a5bf50e9b0229eee0d468032f33bf10778e760f5555e2dd441fac82c79",
+      "source": "clipper/clipit-operator/references/media-qa.md",
+      "sourceSha256": "66b139a5bf50e9b0229eee0d468032f33bf10778e760f5555e2dd441fac82c79"
+    },
+    "references/clipit-operator--time-and-state.md": {
+      "bytes": 4425,
+      "sha256": "944359de44f221f8ea56e2a8b38e5ad6419f690b3cba87d0e5501664710c685d",
+      "source": "clipper/clipit-operator/references/time-and-state.md",
+      "sourceSha256": "944359de44f221f8ea56e2a8b38e5ad6419f690b3cba87d0e5501664710c685d"
+    },
+    "requirements.txt": {
+      "bytes": 38,
+      "sha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80",
+      "source": "requirements.txt",
+      "sourceSha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80"
+    }
+  },
+  "format": "clipit-portable-skills.v1",
+  "skillId": "scene-alter",
+  "sourcePath": "clipper/scene-alter"
+}
