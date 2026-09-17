@@ -213,3 +213,24 @@ test('named brief needs review, uses exact source, and change draft never sends 
     attached = null; await React.act(async () => { attachment.data.run({ insertText: value => { attached = value } }); await new Promise(resolve => setImmediate(resolve)) }); assert.equal(attached, null)
   } finally { await f.close() }
 })
+
+test('modern view exposes degraded reads and exact parameters without historical reasoning or approval protocol noise', async () => {
+  const approval = { approvalId: 'decision', actionDigest: 'digest', expiresAt: '2099-01-01T00:00:00Z', totalEstimatedCost: 2,
+    tasks: [{ id: 'task', title: 'Prepare the reviewed cut', prompt: 'Keep this exact phrase', confirmation: { tool: 'startExport', planId: 'internal-plan-id', planSignature: 'internal-signature', params: { format: 'mp4', width: 1080 } } }] }
+  const run = { id: 'run', name: 'Reviewed launch edit', status: 'awaiting_approval', currentApproval: approval }
+  const f = await modernFixture(route => {
+    if (route === '/operations/overview') return { status: 'degraded', degraded: ['credits'], runs: [] }
+    if (route === '/operations/runs') return { items: [run] }
+    if (route === '/operations/run') return run
+    if (route === '/operations/events') return { items: [{ sequence: 1, type: 'progress', message: 'private historical reasoning' }, { sequence: 2, type: 'progress', message: 'unsafe legacy text', presentation: { message: 'Export plan prepared.', actorLabel: 'ClipIt workflow' } }] }
+  })
+  try {
+    assert.match(f.text(), /Some information is unavailable/)
+    await f.selectTask(); assert.match(f.text(), /Detailed history is unavailable/); assert.match(f.text(), /Export plan prepared/)
+    assert.doesNotMatch(f.text(), /private historical reasoning|unsafe legacy text/)
+    await f.click('Review proposed actions')
+    assert.match(f.text(), /Tool: Start Export/); assert.match(f.text(), /Keep this exact phrase/); assert.match(f.text(), /1080/); assert.match(f.text(), /mp4/)
+    assert.doesNotMatch(f.text(), /internal-plan-id|internal-signature/)
+    assert.match(document.querySelector('dialog details').textContent, /internal-plan-id/)
+  } finally { await f.close() }
+})
