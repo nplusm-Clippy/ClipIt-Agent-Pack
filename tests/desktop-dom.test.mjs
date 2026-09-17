@@ -217,7 +217,7 @@ test('named brief needs review, uses exact source, and change draft never sends 
 test('modern view exposes degraded reads and exact parameters without historical reasoning or approval protocol noise', async () => {
   const approval = { approvalId: 'decision', actionDigest: 'digest', expiresAt: '2099-01-01T00:00:00Z', totalEstimatedCost: 2,
     tasks: [{ id: 'task', title: 'Prepare the reviewed cut', prompt: 'Keep this exact phrase', confirmation: { tool: 'startExport', planId: 'internal-plan-id', planSignature: 'internal-signature', params: { format: 'mp4', width: 1080 } } }] }
-  const run = { id: 'run', name: 'Reviewed launch edit', status: 'awaiting_approval', currentApproval: approval }
+  const run = { id: 'run', name: 'Reviewed launch edit', status: 'awaiting_approval', currentApproval: approval, presentation: { latestActivity: { kind: 'progress', message: 'private old summary' } } }
   const f = await modernFixture(route => {
     if (route === '/operations/overview') return { status: 'degraded', degraded: ['credits'], runs: [] }
     if (route === '/operations/runs') return { items: [run] }
@@ -227,7 +227,7 @@ test('modern view exposes degraded reads and exact parameters without historical
   try {
     assert.match(f.text(), /Some information is unavailable/)
     await f.selectTask(); assert.match(f.text(), /Detailed history is unavailable/); assert.match(f.text(), /Export plan prepared/)
-    assert.doesNotMatch(f.text(), /private historical reasoning|unsafe legacy text/)
+    assert.doesNotMatch(f.text(), /private historical reasoning|unsafe legacy text|private old summary/)
     await f.click('Review proposed actions')
     assert.match(f.text(), /Tool: Start Export/); assert.match(f.text(), /Keep this exact phrase/); assert.match(f.text(), /1080/); assert.match(f.text(), /mp4/)
     assert.doesNotMatch(f.text(), /internal-plan-id|internal-signature/)
