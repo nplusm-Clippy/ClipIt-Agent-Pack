@@ -12,6 +12,16 @@ spec.loader.exec_module(packager)
 
 
 class ReleasePackageTests(unittest.TestCase):
+    def test_release_versions_agree_across_plugin_surfaces(self):
+        import yaml
+        from clipit_plugin.version import VERSION
+        manifest = json.loads((ROOT / "agent-pack.manifest.json").read_text())
+        self.assertEqual(manifest["packVersion"], VERSION)
+        self.assertEqual(manifest["nativePlugin"]["version"], VERSION)
+        self.assertEqual(json.loads((ROOT / "dashboard/manifest.json").read_text())["version"], VERSION)
+        self.assertEqual(yaml.safe_load((ROOT / "plugin.yaml").read_text())["version"], VERSION)
+        self.assertIn("export const VERSION = '" + VERSION + "'", (ROOT / "desktop/plugin.js").read_text())
+
     def test_reproducible_and_preserves_every_legacy_entrypoint(self):
         with tempfile.TemporaryDirectory() as temporary:
             first = packager.build(Path(temporary) / "one")
