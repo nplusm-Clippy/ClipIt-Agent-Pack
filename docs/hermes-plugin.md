@@ -6,13 +6,38 @@ This unified package contains the agent tools, all 18 canonical skills, a gatewa
 
 Tested source: Hermes release `v2026.9.14`, commit `345cd2b057a452236de401d3534b8502a7465e8d`. That release reports runtime version `0.21.3`. The manifest checks the runtime version; the immutable tested commit is the stronger compatibility anchor.
 
-The release candidate is not yet published. After release approval, install the reviewed Agent Pack commit using Hermes' supported `--ref` option, with the exact 40-character release SHA from its release record. Do not substitute the current main branch for a reviewed release. For isolated local testing, place the package in a disposable `HERMES_HOME/plugins/clipit` and use `hermes plugins doctor <package-directory> --ci` before enabling it.
+The package uses manifest file format 1, supported by the released installer. Minimum Hermes version, Python dependencies, required secret, opt-in tools and capability declarations are retained. The pinned release's runtime accepts manifest format 2, but its Git installer rejects it; format 1 avoids that installer/runtime mismatch.
 
-1. Install the approved package with the Python plugin initially disabled.
+### Install version 3.1.0
+
+Start from the intended Hermes profile. Add `--profile <your-profile>` to each `hermes` command when using a named profile; choose that same profile in Desktop. The default commands below use the current/default profile. Do not switch or restart unrelated gateways.
+
+```bash
+CLIPIT_RELEASE_SHA="$(git ls-remote --tags https://github.com/nplusm-Clippy/ClipIt-Agent-Pack.git \
+  'refs/tags/v3.1.0' 'refs/tags/v3.1.0^{}' | awk 'NR == 1 { sha = $1 } /\^\{\}$/ { sha = $1 } END { print sha }')"
+test "${#CLIPIT_RELEASE_SHA}" -eq 40 && \
+  hermes plugins install nplusm-Clippy/ClipIt-Agent-Pack --ref "$CLIPIT_RELEASE_SHA" --no-enable
+```
+
+Compare the resolved commit with the [release record](https://github.com/nplusm-Clippy/ClipIt-Agent-Pack/releases/tag/v3.1.0). The tag must be published before these commands work. Hermes scans third-party code; review any caution findings before accepting its interactive confirmation. Never disable the scanner to install this pack.
+
+Hermes reports Python dependencies but does not install them automatically. Install `requests>=2.32.0,<3` into the Python environment that runs your Hermes gateway. For the standard Hermes checkout:
+
+```bash
+~/.hermes/hermes-agent/venv/bin/python -m pip install 'requests>=2.32.0,<3'
+hermes plugins enable clipit
+hermes clipit doctor
+```
+
+If Hermes is installed elsewhere, use that installation's Python executable instead. This dependency setup is for the gateway, not the browser or another system Python.
+
+1. Install the pinned package with the Python plugin initially disabled.
 2. Configure `CLIPPER_API_KEY` through the hidden `requires_env` prompt in the gateway profile that will use ClipIt. Prefer a dedicated least-privilege key; an existing key retains its existing scope.
 3. Enable the Python plugin: `hermes plugins enable clipit`.
-4. In Hermes Desktop, separately enable ClipIt under **Capabilities → Plugins**. It is off by default.
-5. Open ClipIt in the sidebar, inspect the account/workspace and permissions, then run Doctor in Settings.
+4. Restart only the relevant gateway/Desktop backend when idle, then separately enable the Desktop extension under **Capabilities → Plugins** (called **Skills → Plugins** in some versions). The Tools tab shows eight Clipit tools; toggling a skill or toolset alone does not enable the Desktop extension.
+5. Open ClipIt in the sidebar, inspect the account/workspace, credential label and permissions, then use **Connection → Diagnostics → Run Doctor**. The plugin is off by default.
+
+The macOS Desktop 0.17.0 build used in the original acceptance had a host route-cache defect and required a narrow local compatibility patch. An unpatched 0.17.0 Desktop is not covered by that acceptance, and availability of a released Desktop build resolving that defect has not been verified. Use a compatible Desktop build verified to load extension routes; Python tools and portable skills remain usable without Desktop. Do not install an unrelated ClipIt desktop executable or overwrite Hermes core files as part of this package installation.
 
 The Desktop Control Room needs the matching ClipIt server platform contract. When the server lacks it, the UI reports an upgrade requirement; legacy CLI/MCP/Python paths remain usable.
 
@@ -73,9 +98,10 @@ python tooling/build_parity_inventory.py --check
 python tooling/package_release.py --output dist
 python -m zipfile -e dist/clipit-agent-pack-3.1.0.zip dist/extracted
 hermes plugins doctor dist/extracted/clipit --ci
+python tooling/verify_hermes_install.py --hermes-source /path/to/pinned/hermes-agent
 ```
 
-Hermes Doctor is run against the actual pinned source, not the fixture extractor used by portable skill tests. No test should use a production credential or execute paid generation, publishing or payment. Native Desktop acceptance, remote gateway acceptance, staging media flows and the mixed-client soak remain release gates until their evidence is recorded.
+Hermes Doctor is run against the actual pinned source, not the fixture extractor used by portable skill tests. The clean installer check runs Hermes' Git installer in a disposable home, retains opt-in and version gates, and checks every portable skill through its real GitHub parser, scanner, quarantine and installer. Git and file-download transports use the local candidate snapshot; a public post-publication install remains a separate release check. It reports caution findings rather than disabling scanners. No test should use a production credential or execute paid generation, publishing or payment. Native Desktop acceptance, remote gateway acceptance, staging media flows and the mixed-client soak remain release gates until their evidence is recorded.
 
 ## Troubleshooting and release configuration
 

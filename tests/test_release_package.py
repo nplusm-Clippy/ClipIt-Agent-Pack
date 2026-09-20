@@ -19,7 +19,10 @@ class ReleasePackageTests(unittest.TestCase):
         self.assertEqual(manifest["packVersion"], VERSION)
         self.assertEqual(manifest["nativePlugin"]["version"], VERSION)
         self.assertEqual(json.loads((ROOT / "dashboard/manifest.json").read_text())["version"], VERSION)
-        self.assertEqual(yaml.safe_load((ROOT / "plugin.yaml").read_text())["version"], VERSION)
+        plugin = yaml.safe_load((ROOT / "plugin.yaml").read_text())
+        self.assertEqual(plugin["version"], VERSION)
+        self.assertEqual(plugin["manifest_version"], 1)
+        self.assertEqual(plugin["requires_hermes"], ">=0.21.3")
         self.assertIn("export const VERSION = '" + VERSION + "'", (ROOT / "desktop/plugin.js").read_text())
 
     def test_reproducible_and_preserves_every_legacy_entrypoint(self):

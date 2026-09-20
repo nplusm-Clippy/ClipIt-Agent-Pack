@@ -37,6 +37,7 @@ jobs:
           git -C "$RUNNER_TEMP/hermes-source" fetch --depth 1 origin 345cd2b057a452236de401d3534b8502a7465e8d
           git -C "$RUNNER_TEMP/hermes-source" checkout --detach FETCH_HEAD
           python tooling/verify_hermes_runtime.py --hermes-source "$RUNNER_TEMP/hermes-source" --package dist/extracted/clipit
+          python tooling/verify_hermes_install.py --hermes-source "$RUNNER_TEMP/hermes-source"
       - uses: actions/upload-artifact@v4
         with:
           name: clipit-agent-pack-candidate

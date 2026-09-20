@@ -1,4 +1,4 @@
-manifest_version: 2
+manifest_version: 1
 name: clipit
 label: ClipIt
 version: 3.1.0
