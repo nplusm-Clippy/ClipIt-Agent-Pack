@@ -329,7 +329,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Workflow job ID awaiting approval'"
+            "help": "\"Workflow job ID awaiting approval\""
           }
         },
         {
@@ -338,7 +338,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Pending approval ID'"
+            "help": "\"Pending approval ID\""
           }
         },
         {
@@ -347,7 +347,7 @@
           ],
           "options": {
             "required": "True",
-            "choices": "['approved', 'cheaper', 'cancelled']"
+            "choices": "[\"approved\", \"cheaper\", \"cancelled\"]"
           }
         },
         {
@@ -355,8 +355,8 @@
             "--wait"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Wait for the continuation workflow'"
+            "action": "\"store_true\"",
+            "help": "\"Wait for the continuation workflow\""
           }
         },
         {
@@ -366,7 +366,7 @@
           "options": {
             "type": "float",
             "default": "900",
-            "help": "'Max wait in seconds'"
+            "help": "\"Max wait in seconds\""
           }
         },
         {
@@ -376,19 +376,19 @@
           "options": {
             "type": "float",
             "default": "3",
-            "help": "'Poll interval in seconds'"
+            "help": "\"Poll interval in seconds\""
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "f'/api/v1/agent/workflows/{args.job_id}/approval'",
+          "pathExpression": "f\"/api/v1/agent/workflows/{args.job_id}/approval\"",
           "line": 30
         },
         {
           "method": "GET",
-          "pathExpression": "f'/api/v1/agent/workflows/{continuation_id}'",
+          "pathExpression": "f\"/api/v1/agent/workflows/{continuation_id}\"",
           "line": 46
         }
       ],
@@ -403,12 +403,12 @@
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "f'/api/v1/assets/{signed['assetId']}/finalize'",
+          "pathExpression": "f\"/api/v1/assets/{signed['assetId']}/finalize\"",
           "line": 107
         },
         {
           "method": "POST",
-          "pathExpression": "'/api/v1/assets/sign-upload'",
+          "pathExpression": "\"/api/v1/assets/sign-upload\"",
           "line": 84
         }
       ],
@@ -426,14 +426,14 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Post ID to cancel'"
+            "help": "\"Post ID to cancel\""
           }
         }
       ],
       "requests": [
         {
           "method": "DELETE",
-          "pathExpression": "f'/api/v1/social/posts/{args.post_id}'",
+          "pathExpression": "f\"/api/v1/social/posts/{args.post_id}\"",
           "line": 19
         }
       ],
@@ -448,17 +448,17 @@
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "'/api/v1/agent/me'",
+          "pathExpression": "\"/api/v1/agent/me\"",
           "line": 194
         },
         {
           "method": "GET",
-          "pathExpression": "f'/api/v1/jobs/{job_id}'",
+          "pathExpression": "f\"/api/v1/jobs/{job_id}\"",
           "line": 287
         },
         {
           "method": "GET",
-          "pathExpression": "f'/api/v1/exports/{job_id}'",
+          "pathExpression": "f\"/api/v1/exports/{job_id}\"",
           "line": 325
         }
       ],
@@ -476,7 +476,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Source video ID'"
+            "help": "\"Source video ID\""
           }
         },
         {
@@ -486,7 +486,7 @@
           "options": {
             "type": "float",
             "required": "True",
-            "help": "'Start time in seconds'"
+            "help": "\"Start time in seconds\""
           }
         },
         {
@@ -496,7 +496,7 @@
           "options": {
             "type": "float",
             "required": "True",
-            "help": "'End time in seconds'"
+            "help": "\"End time in seconds\""
           }
         },
         {
@@ -504,7 +504,7 @@
             "--title"
           ],
           "options": {
-            "help": "'Clip title'"
+            "help": "\"Clip title\""
           }
         },
         {
@@ -512,14 +512,14 @@
             "--caption"
           ],
           "options": {
-            "help": "'Clip caption text'"
+            "help": "\"Clip caption text\""
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "'/api/v1/clips'",
+          "pathExpression": "\"/api/v1/clips\"",
           "line": 34
         }
       ],
@@ -537,7 +537,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Product key from get_billing_catalog.py'"
+            "help": "\"Product key from get_billing_catalog.py\""
           }
         },
         {
@@ -546,8 +546,8 @@
           ],
           "options": {
             "required": "True",
-            "choices": "['x402_direct', 'stripe_x402', 'stripe_mpp']",
-            "help": "'Ready payment rail selected from the live catalog'"
+            "choices": "[\"x402_direct\", \"stripe_x402\", \"stripe_mpp\"]",
+            "help": "\"Ready payment rail selected from the live catalog\""
           }
         },
         {
@@ -555,7 +555,7 @@
             "--idempotency-key"
           ],
           "options": {
-            "help": "'Stable retry key, maximum 160 characters'"
+            "help": "\"Stable retry key, maximum 160 characters\""
           }
         },
         {
@@ -563,15 +563,15 @@
             "--confirm"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Confirm that the human approved the product, amount, rail, and budget'"
+            "action": "\"store_true\"",
+            "help": "\"Confirm that the human approved the product, amount, rail, and budget\""
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "'/api/v1/billing/agent-payments'",
+          "pathExpression": "\"/api/v1/billing/agent-payments\"",
           "line": 37
         }
       ],
@@ -589,14 +589,14 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Clip ID to delete'"
+            "help": "\"Clip ID to delete\""
           }
         }
       ],
       "requests": [
         {
           "method": "DELETE",
-          "pathExpression": "f'/api/v1/clips/{args.clip_id}'",
+          "pathExpression": "f\"/api/v1/clips/{args.clip_id}\"",
           "line": 19
         }
       ],
@@ -614,14 +614,14 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Video ID to delete'"
+            "help": "\"Video ID to delete\""
           }
         }
       ],
       "requests": [
         {
           "method": "DELETE",
-          "pathExpression": "f'/api/v1/videos/{args.video_id}'",
+          "pathExpression": "f\"/api/v1/videos/{args.video_id}\"",
           "line": 19
         }
       ],
@@ -639,7 +639,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Expected workspace ID from the ClipIt admin dashboard'"
+            "help": "\"Expected workspace ID from the ClipIt admin dashboard\""
           }
         },
         {
@@ -648,7 +648,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Completed export ID'"
+            "help": "\"Completed export ID\""
           }
         },
         {
@@ -657,7 +657,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Named ClipIt CLI profile'"
+            "help": "\"Named ClipIt CLI profile\""
           }
         }
       ],
@@ -676,14 +676,14 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Clip ID (must be rendered)'"
+            "help": "\"Clip ID (must be rendered)\""
           }
         }
       ],
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "f'/api/v1/clips/{args.clip_id}/download'",
+          "pathExpression": "f\"/api/v1/clips/{args.clip_id}/download\"",
           "line": 19
         }
       ],
@@ -701,14 +701,14 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Export job ID'"
+            "help": "\"Export job ID\""
           }
         }
       ],
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "f'/api/v1/exports/{args.job_id}/download'",
+          "pathExpression": "f\"/api/v1/exports/{args.job_id}/download\"",
           "line": 19
         }
       ],
@@ -723,17 +723,17 @@
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "f'/api/v1/exports/{export_id}'",
+          "pathExpression": "f\"/api/v1/exports/{export_id}\"",
           "line": 107
         },
         {
           "method": "GET",
-          "pathExpression": "'/api/v1/deliverables'",
+          "pathExpression": "\"/api/v1/deliverables\"",
           "line": 198
         },
         {
           "method": "POST",
-          "pathExpression": "'/api/v1/deliverables'",
+          "pathExpression": "\"/api/v1/deliverables\"",
           "line": 263
         }
       ],
@@ -748,7 +748,7 @@
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "'/api/v1/agent/execute'",
+          "pathExpression": "\"/api/v1/agent/execute\"",
           "line": 34
         }
       ],
@@ -765,7 +765,7 @@
             "--profile"
           ],
           "options": {
-            "help": "'Named ClipIt CLI profile'"
+            "help": "\"Named ClipIt CLI profile\""
           }
         },
         {
@@ -774,7 +774,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Operation type, e.g. transcription'"
+            "help": "\"Operation type, e.g. transcription\""
           }
         },
         {
@@ -783,7 +783,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Provider name, e.g. deepgram'"
+            "help": "\"Provider name, e.g. deepgram\""
           }
         },
         {
@@ -791,7 +791,7 @@
             "--model-id"
           ],
           "options": {
-            "help": "'Optional provider model ID'"
+            "help": "\"Optional provider model ID\""
           }
         },
         {
@@ -800,7 +800,7 @@
           ],
           "options": {
             "type": "float",
-            "help": "'Optional approval cap; this does not expose the account balance'"
+            "help": "\"Optional approval cap; this does not expose the account balance\""
           }
         },
         {
@@ -808,16 +808,16 @@
             "metrics"
           ],
           "options": {
-            "nargs": "'*'",
+            "nargs": "\"*\"",
             "type": "parse_metric",
-            "help": "'Metric key=value pairs'"
+            "help": "\"Metric key=value pairs\""
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "'/api/v1/credits/preflight'",
+          "pathExpression": "\"/api/v1/credits/preflight\"",
           "line": 31
         }
       ],
@@ -832,7 +832,7 @@
       "requests": [
         {
           "method": "PATCH",
-          "pathExpression": "f'/api/v1/clips/{clip_id}/editor-snapshot/caption-style'",
+          "pathExpression": "f\"/api/v1/clips/{clip_id}/editor-snapshot/caption-style\"",
           "line": 139
         }
       ],
@@ -847,7 +847,7 @@
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "f'/api/v1/clips/{clip_id}/delivery-state'",
+          "pathExpression": "f\"/api/v1/clips/{clip_id}/delivery-state\"",
           "line": 101
         }
       ],
@@ -865,7 +865,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Clip ID'"
+            "help": "\"Clip ID\""
           }
         },
         {
@@ -875,7 +875,7 @@
           "options": {
             "type": "float",
             "required": "True",
-            "help": "'B-Roll start time within clip (seconds)'"
+            "help": "\"B-Roll start time within clip (seconds)\""
           }
         },
         {
@@ -885,7 +885,7 @@
           "options": {
             "type": "float",
             "required": "True",
-            "help": "'B-Roll end time within clip (seconds)'"
+            "help": "\"B-Roll end time within clip (seconds)\""
           }
         },
         {
@@ -893,7 +893,7 @@
             "--prompt"
           ],
           "options": {
-            "help": "'Custom visual prompt (overrides plan concepts)'"
+            "help": "\"Custom visual prompt (overrides plan concepts)\""
           }
         },
         {
@@ -902,7 +902,7 @@
           ],
           "options": {
             "type": "int",
-            "help": "'Index from plan_broll output to use'"
+            "help": "\"Index from plan_broll output to use\""
           }
         },
         {
@@ -910,8 +910,8 @@
             "--mode"
           ],
           "options": {
-            "default": "'single_image'",
-            "choices": "['single_image', 'start_end_frame']"
+            "default": "\"single_image\"",
+            "choices": "[\"single_image\", \"start_end_frame\"]"
           }
         },
         {
@@ -919,7 +919,7 @@
             "--end-frame-description"
           ],
           "options": {
-            "help": "'Required for start_end_frame mode: how the end frame differs'"
+            "help": "\"Required for start_end_frame mode: how the end frame differs\""
           }
         },
         {
@@ -927,7 +927,7 @@
             "--transition-description"
           ],
           "options": {
-            "help": "'Optional: describes motion between start and end frames'"
+            "help": "\"Optional: describes motion between start and end frames\""
           }
         },
         {
@@ -937,7 +937,7 @@
           "options": {
             "type": "int",
             "default": "6",
-            "help": "'Generated video duration in seconds (5-15)'"
+            "help": "\"Generated video duration in seconds (5-15)\""
           }
         },
         {
@@ -945,8 +945,8 @@
             "--resolution"
           ],
           "options": {
-            "default": "'768p'",
-            "choices": "['480p', '768p']"
+            "default": "\"768p\"",
+            "choices": "[\"480p\", \"768p\"]"
           }
         },
         {
@@ -954,8 +954,8 @@
             "--image-quality"
           ],
           "options": {
-            "default": "'high'",
-            "choices": "['low', 'medium', 'high', 'auto']"
+            "default": "\"high\"",
+            "choices": "[\"low\", \"medium\", \"high\", \"auto\"]"
           }
         },
         {
@@ -963,15 +963,15 @@
             "--wait"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Wait for generation to finish'"
+            "action": "\"store_true\"",
+            "help": "\"Wait for generation to finish\""
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "f'/api/v1/clips/{args.clip_id}/broll/generate'",
+          "pathExpression": "f\"/api/v1/clips/{args.clip_id}/broll/generate\"",
           "line": 65
         }
       ],
@@ -989,7 +989,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Clip ID'"
+            "help": "\"Clip ID\""
           }
         },
         {
@@ -997,7 +997,7 @@
             "--preset"
           ],
           "options": {
-            "choices": "['bold', 'minimal', 'neon', 'classic', 'tiktok-viral']"
+            "choices": "[\"bold\", \"minimal\", \"neon\", \"classic\", \"tiktok-viral\"]"
           }
         },
         {
@@ -1005,7 +1005,7 @@
             "--font"
           ],
           "options": {
-            "help": "'Font name (Inter, Arial, Bangers, Oswald, Roboto)'"
+            "help": "\"Font name (Inter, Arial, Bangers, Oswald, Roboto)\""
           }
         },
         {
@@ -1014,7 +1014,7 @@
           ],
           "options": {
             "type": "int",
-            "help": "'Font size (12-120)'"
+            "help": "\"Font size (12-120)\""
           }
         },
         {
@@ -1030,14 +1030,14 @@
             "--position"
           ],
           "options": {
-            "choices": "['top', 'center', 'bottom']"
+            "choices": "[\"top\", \"center\", \"bottom\"]"
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "f'/api/v1/clips/{args.clip_id}/captions'",
+          "pathExpression": "f\"/api/v1/clips/{args.clip_id}/captions\"",
           "line": 40
         }
       ],
@@ -1055,7 +1055,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Description of the thumbnail'"
+            "help": "\"Description of the thumbnail\""
           }
         },
         {
@@ -1063,7 +1063,7 @@
             "--clip-id"
           ],
           "options": {
-            "help": "'Clip to base the thumbnail on (image-to-image)'"
+            "help": "\"Clip to base the thumbnail on (image-to-image)\""
           }
         },
         {
@@ -1071,8 +1071,8 @@
             "--aspect-ratio"
           ],
           "options": {
-            "default": "'16:9'",
-            "choices": "['16:9', '9:16', '1:1', '4:5', '3:4', '3:2', '2:3']"
+            "default": "\"16:9\"",
+            "choices": "[\"16:9\", \"9:16\", \"1:1\", \"4:5\", \"3:4\", \"3:2\", \"2:3\"]"
           }
         },
         {
@@ -1080,8 +1080,8 @@
             "--resolution"
           ],
           "options": {
-            "default": "'2K'",
-            "choices": "['2K', '4K']"
+            "default": "\"2K\"",
+            "choices": "[\"2K\", \"4K\"]"
           }
         },
         {
@@ -1089,7 +1089,7 @@
             "--quality"
           ],
           "options": {
-            "choices": "['low', 'medium', 'high', 'auto']"
+            "choices": "[\"low\", \"medium\", \"high\", \"auto\"]"
           }
         },
         {
@@ -1107,15 +1107,15 @@
             "--wait"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Wait for generation to complete'"
+            "action": "\"store_true\"",
+            "help": "\"Wait for generation to complete\""
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "'/api/v1/thumbnails'",
+          "pathExpression": "\"/api/v1/thumbnails\"",
           "line": 47
         }
       ],
@@ -1132,8 +1132,8 @@
             "--target"
           ],
           "options": {
-            "default": "'generic'",
-            "choices": "['generic', 'codex', 'claude', 'hermes']"
+            "default": "\"generic\"",
+            "choices": "[\"generic\", \"codex\", \"claude\", \"hermes\"]"
           }
         },
         {
@@ -1141,15 +1141,15 @@
             "--format"
           ],
           "options": {
-            "default": "'markdown'",
-            "choices": "['markdown', 'json']"
+            "default": "\"markdown\"",
+            "choices": "[\"markdown\", \"json\"]"
           }
         }
       ],
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "f'{client.base_url}/api/v1/agent/instructions'",
+          "pathExpression": "f\"{client.base_url}/api/v1/agent/instructions\"",
           "line": 21
         }
       ],
@@ -1167,7 +1167,7 @@
           ],
           "options": {
             "type": "int",
-            "help": "'Lookback window in days (1-365)'"
+            "help": "\"Lookback window in days (1-365)\""
           }
         },
         {
@@ -1175,8 +1175,8 @@
             "--by-platform"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Group analytics by platform'"
+            "action": "\"store_true\"",
+            "help": "\"Group analytics by platform\""
           }
         }
       ],
@@ -1192,7 +1192,7 @@
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "'/api/v1/billing/catalog'",
+          "pathExpression": "\"/api/v1/billing/catalog\"",
           "line": 14
         }
       ],
@@ -1207,7 +1207,7 @@
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "'/api/v1/billing/subscription'",
+          "pathExpression": "\"/api/v1/billing/subscription\"",
           "line": 14
         }
       ],
@@ -1225,14 +1225,14 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Clip ID'"
+            "help": "\"Clip ID\""
           }
         }
       ],
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "f'/api/v1/clips/{args.clip_id}'",
+          "pathExpression": "f\"/api/v1/clips/{args.clip_id}\"",
           "line": 19
         }
       ],
@@ -1247,7 +1247,7 @@
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "'/api/v1/credits/balance'",
+          "pathExpression": "\"/api/v1/credits/balance\"",
           "line": 18
         }
       ],
@@ -1271,7 +1271,7 @@
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "f'/api/v1/billing/agent-payments/{attempt_id}'",
+          "pathExpression": "f\"/api/v1/billing/agent-payments/{attempt_id}\"",
           "line": 17
         }
       ],
@@ -1286,7 +1286,7 @@
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "'/api/v1/agent/payment-capabilities'",
+          "pathExpression": "\"/api/v1/agent/payment-capabilities\"",
           "line": 14
         }
       ],
@@ -1310,7 +1310,7 @@
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "f'/api/v1/billing/agent-payments/{attempt_id}/receipt'",
+          "pathExpression": "f\"/api/v1/billing/agent-payments/{attempt_id}/receipt\"",
           "line": 17
         }
       ],
@@ -1328,14 +1328,14 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Social post ID'"
+            "help": "\"Social post ID\""
           }
         }
       ],
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "f'/api/v1/analytics/posts/{args.post_id}/metrics'",
+          "pathExpression": "f\"/api/v1/analytics/posts/{args.post_id}/metrics\"",
           "line": 19
         }
       ],
@@ -1353,14 +1353,14 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Post ID'"
+            "help": "\"Post ID\""
           }
         }
       ],
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "f'/api/v1/social/posts/{args.post_id}'",
+          "pathExpression": "f\"/api/v1/social/posts/{args.post_id}\"",
           "line": 19
         }
       ],
@@ -1378,7 +1378,7 @@
           ],
           "options": {
             "type": "int",
-            "help": "'Lookback window in days (1-365)'"
+            "help": "\"Lookback window in days (1-365)\""
           }
         },
         {
@@ -1387,7 +1387,7 @@
           ],
           "options": {
             "type": "int",
-            "help": "'Maximum results (1-100)'"
+            "help": "\"Maximum results (1-100)\""
           }
         },
         {
@@ -1395,15 +1395,15 @@
             "--metric"
           ],
           "options": {
-            "choices": "['views', 'likes', 'comments', 'shares', 'saves', 'reach', 'impressions', 'watchTimeSeconds', 'revenueCents']",
-            "help": "'Metric to rank by'"
+            "choices": "[\n            \"views\",\n            \"likes\",\n            \"comments\",\n            \"shares\",\n            \"saves\",\n            \"reach\",\n            \"impressions\",\n            \"watchTimeSeconds\",\n            \"revenueCents\",\n        ]",
+            "help": "\"Metric to rank by\""
           }
         }
       ],
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "'/api/v1/analytics/top-clips'",
+          "pathExpression": "\"/api/v1/analytics/top-clips\"",
           "line": 43
         }
       ],
@@ -1421,14 +1421,14 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Video ID'"
+            "help": "\"Video ID\""
           }
         }
       ],
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "f'/api/v1/videos/{args.video_id}/transcript'",
+          "pathExpression": "f\"/api/v1/videos/{args.video_id}/transcript\"",
           "line": 19
         }
       ],
@@ -1446,14 +1446,14 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Video ID'"
+            "help": "\"Video ID\""
           }
         }
       ],
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "f'/api/v1/videos/{args.video_id}'",
+          "pathExpression": "f\"/api/v1/videos/{args.video_id}\"",
           "line": 19
         }
       ],
@@ -1471,7 +1471,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Video URL to import'"
+            "help": "\"Video URL to import\""
           }
         },
         {
@@ -1479,7 +1479,7 @@
             "--title"
           ],
           "options": {
-            "help": "'Optional title override'"
+            "help": "\"Optional title override\""
           }
         },
         {
@@ -1487,15 +1487,15 @@
             "--wait"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Wait for processing to complete'"
+            "action": "\"store_true\"",
+            "help": "\"Wait for processing to complete\""
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "'/api/v1/videos/from-url'",
+          "pathExpression": "\"/api/v1/videos/from-url\"",
           "line": 25
         }
       ],
@@ -1528,7 +1528,7 @@
             "--profile"
           ],
           "options": {
-            "help": "'Named ClipIt CLI profile'"
+            "help": "\"Named ClipIt CLI profile\""
           }
         },
         {
@@ -1536,8 +1536,8 @@
             "--aspect-ratio"
           ],
           "options": {
-            "default": "'9:16'",
-            "choices": "['16:9', '9:16', '1:1', '4:5']"
+            "default": "\"9:16\"",
+            "choices": "[\"16:9\", \"9:16\", \"1:1\", \"4:5\"]"
           }
         },
         {
@@ -1545,8 +1545,8 @@
             "--fit-background"
           ],
           "options": {
-            "default": "'blur'",
-            "choices": "['black', 'blur']"
+            "default": "\"blur\"",
+            "choices": "[\"black\", \"blur\"]"
           }
         },
         {
@@ -1554,8 +1554,8 @@
             "--quality"
           ],
           "options": {
-            "default": "'high'",
-            "choices": "['standard', 'high', '4k']"
+            "default": "\"high\"",
+            "choices": "[\"standard\", \"high\", \"4k\"]"
           }
         },
         {
@@ -1563,9 +1563,9 @@
             "--captions"
           ],
           "options": {
-            "dest": "'include_captions'",
-            "action": "'store_true'",
-            "help": "'Initialize canonical captions (requires a transcript)'"
+            "dest": "\"include_captions\"",
+            "action": "\"store_true\"",
+            "help": "\"Initialize canonical captions (requires a transcript)\""
           }
         },
         {
@@ -1573,9 +1573,9 @@
             "--no-captions"
           ],
           "options": {
-            "dest": "'include_captions'",
-            "action": "'store_false'",
-            "help": "'Initialize without captions (default)'"
+            "dest": "\"include_captions\"",
+            "action": "\"store_false\"",
+            "help": "\"Initialize without captions (default)\""
           }
         },
         {
@@ -1583,8 +1583,8 @@
             "--caption-style"
           ],
           "options": {
-            "choices": "['bold', 'minimal', 'neon', 'classic']",
-            "help": "'Legacy coarse caption style'"
+            "choices": "[\"bold\", \"minimal\", \"neon\", \"classic\"]",
+            "help": "\"Legacy coarse caption style\""
           }
         },
         {
@@ -1592,8 +1592,8 @@
             "--caption-preset-id"
           ],
           "options": {
-            "choices": "['hormozi', 'mrbeast', 'minimal-white', 'netflix', 'tiktok-viral', 'podcast', 'gaming-neon', 'karaoke']",
-            "help": "'Named canonical caption preset'"
+            "choices": "[\n            \"hormozi\",\n            \"mrbeast\",\n            \"minimal-white\",\n            \"netflix\",\n            \"tiktok-viral\",\n            \"podcast\",\n            \"gaming-neon\",\n            \"karaoke\",\n        ]",
+            "help": "\"Named canonical caption preset\""
           }
         },
         {
@@ -1601,14 +1601,14 @@
             "--caption-style-json"
           ],
           "options": {
-            "help": "'Exact style JSON object or @path/to/style.json'"
+            "help": "\"Exact style JSON object or @path/to/style.json\""
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "f'/api/v1/clips/{clip_id}/editor-snapshot/initialize'",
+          "pathExpression": "f\"/api/v1/clips/{clip_id}/editor-snapshot/initialize\"",
           "line": 48
         }
       ],
@@ -1625,8 +1625,8 @@
             "--type"
           ],
           "options": {
-            "choices": "['image', 'video', 'audio', 'raw']",
-            "help": "'Filter by asset type'"
+            "choices": "[\"image\", \"video\", \"audio\", \"raw\"]",
+            "help": "\"Filter by asset type\""
           }
         },
         {
@@ -1635,7 +1635,7 @@
           ],
           "options": {
             "type": "int",
-            "help": "'Maximum assets to return (1-200)'"
+            "help": "\"Maximum assets to return (1-200)\""
           }
         },
         {
@@ -1644,14 +1644,14 @@
           ],
           "options": {
             "type": "int",
-            "help": "'Pagination offset'"
+            "help": "\"Pagination offset\""
           }
         }
       ],
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "'/api/v1/assets'",
+          "pathExpression": "\"/api/v1/assets\"",
           "line": 29
         }
       ],
@@ -1668,7 +1668,7 @@
             "--video-id"
           ],
           "options": {
-            "help": "'Filter by video ID'"
+            "help": "\"Filter by video ID\""
           }
         },
         {
@@ -1693,7 +1693,7 @@
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "'/api/v1/clips'",
+          "pathExpression": "\"/api/v1/clips\"",
           "line": 25
         }
       ],
@@ -1711,7 +1711,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Named ClipIt CLI profile'"
+            "help": "\"Named ClipIt CLI profile\""
           }
         },
         {
@@ -1720,7 +1720,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Expected workspace ID from the ClipIt admin dashboard'"
+            "help": "\"Expected workspace ID from the ClipIt admin dashboard\""
           }
         },
         {
@@ -1728,7 +1728,7 @@
             "--status"
           ],
           "options": {
-            "choices": "['ready', 'selected']"
+            "choices": "[\"ready\", \"selected\"]"
           }
         },
         {
@@ -1736,7 +1736,7 @@
             "--export-id"
           ],
           "options": {
-            "help": "'Filter by exact completed export ID'"
+            "help": "\"Filter by exact completed export ID\""
           }
         },
         {
@@ -1746,7 +1746,7 @@
           "options": {
             "type": "int",
             "default": "50",
-            "help": "'Maximum rows (1-100)'"
+            "help": "\"Maximum rows (1-100)\""
           }
         },
         {
@@ -1756,7 +1756,7 @@
           "options": {
             "type": "int",
             "default": "0",
-            "help": "'Pagination offset'"
+            "help": "\"Pagination offset\""
           }
         }
       ],
@@ -1772,7 +1772,7 @@
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "'/api/v1/social/accounts'",
+          "pathExpression": "\"/api/v1/social/accounts\"",
           "line": 16
         }
       ],
@@ -1806,7 +1806,7 @@
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "'/api/v1/videos'",
+          "pathExpression": "\"/api/v1/videos\"",
           "line": 20
         }
       ],
@@ -1823,8 +1823,8 @@
             "goal"
           ],
           "options": {
-            "nargs": "'+'",
-            "help": "'Free-text goal for the ClipIt agent'"
+            "nargs": "\"+\"",
+            "help": "\"Free-text goal for the ClipIt agent\""
           }
         },
         {
@@ -1832,7 +1832,7 @@
             "--conversation-id"
           ],
           "options": {
-            "help": "'Optional conversation/session ID'"
+            "help": "\"Optional conversation/session ID\""
           }
         },
         {
@@ -1840,7 +1840,7 @@
             "--video-id"
           ],
           "options": {
-            "help": "'Optional video context ID'"
+            "help": "\"Optional video context ID\""
           }
         },
         {
@@ -1848,7 +1848,7 @@
             "--clip-id"
           ],
           "options": {
-            "help": "'Optional clip context ID'"
+            "help": "\"Optional clip context ID\""
           }
         },
         {
@@ -1856,7 +1856,7 @@
             "--project-id"
           ],
           "options": {
-            "help": "'Optional project context ID'"
+            "help": "\"Optional project context ID\""
           }
         },
         {
@@ -1864,7 +1864,7 @@
             "--sequence-id"
           ],
           "options": {
-            "help": "'Optional sequence context ID'"
+            "help": "\"Optional sequence context ID\""
           }
         },
         {
@@ -1872,8 +1872,8 @@
             "--quick-mode"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Ask the orchestrator for a faster workflow'"
+            "action": "\"store_true\"",
+            "help": "\"Ask the orchestrator for a faster workflow\""
           }
         },
         {
@@ -1882,7 +1882,7 @@
           ],
           "options": {
             "type": "int",
-            "help": "'Maximum subagent calls, 1-10'"
+            "help": "\"Maximum subagent calls, 1-10\""
           }
         },
         {
@@ -1890,9 +1890,9 @@
             "--trace"
           ],
           "options": {
-            "dest": "'trace_enabled'",
-            "action": "'store_true'",
-            "help": "'Enable trace output server-side'"
+            "dest": "\"trace_enabled\"",
+            "action": "\"store_true\"",
+            "help": "\"Enable trace output server-side\""
           }
         },
         {
@@ -1902,7 +1902,7 @@
           "options": {
             "type": "float",
             "default": "900",
-            "help": "'Max wait in seconds'"
+            "help": "\"Max wait in seconds\""
           }
         },
         {
@@ -1912,19 +1912,19 @@
           "options": {
             "type": "float",
             "default": "3",
-            "help": "'Poll interval in seconds'"
+            "help": "\"Poll interval in seconds\""
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "'/api/v1/agent/orchestrate'",
+          "pathExpression": "\"/api/v1/agent/orchestrate\"",
           "line": 61
         },
         {
           "method": "GET",
-          "pathExpression": "f'/api/v1/agent/workflows/{job_id}'",
+          "pathExpression": "f\"/api/v1/agent/workflows/{job_id}\"",
           "line": 67
         }
       ],
@@ -1942,7 +1942,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Clip ID'"
+            "help": "\"Clip ID\""
           }
         },
         {
@@ -1952,7 +1952,7 @@
           "options": {
             "type": "int",
             "default": "3",
-            "help": "'Number of concepts (1-8)'"
+            "help": "\"Number of concepts (1-8)\""
           }
         },
         {
@@ -1960,7 +1960,7 @@
             "--theme"
           ],
           "options": {
-            "help": "'Optional theme hint'"
+            "help": "\"Optional theme hint\""
           }
         },
         {
@@ -1968,15 +1968,15 @@
             "--wait"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Wait for planning to complete'"
+            "action": "\"store_true\"",
+            "help": "\"Wait for planning to complete\""
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "f'/api/v1/clips/{args.clip_id}/broll/plan'",
+          "pathExpression": "f\"/api/v1/clips/{args.clip_id}/broll/plan\"",
           "line": 26
         }
       ],
@@ -1994,7 +1994,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Rendered clip ID'"
+            "help": "\"Rendered clip ID\""
           }
         },
         {
@@ -2002,7 +2002,7 @@
             "--platform"
           ],
           "options": {
-            "help": "'One exact target platform (required for enterprise keys)'"
+            "help": "\"One exact target platform (required for enterprise keys)\""
           }
         },
         {
@@ -2010,7 +2010,7 @@
             "--platforms"
           ],
           "options": {
-            "help": "'Comma-separated platforms for ordinary keys'"
+            "help": "\"Comma-separated platforms for ordinary keys\""
           }
         },
         {
@@ -2018,7 +2018,7 @@
             "--account-id"
           ],
           "options": {
-            "help": "'Exact accountId for a single --platform'"
+            "help": "\"Exact accountId for a single --platform\""
           }
         },
         {
@@ -2026,7 +2026,7 @@
             "--account-ids"
           ],
           "options": {
-            "help": "'platform=accountId pairs or a JSON object'"
+            "help": "\"platform=accountId pairs or a JSON object\""
           }
         },
         {
@@ -2035,7 +2035,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Post caption'"
+            "help": "\"Post caption\""
           }
         },
         {
@@ -2043,7 +2043,7 @@
             "--title"
           ],
           "options": {
-            "help": "'Title (required for YouTube)'"
+            "help": "\"Title (required for YouTube)\""
           }
         },
         {
@@ -2051,7 +2051,7 @@
             "--hashtags"
           ],
           "options": {
-            "help": "'Comma-separated hashtags'"
+            "help": "\"Comma-separated hashtags\""
           }
         },
         {
@@ -2059,7 +2059,7 @@
             "--export-id"
           ],
           "options": {
-            "help": "'Exact completed export ID (required if delivery-state is ambiguous)'"
+            "help": "\"Exact completed export ID (required if delivery-state is ambiguous)\""
           }
         },
         {
@@ -2067,7 +2067,7 @@
             "--enterprise-deliverable-id"
           ],
           "options": {
-            "help": "'Optional selected enterprise deliverable ID'"
+            "help": "\"Optional selected enterprise deliverable ID\""
           }
         },
         {
@@ -2075,15 +2075,15 @@
             "--wait"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Wait for posting to complete'"
+            "action": "\"store_true\"",
+            "help": "\"Wait for posting to complete\""
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "'/api/v1/social/post'",
+          "pathExpression": "\"/api/v1/social/post\"",
           "line": 66
         }
       ],
@@ -2101,7 +2101,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Clip ID to render'"
+            "help": "\"Clip ID to render\""
           }
         },
         {
@@ -2109,7 +2109,7 @@
             "--workspace-id"
           ],
           "options": {
-            "help": "'Expected enterprise workspace ID'"
+            "help": "\"Expected enterprise workspace ID\""
           }
         },
         {
@@ -2117,7 +2117,7 @@
             "--profile"
           ],
           "options": {
-            "help": "'Named ClipIt CLI profile'"
+            "help": "\"Named ClipIt CLI profile\""
           }
         },
         {
@@ -2125,8 +2125,8 @@
             "--aspect-ratio"
           ],
           "options": {
-            "default": "'9:16'",
-            "choices": "['16:9', '9:16', '1:1', '4:5']"
+            "default": "\"9:16\"",
+            "choices": "[\"16:9\", \"9:16\", \"1:1\", \"4:5\"]"
           }
         },
         {
@@ -2134,8 +2134,8 @@
             "--quality"
           ],
           "options": {
-            "default": "'high'",
-            "choices": "['standard', 'high', '4k']"
+            "default": "\"high\"",
+            "choices": "[\"standard\", \"high\", \"4k\"]"
           }
         },
         {
@@ -2143,9 +2143,9 @@
             "--captions"
           ],
           "options": {
-            "dest": "'include_captions'",
-            "action": "'store_true'",
-            "help": "'Render captions for personal clips; enterprise captions use the exact recipe'"
+            "dest": "\"include_captions\"",
+            "action": "\"store_true\"",
+            "help": "\"Render captions for personal clips; enterprise captions use the exact recipe\""
           }
         },
         {
@@ -2153,9 +2153,9 @@
             "--no-captions"
           ],
           "options": {
-            "dest": "'include_captions'",
-            "action": "'store_false'",
-            "help": "'Render without captions; allowed for a matching enterprise snapshot'"
+            "dest": "\"include_captions\"",
+            "action": "\"store_false\"",
+            "help": "\"Render without captions; allowed for a matching enterprise snapshot\""
           }
         },
         {
@@ -2164,7 +2164,7 @@
           ],
           "options": {
             "choices": "sorted(CAPTION_STYLES)",
-            "help": "'Legacy coarse caption style for personal renders'"
+            "help": "\"Legacy coarse caption style for personal renders\""
           }
         },
         {
@@ -2172,7 +2172,7 @@
             "--watermark"
           ],
           "options": {
-            "action": "'store_true'",
+            "action": "\"store_true\"",
             "default": "False"
           }
         },
@@ -2181,9 +2181,9 @@
             "--auto-reframe"
           ],
           "options": {
-            "dest": "'auto_reframe'",
-            "action": "'store_true'",
-            "help": "'Automatically frame the subject (personal default)'"
+            "dest": "\"auto_reframe\"",
+            "action": "\"store_true\"",
+            "help": "\"Automatically frame the subject (personal default)\""
           }
         },
         {
@@ -2191,9 +2191,9 @@
             "--no-auto-reframe"
           ],
           "options": {
-            "dest": "'auto_reframe'",
-            "action": "'store_false'",
-            "help": "'Preserve canonical full-frame authority (required for enterprise)'"
+            "dest": "\"auto_reframe\"",
+            "action": "\"store_false\"",
+            "help": "\"Preserve canonical full-frame authority (required for enterprise)\""
           }
         },
         {
@@ -2201,15 +2201,15 @@
             "--wait"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Wait for render to complete'"
+            "action": "\"store_true\"",
+            "help": "\"Wait for render to complete\""
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "f'/api/v1/clips/{clip_id}/render'",
+          "pathExpression": "f\"/api/v1/clips/{clip_id}/render\"",
           "line": 47
         }
       ],
@@ -2243,7 +2243,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Named ClipIt CLI profile'"
+            "help": "\"Named ClipIt CLI profile\""
           }
         },
         {
@@ -2253,7 +2253,7 @@
           "options": {
             "required": "True",
             "type": "parse_style",
-            "help": "'Exact caption style JSON object or @path/to/style.json'"
+            "help": "\"Exact caption style JSON object or @path/to/style.json\""
           }
         },
         {
@@ -2296,8 +2296,8 @@
             "--include-outro"
           ],
           "options": {
-            "dest": "'include_outro'",
-            "action": "'store_true'"
+            "dest": "\"include_outro\"",
+            "action": "\"store_true\""
           }
         },
         {
@@ -2305,8 +2305,8 @@
             "--no-outro"
           ],
           "options": {
-            "dest": "'include_outro'",
-            "action": "'store_false'"
+            "dest": "\"include_outro\"",
+            "action": "\"store_false\""
           }
         },
         {
@@ -2314,8 +2314,8 @@
             "--confirm"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Advance the exact plan returned by preflight'"
+            "action": "\"store_true\"",
+            "help": "\"Advance the exact plan returned by preflight\""
           }
         },
         {
@@ -2323,7 +2323,7 @@
             "--idempotency-key"
           ],
           "options": {
-            "help": "'Stable first-advance key; generated when omitted'"
+            "help": "\"Stable first-advance key; generated when omitted\""
           }
         },
         {
@@ -2331,7 +2331,7 @@
             "--resume-token"
           ],
           "options": {
-            "help": "'Durable token from a processing receipt'"
+            "help": "\"Durable token from a processing receipt\""
           }
         },
         {
@@ -2339,7 +2339,7 @@
             "--plan-hash"
           ],
           "options": {
-            "help": "'Original plan hash; required with --resume-token'"
+            "help": "\"Original plan hash; required with --resume-token\""
           }
         },
         {
@@ -2347,7 +2347,7 @@
             "--caption-style-hash"
           ],
           "options": {
-            "help": "'Original approved caption-style hash; required with --resume-token'"
+            "help": "\"Original approved caption-style hash; required with --resume-token\""
           }
         },
         {
@@ -2356,7 +2356,7 @@
           ],
           "options": {
             "type": "float",
-            "help": "'Approved final duration from receipt lineage; required with --resume-token'"
+            "help": "\"Approved final duration from receipt lineage; required with --resume-token\""
           }
         },
         {
@@ -2364,8 +2364,8 @@
             "--wait"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Resume until completed or blocked'"
+            "action": "\"store_true\"",
+            "help": "\"Resume until completed or blocked\""
           }
         },
         {
@@ -2402,7 +2402,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Rendered clip ID'"
+            "help": "\"Rendered clip ID\""
           }
         },
         {
@@ -2410,7 +2410,7 @@
             "--platform"
           ],
           "options": {
-            "help": "'One exact target platform (required for enterprise keys)'"
+            "help": "\"One exact target platform (required for enterprise keys)\""
           }
         },
         {
@@ -2418,7 +2418,7 @@
             "--platforms"
           ],
           "options": {
-            "help": "'Comma-separated platforms for ordinary keys'"
+            "help": "\"Comma-separated platforms for ordinary keys\""
           }
         },
         {
@@ -2426,7 +2426,7 @@
             "--account-id"
           ],
           "options": {
-            "help": "'Exact accountId for a single --platform'"
+            "help": "\"Exact accountId for a single --platform\""
           }
         },
         {
@@ -2434,7 +2434,7 @@
             "--account-ids"
           ],
           "options": {
-            "help": "'platform=accountId pairs or a JSON object'"
+            "help": "\"platform=accountId pairs or a JSON object\""
           }
         },
         {
@@ -2443,7 +2443,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Post caption'"
+            "help": "\"Post caption\""
           }
         },
         {
@@ -2452,7 +2452,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'ISO 8601 datetime (must be in the future)'"
+            "help": "\"ISO 8601 datetime (must be in the future)\""
           }
         },
         {
@@ -2460,7 +2460,7 @@
             "--title"
           ],
           "options": {
-            "help": "'Title (required for YouTube)'"
+            "help": "\"Title (required for YouTube)\""
           }
         },
         {
@@ -2468,7 +2468,7 @@
             "--hashtags"
           ],
           "options": {
-            "help": "'Comma-separated hashtags'"
+            "help": "\"Comma-separated hashtags\""
           }
         },
         {
@@ -2476,7 +2476,7 @@
             "--export-id"
           ],
           "options": {
-            "help": "'Exact completed export ID (required if delivery-state is ambiguous)'"
+            "help": "\"Exact completed export ID (required if delivery-state is ambiguous)\""
           }
         },
         {
@@ -2484,7 +2484,7 @@
             "--enterprise-deliverable-id"
           ],
           "options": {
-            "help": "'Optional selected enterprise deliverable ID'"
+            "help": "\"Optional selected enterprise deliverable ID\""
           }
         },
         {
@@ -2492,15 +2492,15 @@
             "--wait"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Wait for enterprise schedule registration'"
+            "action": "\"store_true\"",
+            "help": "\"Wait for enterprise schedule registration\""
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "'/api/v1/social/schedule'",
+          "pathExpression": "\"/api/v1/social/schedule\"",
           "line": 67
         }
       ],
@@ -2534,7 +2534,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Named ClipIt CLI profile'"
+            "help": "\"Named ClipIt CLI profile\""
           }
         },
         {
@@ -2543,7 +2543,7 @@
           ],
           "options": {
             "type": "parse_style",
-            "help": "'Exact style JSON object or @path/to/style.json'"
+            "help": "\"Exact style JSON object or @path/to/style.json\""
           }
         },
         {
@@ -2593,17 +2593,17 @@
       "requests": [
         {
           "method": "GET",
-          "pathExpression": "'/api/v1/agent/me'",
+          "pathExpression": "\"/api/v1/agent/me\"",
           "line": 252
         },
         {
           "method": "GET",
-          "pathExpression": "f'/api/v1/clips/{clip_id}/delivery-state'",
+          "pathExpression": "f\"/api/v1/clips/{clip_id}/delivery-state\"",
           "line": 263
         },
         {
           "method": "GET",
-          "pathExpression": "'/api/v1/social/accounts'",
+          "pathExpression": "\"/api/v1/social/accounts\"",
           "line": 272
         }
       ],
@@ -2621,7 +2621,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Clip ID to export'"
+            "help": "\"Clip ID to export\""
           }
         },
         {
@@ -2629,7 +2629,7 @@
             "--profile"
           ],
           "options": {
-            "help": "'Named ClipIt CLI profile'"
+            "help": "\"Named ClipIt CLI profile\""
           }
         },
         {
@@ -2637,7 +2637,7 @@
             "--project-id"
           ],
           "options": {
-            "help": "'Optional project ID'"
+            "help": "\"Optional project ID\""
           }
         },
         {
@@ -2645,7 +2645,7 @@
             "--sequence-id"
           ],
           "options": {
-            "help": "'Optional sequence ID'"
+            "help": "\"Optional sequence ID\""
           }
         },
         {
@@ -2654,7 +2654,7 @@
           ],
           "options": {
             "type": "float",
-            "help": "'Export start time in seconds'"
+            "help": "\"Export start time in seconds\""
           }
         },
         {
@@ -2663,7 +2663,7 @@
           ],
           "options": {
             "type": "float",
-            "help": "'Export end time in seconds'"
+            "help": "\"Export end time in seconds\""
           }
         },
         {
@@ -2671,8 +2671,8 @@
             "--format"
           ],
           "options": {
-            "default": "'mp4'",
-            "choices": "['mp4', 'mov', 'avi', 'webm', 'mkv']"
+            "default": "\"mp4\"",
+            "choices": "[\"mp4\", \"mov\", \"avi\", \"webm\", \"mkv\"]"
           }
         },
         {
@@ -2680,8 +2680,8 @@
             "--aspect-ratio"
           ],
           "options": {
-            "default": "'16:9'",
-            "choices": "['original', '16:9', '9:16', '1:1', '4:3', '4:5', '2:3']"
+            "default": "\"16:9\"",
+            "choices": "[\"original\", \"16:9\", \"9:16\", \"1:1\", \"4:3\", \"4:5\", \"2:3\"]"
           }
         },
         {
@@ -2689,8 +2689,8 @@
             "--reframe-mode"
           ],
           "options": {
-            "default": "'fill'",
-            "choices": "['fit', 'fill', 'custom']"
+            "default": "\"fill\"",
+            "choices": "[\"fit\", \"fill\", \"custom\"]"
           }
         },
         {
@@ -2698,7 +2698,7 @@
             "--fit-background"
           ],
           "options": {
-            "choices": "['black', 'blur']"
+            "choices": "[\"black\", \"blur\"]"
           }
         },
         {
@@ -2707,7 +2707,7 @@
           ],
           "options": {
             "type": "float",
-            "help": "'Custom reframe x position (0-1)'"
+            "help": "\"Custom reframe x position (0-1)\""
           }
         },
         {
@@ -2716,7 +2716,7 @@
           ],
           "options": {
             "type": "float",
-            "help": "'Custom reframe y position (0-1)'"
+            "help": "\"Custom reframe y position (0-1)\""
           }
         },
         {
@@ -2724,8 +2724,8 @@
             "--hide-video"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Export audio/captions without video'"
+            "action": "\"store_true\"",
+            "help": "\"Export audio/captions without video\""
           }
         },
         {
@@ -2733,8 +2733,8 @@
             "--resolution"
           ],
           "options": {
-            "default": "'1080p'",
-            "choices": "['2160p', '1080p', '720p', '480p', '360p', 'original']"
+            "default": "\"1080p\"",
+            "choices": "[\"2160p\", \"1080p\", \"720p\", \"480p\", \"360p\", \"original\"]"
           }
         },
         {
@@ -2744,7 +2744,7 @@
           "options": {
             "type": "int",
             "default": "8000000",
-            "help": "'Video bitrate'"
+            "help": "\"Video bitrate\""
           }
         },
         {
@@ -2754,7 +2754,7 @@
           "options": {
             "type": "int",
             "default": "30",
-            "help": "'Frames per second'"
+            "help": "\"Frames per second\""
           }
         },
         {
@@ -2762,8 +2762,8 @@
             "--codec"
           ],
           "options": {
-            "default": "'h264'",
-            "choices": "['h264', 'h265', 'vp9', 'av1', 'prores']"
+            "default": "\"h264\"",
+            "choices": "[\"h264\", \"h265\", \"vp9\", \"av1\", \"prores\"]"
           }
         },
         {
@@ -2771,8 +2771,8 @@
             "--quality-preset"
           ],
           "options": {
-            "default": "'medium'",
-            "choices": "['ultrafast', 'superfast', 'veryfast', 'faster', 'fast', 'medium', 'slow', 'slower', 'veryslow']"
+            "default": "\"medium\"",
+            "choices": "[\"ultrafast\", \"superfast\", \"veryfast\", \"faster\", \"fast\", \"medium\", \"slow\", \"slower\", \"veryslow\"]"
           }
         },
         {
@@ -2780,8 +2780,8 @@
             "--hardware-acceleration"
           ],
           "options": {
-            "dest": "'hardware_acceleration'",
-            "action": "'store_true'",
+            "dest": "\"hardware_acceleration\"",
+            "action": "\"store_true\"",
             "default": "True"
           }
         },
@@ -2790,8 +2790,8 @@
             "--no-hardware-acceleration"
           ],
           "options": {
-            "dest": "'hardware_acceleration'",
-            "action": "'store_false'"
+            "dest": "\"hardware_acceleration\"",
+            "action": "\"store_false\""
           }
         },
         {
@@ -2799,8 +2799,8 @@
             "--color-space"
           ],
           "options": {
-            "default": "'sdr'",
-            "choices": "['sdr', 'hdr']"
+            "default": "\"sdr\"",
+            "choices": "[\"sdr\", \"hdr\"]"
           }
         },
         {
@@ -2808,8 +2808,8 @@
             "--audio-codec"
           ],
           "options": {
-            "default": "'aac'",
-            "choices": "['aac', 'mp3', 'opus', 'pcm']"
+            "default": "\"aac\"",
+            "choices": "[\"aac\", \"mp3\", \"opus\", \"pcm\"]"
           }
         },
         {
@@ -2835,8 +2835,8 @@
             "--include-audio"
           ],
           "options": {
-            "dest": "'include_audio'",
-            "action": "'store_true'",
+            "dest": "\"include_audio\"",
+            "action": "\"store_true\"",
             "default": "True"
           }
         },
@@ -2845,8 +2845,8 @@
             "--no-audio"
           ],
           "options": {
-            "dest": "'include_audio'",
-            "action": "'store_false'"
+            "dest": "\"include_audio\"",
+            "action": "\"store_false\""
           }
         },
         {
@@ -2854,9 +2854,9 @@
             "--include-outro"
           ],
           "options": {
-            "dest": "'include_outro'",
-            "action": "'store_true'",
-            "help": "'Append the four-second ClipIt outro (default)'"
+            "dest": "\"include_outro\"",
+            "action": "\"store_true\"",
+            "help": "\"Append the four-second ClipIt outro (default)\""
           }
         },
         {
@@ -2864,9 +2864,9 @@
             "--no-outro"
           ],
           "options": {
-            "dest": "'include_outro'",
-            "action": "'store_false'",
-            "help": "'Preserve the exact content duration without the ClipIt outro'"
+            "dest": "\"include_outro\"",
+            "action": "\"store_false\"",
+            "help": "\"Preserve the exact content duration without the ClipIt outro\""
           }
         },
         {
@@ -2875,7 +2875,7 @@
           ],
           "options": {
             "type": "float",
-            "help": "'Audio volume 0-100'"
+            "help": "\"Audio volume 0-100\""
           }
         },
         {
@@ -2883,8 +2883,8 @@
             "--audio-muted"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Mute exported audio'"
+            "action": "\"store_true\"",
+            "help": "\"Mute exported audio\""
           }
         },
         {
@@ -2893,7 +2893,7 @@
           ],
           "options": {
             "type": "float",
-            "help": "'Playback speed 0.25-4'"
+            "help": "\"Playback speed 0.25-4\""
           }
         },
         {
@@ -2901,7 +2901,7 @@
             "--watermark-text"
           ],
           "options": {
-            "help": "'Watermark text'"
+            "help": "\"Watermark text\""
           }
         },
         {
@@ -2909,7 +2909,7 @@
             "--watermark-image-url"
           ],
           "options": {
-            "help": "'Watermark image URL'"
+            "help": "\"Watermark image URL\""
           }
         },
         {
@@ -2917,8 +2917,8 @@
             "--watermark-position"
           ],
           "options": {
-            "choices": "['top-left', 'top-right', 'bottom-left', 'bottom-right', 'center']",
-            "default": "'bottom-right'"
+            "choices": "[\"top-left\", \"top-right\", \"bottom-left\", \"bottom-right\", \"center\"]",
+            "default": "\"bottom-right\""
           }
         },
         {
@@ -2949,7 +2949,7 @@
             "--output-filename"
           ],
           "options": {
-            "help": "'Output file name'"
+            "help": "\"Output file name\""
           }
         },
         {
@@ -2957,7 +2957,7 @@
             "--title"
           ],
           "options": {
-            "help": "'Export metadata title'"
+            "help": "\"Export metadata title\""
           }
         },
         {
@@ -2965,7 +2965,7 @@
             "--description"
           ],
           "options": {
-            "help": "'Export metadata description'"
+            "help": "\"Export metadata description\""
           }
         },
         {
@@ -2973,7 +2973,7 @@
             "--tags"
           ],
           "options": {
-            "help": "'Comma-separated export metadata tags'"
+            "help": "\"Comma-separated export metadata tags\""
           }
         },
         {
@@ -2982,7 +2982,7 @@
           ],
           "options": {
             "type": "parse_json_object",
-            "help": "'Additional exportStart JSON fields'"
+            "help": "\"Additional exportStart JSON fields\""
           }
         },
         {
@@ -2990,7 +2990,7 @@
             "--idempotency-key"
           ],
           "options": {
-            "help": "'Stable key to reuse only when retrying the same export after an unknown outcome'"
+            "help": "\"Stable key to reuse only when retrying the same export after an unknown outcome\""
           }
         },
         {
@@ -2998,8 +2998,8 @@
             "--wait"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Wait for export completion'"
+            "action": "\"store_true\"",
+            "help": "\"Wait for export completion\""
           }
         },
         {
@@ -3009,7 +3009,7 @@
           "options": {
             "type": "float",
             "default": "600",
-            "help": "'Max wait in seconds'"
+            "help": "\"Max wait in seconds\""
           }
         },
         {
@@ -3019,14 +3019,14 @@
           "options": {
             "type": "float",
             "default": "3",
-            "help": "'Poll interval in seconds'"
+            "help": "\"Poll interval in seconds\""
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "'/api/v1/exports'",
+          "pathExpression": "\"/api/v1/exports\"",
           "line": 184
         }
       ],
@@ -3044,7 +3044,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Video ID'"
+            "help": "\"Video ID\""
           }
         },
         {
@@ -3054,7 +3054,7 @@
           "options": {
             "type": "int",
             "default": "5",
-            "help": "'Number of suggestions (1-20)'"
+            "help": "\"Number of suggestions (1-20)\""
           }
         },
         {
@@ -3062,7 +3062,7 @@
             "--platforms"
           ],
           "options": {
-            "help": "'Comma-separated target platforms'"
+            "help": "\"Comma-separated target platforms\""
           }
         },
         {
@@ -3071,7 +3071,7 @@
           ],
           "options": {
             "type": "float",
-            "help": "'Minimum clip duration (seconds)'"
+            "help": "\"Minimum clip duration (seconds)\""
           }
         },
         {
@@ -3080,14 +3080,14 @@
           ],
           "options": {
             "type": "float",
-            "help": "'Maximum clip duration (seconds)'"
+            "help": "\"Maximum clip duration (seconds)\""
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "f'/api/v1/videos/{args.video_id}/suggest-clips'",
+          "pathExpression": "f\"/api/v1/videos/{args.video_id}/suggest-clips\"",
           "line": 35
         }
       ],
@@ -3105,7 +3105,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Video ID to transcribe'"
+            "help": "\"Video ID to transcribe\""
           }
         },
         {
@@ -3113,15 +3113,15 @@
             "--wait"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Wait for transcription to complete'"
+            "action": "\"store_true\"",
+            "help": "\"Wait for transcription to complete\""
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "f'/api/v1/videos/{args.video_id}/transcribe'",
+          "pathExpression": "f\"/api/v1/videos/{args.video_id}/transcribe\"",
           "line": 20
         }
       ],
@@ -3139,7 +3139,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Clip ID'"
+            "help": "\"Clip ID\""
           }
         },
         {
@@ -3147,7 +3147,7 @@
             "--preset"
           ],
           "options": {
-            "choices": "['bold', 'minimal', 'neon', 'classic', 'tiktok-viral']"
+            "choices": "[\"bold\", \"minimal\", \"neon\", \"classic\", \"tiktok-viral\"]"
           }
         },
         {
@@ -3175,14 +3175,14 @@
             "--position"
           ],
           "options": {
-            "choices": "['top', 'center', 'bottom']"
+            "choices": "[\"top\", \"center\", \"bottom\"]"
           }
         }
       ],
       "requests": [
         {
           "method": "PATCH",
-          "pathExpression": "f'/api/v1/clips/{args.clip_id}/captions'",
+          "pathExpression": "f\"/api/v1/clips/{args.clip_id}/captions\"",
           "line": 41
         }
       ],
@@ -3200,7 +3200,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Clip ID'"
+            "help": "\"Clip ID\""
           }
         },
         {
@@ -3209,7 +3209,7 @@
           ],
           "options": {
             "type": "float",
-            "help": "'New start time (seconds)'"
+            "help": "\"New start time (seconds)\""
           }
         },
         {
@@ -3218,7 +3218,7 @@
           ],
           "options": {
             "type": "float",
-            "help": "'New end time (seconds)'"
+            "help": "\"New end time (seconds)\""
           }
         },
         {
@@ -3226,7 +3226,7 @@
             "--title"
           ],
           "options": {
-            "help": "'New title'"
+            "help": "\"New title\""
           }
         },
         {
@@ -3234,14 +3234,14 @@
             "--caption"
           ],
           "options": {
-            "help": "'New caption'"
+            "help": "\"New caption\""
           }
         }
       ],
       "requests": [
         {
           "method": "PATCH",
-          "pathExpression": "f'/api/v1/clips/{args.clip_id}'",
+          "pathExpression": "f\"/api/v1/clips/{args.clip_id}\"",
           "line": 37
         }
       ],
@@ -3259,7 +3259,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Path to the asset file'"
+            "help": "\"Path to the asset file\""
           }
         },
         {
@@ -3267,7 +3267,7 @@
             "--content-type"
           ],
           "options": {
-            "help": "'MIME type, guessed from file when omitted'"
+            "help": "\"MIME type, guessed from file when omitted\""
           }
         },
         {
@@ -3275,7 +3275,7 @@
             "--idempotency-key"
           ],
           "options": {
-            "help": "'Stable key to reuse only when retrying this exact upload after an unknown outcome'"
+            "help": "\"Stable key to reuse only when retrying this exact upload after an unknown outcome\""
           }
         },
         {
@@ -3303,7 +3303,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Path to the video file'"
+            "help": "\"Path to the video file\""
           }
         },
         {
@@ -3311,8 +3311,8 @@
             "--wait"
           ],
           "options": {
-            "action": "'store_true'",
-            "help": "'Wait for processing to complete'"
+            "action": "\"store_true\"",
+            "help": "\"Wait for processing to complete\""
           }
         }
       ],
@@ -3331,14 +3331,14 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Video asset ID returned by list_assets.py'"
+            "help": "\"Video asset ID returned by list_assets.py\""
           }
         }
       ],
       "requests": [
         {
           "method": "POST",
-          "pathExpression": "f'/api/v1/assets/{args.asset_id}/video'",
+          "pathExpression": "f\"/api/v1/assets/{args.asset_id}/video\"",
           "line": 25
         }
       ],
@@ -3356,7 +3356,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Expected enterprise workspace ID from the ClipIt admin dashboard'"
+            "help": "\"Expected enterprise workspace ID from the ClipIt admin dashboard\""
           }
         },
         {
@@ -3364,7 +3364,7 @@
             "--profile"
           ],
           "options": {
-            "help": "'Named ClipIt CLI profile (or set CLIPIT_PROFILE)'"
+            "help": "\"Named ClipIt CLI profile (or set CLIPIT_PROFILE)\""
           }
         }
       ],
@@ -3383,7 +3383,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Export job ID to poll'"
+            "help": "\"Export job ID to poll\""
           }
         },
         {
@@ -3393,7 +3393,7 @@
           "options": {
             "type": "float",
             "default": "600",
-            "help": "'Max wait in seconds'"
+            "help": "\"Max wait in seconds\""
           }
         },
         {
@@ -3403,7 +3403,7 @@
           "options": {
             "type": "float",
             "default": "3",
-            "help": "'Poll interval in seconds'"
+            "help": "\"Poll interval in seconds\""
           }
         }
       ],
@@ -3422,7 +3422,7 @@
           ],
           "options": {
             "required": "True",
-            "help": "'Job ID to poll'"
+            "help": "\"Job ID to poll\""
           }
         },
         {
@@ -3432,7 +3432,7 @@
           "options": {
             "type": "float",
             "default": "600",
-            "help": "'Max wait in seconds'"
+            "help": "\"Max wait in seconds\""
           }
         },
         {
@@ -3442,7 +3442,7 @@
           "options": {
             "type": "float",
             "default": "3",
-            "help": "'Poll interval in seconds'"
+            "help": "\"Poll interval in seconds\""
           }
         }
       ],

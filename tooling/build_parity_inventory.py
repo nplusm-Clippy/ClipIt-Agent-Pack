@@ -20,9 +20,9 @@ def inventory():
                 continue
             if node.func.attr == 'add_argument':
                 arguments.append({'flags': [ast.literal_eval(arg) for arg in node.args if isinstance(arg, ast.Constant)],
-                                  'options': {kw.arg: ast.unparse(kw.value) for kw in node.keywords}})
+                                  'options': {kw.arg: ast.get_source_segment(source, kw.value) for kw in node.keywords}})
             if node.func.attr in {'get', 'post', 'put', 'patch', 'delete', 'request'} and node.args:
-                target = ast.unparse(node.args[0])
+                target = ast.get_source_segment(source, node.args[0])
                 if '/api/' in target:
                     requests.append({'method': node.func.attr.upper(), 'pathExpression': target, 'line': node.lineno})
         scripts.append({'path': path.relative_to(ROOT).as_posix(), 'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
