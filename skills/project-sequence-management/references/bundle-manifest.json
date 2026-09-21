@@ -1,0 +1,31 @@
+{
+  "files": {
+    "SKILL.md": {
+      "bytes": 3291,
+      "sha256": "8a2d37c951cd7ea5b564e38770063f89fafa601de5ae6dd9b2eaa823952d0a2f",
+      "source": "clipper/project-sequence-management/SKILL.md",
+      "sourceSha256": "2fd025054d022e97d341737c38c19f6b7ded78a7ffc9f96c95630c19514b913c"
+    },
+    "references/LICENSE": {
+      "bytes": 1070,
+      "sha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3",
+      "source": "LICENSE",
+      "sourceSha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3"
+    },
+    "references/project-structure.md": {
+      "bytes": 2395,
+      "sha256": "8b822d20cab4205eb50caef622e336c474cbd26fe9bc1c618c9517a880983d99",
+      "source": "clipper/project-sequence-management/references/project-structure.md",
+      "sourceSha256": "8b822d20cab4205eb50caef622e336c474cbd26fe9bc1c618c9517a880983d99"
+    },
+    "requirements.txt": {
+      "bytes": 38,
+      "sha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80",
+      "source": "requirements.txt",
+      "sourceSha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80"
+    }
+  },
+  "format": "clipit-portable-skills.v1",
+  "skillId": "project-sequence-management",
+  "sourcePath": "clipper/project-sequence-management"
+}

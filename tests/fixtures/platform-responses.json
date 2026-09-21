@@ -1,0 +1,589 @@
+{
+  "provenance": {
+    "source": "actual shared routes with disposable PostgreSQL and mocked provider dispatch",
+    "synthetic": true
+  },
+  "identity": {
+    "status": 200,
+    "headers": {
+      "cache-control": "private, no-store"
+    },
+    "body": {
+      "user": {
+        "id": "owner",
+        "username": null,
+        "email": null
+      },
+      "apiKey": {
+        "id": "key-a",
+        "keyName": "test",
+        "permissions": {
+          "clippy_agent": true,
+          "video_processing": true,
+          "url_extraction": true
+        },
+        "rateLimit": 120,
+        "webhookUrl": null,
+        "agentInfo": {},
+        "spendLimits": null
+      },
+      "scope": {
+        "identityType": "personal_api_key",
+        "enterprise": false,
+        "workspaceId": null,
+        "workspaceName": null,
+        "workspaceStatus": null,
+        "workspaceRole": null,
+        "resourceOwnerUserId": "owner",
+        "billingMode": "direct"
+      }
+    }
+  },
+  "compatibility": {
+    "status": 200,
+    "headers": {
+      "cache-control": "private, no-store"
+    },
+    "body": {
+      "serverTime": "2026-09-17T00:01:37.838Z",
+      "features": {
+        "durableOperationReceipts": true,
+        "paginatedRuns": true,
+        "incrementalEvents": true,
+        "artifactAssociations": true,
+        "digestBoundApprovals": true,
+        "preflight": true,
+        "safeUndispatchedRetry": true,
+        "coordinatedPolling": true,
+        "automaticProviderRetry": false,
+        "artifactMediaRefresh": false,
+        "progressiveCatalog": true,
+        "conditionalCatalogCache": false
+      },
+      "limits": {
+        "runPageDefault": 50,
+        "runPageMaximum": 100,
+        "eventPageDefault": 100,
+        "eventPageMaximum": 250,
+        "rateLimit": 120,
+        "rateLimitWindowSeconds": 60,
+        "recommendedPollSeconds": 5,
+        "backgroundReadsPerMinute": 12
+      },
+      "pollingMode": "shared_snapshot",
+      "pollingBudget": "Admitted snapshots share at most 20% of the normal key window, capped at 12/minute. Rejected attempts do not consume normal quota; incoming attempt count is not bounded.",
+      "operationKeyRetention": "retained with the operation receipt; deletion removes replay protection",
+      "eventHistory": "Events are retained from the platform migration or first later producer update. Older complete history is unavailable.",
+      "contractVersion": "2026-09-16"
+    }
+  },
+  "overview": {
+    "status": 200,
+    "headers": {
+      "cache-control": "private, no-store"
+    },
+    "body": {
+      "status": "ready",
+      "degraded": [],
+      "runs": [
+        {
+          "id": "fixture-run",
+          "name": "Synthetic review",
+          "jobType": "clippy_workflow",
+          "status": "queued",
+          "progress": 0,
+          "createdAt": "2026-09-17 00:01:37.822314",
+          "updatedAt": "2026-09-17 00:01:37.822314",
+          "completedAt": null
+        },
+        {
+          "id": "fixture-approval",
+          "name": "Approval run",
+          "jobType": "clippy_workflow",
+          "status": "awaiting_approval",
+          "progress": 0,
+          "createdAt": "2026-09-17 00:01:37.803009",
+          "updatedAt": "2026-09-17 00:01:37.807928",
+          "completedAt": null
+        }
+      ],
+      "artifacts": [
+        {
+          "id": "17",
+          "runId": "fixture-run",
+          "kind": "export",
+          "resourceId": "fixture-export",
+          "status": "associated",
+          "createdAt": "2026-09-17 00:01:37.822314"
+        },
+        {
+          "id": "16",
+          "runId": "fixture-run",
+          "kind": "clip",
+          "resourceId": "fixture-clip",
+          "status": "associated",
+          "createdAt": "2026-09-17 00:01:37.822314"
+        }
+      ],
+      "approvals": [
+        {
+          "runId": "fixture-approval",
+          "approvalId": "approval-fixture-approval",
+          "totalEstimatedCost": 2,
+          "expiresAt": "2026-09-17 00:02:37.81"
+        }
+      ],
+      "credits": null,
+      "billingMode": "direct",
+      "observedAt": "2026-09-17T00:01:37.843Z",
+      "contractVersion": "2026-09-16"
+    }
+  },
+  "catalog": {
+    "status": 200,
+    "headers": {
+      "cache-control": "private, no-store"
+    },
+    "body": {
+      "items": [
+        {
+          "name": "testAction",
+          "briefDescription": "Test action",
+          "category": "video",
+          "skill": null,
+          "available": true,
+          "requiredPermissions": [
+            "clippy_agent"
+          ],
+          "missingPermissions": [],
+          "costBand": "free",
+          "confirmation": null
+        }
+      ],
+      "total": 1,
+      "catalogDigest": "0575cd21d169aed53a18a3f6dae3d131e81daf74b9c1e59d6044d094eb6a8a5c",
+      "permissionRevision": "569fe78993d996b7a294bf6d9133fde2fc3da16cbc13e0c9ec11e6547e16c1df",
+      "contractVersion": "2026-09-16"
+    }
+  },
+  "tool": {
+    "status": 200,
+    "headers": {
+      "cache-control": "private, no-store"
+    },
+    "body": {
+      "tool": {
+        "name": "testAction",
+        "description": "Test action",
+        "category": "video",
+        "skill": null,
+        "requiredPermissions": [
+          "clippy_agent"
+        ],
+        "missingPermissions": [],
+        "available": true,
+        "confirmation": null,
+        "contextRequirements": {},
+        "costBand": "free",
+        "selfManagedCostPreflight": false,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string"
+            }
+          }
+        },
+        "examples": []
+      },
+      "catalogDigest": "0575cd21d169aed53a18a3f6dae3d131e81daf74b9c1e59d6044d094eb6a8a5c",
+      "permissionRevision": "569fe78993d996b7a294bf6d9133fde2fc3da16cbc13e0c9ec11e6547e16c1df",
+      "contractVersion": "2026-09-16"
+    }
+  },
+  "runs": {
+    "status": 200,
+    "headers": {
+      "cache-control": "private, no-store"
+    },
+    "body": {
+      "items": [
+        {
+          "id": "fixture-run",
+          "name": "Synthetic review",
+          "jobType": "clippy_workflow",
+          "status": "queued",
+          "progress": 0,
+          "createdAt": "2026-09-17 00:01:37.822314",
+          "updatedAt": "2026-09-17 00:01:37.822314",
+          "completedAt": null
+        },
+        {
+          "id": "fixture-approval",
+          "name": "Approval run",
+          "jobType": "clippy_workflow",
+          "status": "awaiting_approval",
+          "progress": 0,
+          "createdAt": "2026-09-17 00:01:37.803009",
+          "updatedAt": "2026-09-17 00:01:37.807928",
+          "completedAt": null
+        }
+      ],
+      "page": {
+        "nextCursor": null,
+        "hasMore": false,
+        "resumeCursor": "eyJ2IjoxLCJzY29wZSI6IjM1NDBmNjNjNjJlOTU1ZWVjYjVjMTNkYjFjMzViNDVjNWQwYWE3NjQ2NGRmYjRlZTllODFhN2NjMWEyOTRlMDIiLCJpZCI6ImZpeHR1cmUtYXBwcm92YWwiLCJhdCI6IjIwMjYtMDktMTcgMDA6MDE6MzcuODAzMDA5IiwiZXhwaXJlcyI6MTc4OTY4OTY5Nzg3MH0"
+      },
+      "contractVersion": "2026-09-16"
+    }
+  },
+  "run": {
+    "status": 200,
+    "headers": {
+      "cache-control": "private, no-store"
+    },
+    "body": {
+      "contractVersion": "2026-09-16",
+      "id": "fixture-run",
+      "name": "Synthetic review",
+      "status": "queued",
+      "progress": 0,
+      "steps": [],
+      "currentApproval": null,
+      "costs": {
+        "estimatedClip": null,
+        "actualClip": null,
+        "providerCostCents": null,
+        "actualCostSource": "credit-ledger"
+      },
+      "lineage": {
+        "parentRunId": null,
+        "continuationRunId": null,
+        "operationId": null,
+        "videoId": null,
+        "clipId": null
+      },
+      "qa": {
+        "status": "not_verified",
+        "verificationRequired": true
+      },
+      "errors": [],
+      "artifacts": [
+        {
+          "id": "17",
+          "runId": "fixture-run",
+          "kind": "export",
+          "resourceId": "fixture-export",
+          "status": "associated",
+          "createdAt": "2026-09-17 00:01:37.822314"
+        },
+        {
+          "id": "16",
+          "runId": "fixture-run",
+          "kind": "clip",
+          "resourceId": "fixture-clip",
+          "status": "associated",
+          "createdAt": "2026-09-17 00:01:37.822314"
+        }
+      ],
+      "artifactPage": {
+        "nextCursor": null,
+        "hasMore": false,
+        "resumeCursor": "eyJ2IjoxLCJzY29wZSI6ImVhM2E5YzBkYzZmNTdlOWNmOGQ2MDIwN2IzMTdjZjQ1M2VmMWY1ZDMwNjZiMjg2MWJkZmU1NTc2MDNkMDE3ZTYiLCJpZCI6IjE2IiwiZXhwaXJlcyI6MTc4OTY4OTY5Nzg3NX0"
+      },
+      "allowedControls": [
+        "pause",
+        "cancel"
+      ],
+      "createdAt": "2026-09-17T00:01:37.822Z",
+      "updatedAt": "2026-09-17 00:01:37.822314",
+      "completedAt": null,
+      "historyAvailableFrom": "2026-09-17 00:01:37.822314"
+    }
+  },
+  "events": {
+    "status": 200,
+    "headers": {
+      "cache-control": "private, no-store"
+    },
+    "body": {
+      "items": [
+        {
+          "sequence": "1170",
+          "type": "status_changed",
+          "message": "Workflow status: queued",
+          "progress": 0,
+          "stepId": null,
+          "occurredAt": null,
+          "createdAt": "2026-09-17 00:01:37.822314"
+        }
+      ],
+      "page": {
+        "nextCursor": null,
+        "hasMore": false,
+        "resumeCursor": "eyJ2IjoxLCJzY29wZSI6IjBkYjIzY2RlYTk2YTA0NjIxN2NiMDY3ZDFjNzMwNzE2ODMzNzY4ZDJiMGZlOGFhZmVjN2IwYTg4ODVlMjJkODEiLCJpZCI6IjExNzAiLCJleHBpcmVzIjoxNzg5Njg5Njk3ODg2fQ"
+      },
+      "contractVersion": "2026-09-16"
+    }
+  },
+  "artifacts": {
+    "status": 200,
+    "headers": {
+      "cache-control": "private, no-store"
+    },
+    "body": {
+      "items": [
+        {
+          "id": "17",
+          "runId": "fixture-run",
+          "kind": "export",
+          "resourceId": "fixture-export",
+          "status": "associated",
+          "createdAt": "2026-09-17 00:01:37.822314"
+        },
+        {
+          "id": "16",
+          "runId": "fixture-run",
+          "kind": "clip",
+          "resourceId": "fixture-clip",
+          "status": "associated",
+          "createdAt": "2026-09-17 00:01:37.822314"
+        }
+      ],
+      "page": {
+        "nextCursor": null,
+        "hasMore": false,
+        "resumeCursor": "eyJ2IjoxLCJzY29wZSI6ImVhM2E5YzBkYzZmNTdlOWNmOGQ2MDIwN2IzMTdjZjQ1M2VmMWY1ZDMwNjZiMjg2MWJkZmU1NTc2MDNkMDE3ZTYiLCJpZCI6IjE2IiwiZXhwaXJlcyI6MTc4OTY4OTY5Nzg5MH0"
+      },
+      "contractVersion": "2026-09-16"
+    }
+  },
+  "approval_run": {
+    "status": 200,
+    "headers": {
+      "cache-control": "private, no-store"
+    },
+    "body": {
+      "contractVersion": "2026-09-16",
+      "id": "fixture-approval",
+      "name": "Approval run",
+      "status": "awaiting_approval",
+      "progress": 0,
+      "steps": [],
+      "currentApproval": {
+        "approvalId": "approval-fixture-approval",
+        "tasks": [
+          {
+            "id": "task-one",
+            "title": "Generate exact image",
+            "prompt": "Preserve the approved words",
+            "estimatedCost": 2
+          }
+        ],
+        "totalEstimatedCost": 2,
+        "expiresAt": "2026-09-17T00:02:37.810Z",
+        "actionDigest": "6acd334bafbb7a336076cb1a9ad7f0f084bc5dafe93d16bd9ae28469c2fe55e8",
+        "decisions": [
+          "approved",
+          "cancelled"
+        ]
+      },
+      "costs": {
+        "estimatedClip": 2,
+        "actualClip": null,
+        "providerCostCents": null,
+        "actualCostSource": "credit-ledger"
+      },
+      "lineage": {
+        "parentRunId": null,
+        "continuationRunId": null,
+        "operationId": null,
+        "videoId": null,
+        "clipId": null
+      },
+      "qa": {
+        "status": "not_verified",
+        "verificationRequired": true
+      },
+      "errors": [],
+      "artifacts": [],
+      "artifactPage": {
+        "nextCursor": null,
+        "hasMore": false,
+        "resumeCursor": null
+      },
+      "allowedControls": [
+        "cancel"
+      ],
+      "createdAt": "2026-09-17T00:01:37.803Z",
+      "updatedAt": "2026-09-17 00:01:37.807928",
+      "completedAt": null,
+      "historyAvailableFrom": "2026-09-17 00:01:37.803009"
+    }
+  },
+  "source_import": {
+    "status": 202,
+    "headers": {
+      "cache-control": "private, no-store"
+    },
+    "body": {
+      "jobId": "fixture-import",
+      "status": "accepted",
+      "pollUrl": "/api/v1/jobs/fixture-import",
+      "jobStatus": "queued",
+      "operationId": "9ccabd01-5c94-4a02-8549-45d89bee682f",
+      "requestId": "platform-test-request",
+      "replayed": false,
+      "contractVersion": "2026-09-16"
+    }
+  },
+  "approval": {
+    "status": 202,
+    "headers": {
+      "cache-control": "private, no-store"
+    },
+    "body": {
+      "runId": "1f82986e-78aa-4fd4-9dd3-6c07d85353cf",
+      "continuedFrom": "fixture-approval",
+      "status": "accepted",
+      "operationId": "adf4da76-a329-466f-a326-f14e0f7bcf77",
+      "requestId": "platform-test-request",
+      "replayed": false,
+      "contractVersion": "2026-09-16"
+    }
+  },
+  "poll": {
+    "status": 200,
+    "headers": {
+      "cache-control": "private, no-store",
+      "retry-after": "5"
+    },
+    "body": {
+      "allowed": true,
+      "automaticPolling": true,
+      "admittedPerMinute": 12,
+      "intervalMs": 5000,
+      "nextPollAt": "2026-09-17T00:01:42.987Z",
+      "retryAfterSeconds": 5,
+      "normalQuotaLimit": 120,
+      "normalQuotaRemaining": 106,
+      "pollingRemaining": 11,
+      "windowResetAt": "2026-09-17T05:02:37.816Z",
+      "deniedRequestsConsumeNormalQuota": false,
+      "overview": {
+        "status": "ready",
+        "degraded": [],
+        "runs": [
+          {
+            "id": "1f82986e-78aa-4fd4-9dd3-6c07d85353cf",
+            "name": "Approve the pending actions.",
+            "jobType": "clippy_workflow",
+            "status": "queued",
+            "progress": 0,
+            "createdAt": "2026-09-17 00:01:37.952552",
+            "updatedAt": "2026-09-17 00:01:37.962625",
+            "completedAt": null
+          },
+          {
+            "id": "fixture-run",
+            "name": "Synthetic review",
+            "jobType": "clippy_workflow",
+            "status": "queued",
+            "progress": 0,
+            "createdAt": "2026-09-17 00:01:37.822314",
+            "updatedAt": "2026-09-17 00:01:37.822314",
+            "completedAt": null
+          }
+        ],
+        "artifacts": [
+          {
+            "id": "17",
+            "runId": "fixture-run",
+            "kind": "export",
+            "resourceId": "fixture-export",
+            "status": "associated",
+            "createdAt": "2026-09-17 00:01:37.822314"
+          },
+          {
+            "id": "16",
+            "runId": "fixture-run",
+            "kind": "clip",
+            "resourceId": "fixture-clip",
+            "status": "associated",
+            "createdAt": "2026-09-17 00:01:37.822314"
+          }
+        ],
+        "approvals": [],
+        "credits": null,
+        "billingMode": "direct",
+        "observedAt": "2026-09-17T00:01:37.991Z"
+      },
+      "run": {
+        "id": "fixture-run",
+        "name": "Synthetic review",
+        "jobType": "clippy_workflow",
+        "status": "queued",
+        "progress": 0,
+        "createdAt": "2026-09-17 00:01:37.822314",
+        "updatedAt": "2026-09-17 00:01:37.822314",
+        "completedAt": null
+      },
+      "runs": [
+        {
+          "id": "fixture-run",
+          "name": "Synthetic review",
+          "jobType": "clippy_workflow",
+          "status": "queued",
+          "progress": 0,
+          "createdAt": "2026-09-17 00:01:37.822314",
+          "updatedAt": "2026-09-17 00:01:37.822314",
+          "completedAt": null
+        }
+      ],
+      "events": {
+        "items": [
+          {
+            "sequence": "1170",
+            "type": "status_changed",
+            "message": "Workflow status: queued",
+            "progress": 0,
+            "stepId": null,
+            "occurredAt": null,
+            "createdAt": "2026-09-17 00:01:37.822314"
+          }
+        ],
+        "page": {
+          "nextCursor": null,
+          "hasMore": false,
+          "resumeCursor": "eyJ2IjoxLCJzY29wZSI6IjBkYjIzY2RlYTk2YTA0NjIxN2NiMDY3ZDFjNzMwNzE2ODMzNzY4ZDJiMGZlOGFhZmVjN2IwYTg4ODVlMjJkODEiLCJpZCI6IjExNzAiLCJleHBpcmVzIjoxNzg5Njg5Njk3OTkyfQ"
+        }
+      },
+      "observedAt": "2026-09-17T00:01:37.992Z",
+      "contractVersion": "2026-09-16"
+    }
+  },
+  "poll_denied": {
+    "status": 429,
+    "headers": {
+      "cache-control": "private, no-store",
+      "retry-after": "5"
+    },
+    "body": {
+      "allowed": false,
+      "automaticPolling": true,
+      "admittedPerMinute": 12,
+      "intervalMs": 5000,
+      "nextPollAt": "2026-09-17T00:01:42.987Z",
+      "retryAfterSeconds": 5,
+      "normalQuotaLimit": 120,
+      "normalQuotaRemaining": 106,
+      "pollingRemaining": 11,
+      "windowResetAt": "2026-09-17T05:02:37.816Z",
+      "deniedRequestsConsumeNormalQuota": false,
+      "code": "PLATFORM_POLL_COALESCED",
+      "error": "Wait until nextPollAt before requesting another shared snapshot.",
+      "requestId": "platform-test-request",
+      "contractVersion": "2026-09-16"
+    }
+  }
+}

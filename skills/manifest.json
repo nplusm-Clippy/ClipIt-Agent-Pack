@@ -1,0 +1,151 @@
+{
+  "format": "clipit-portable-skills.v1",
+  "packVersion": "3.1.0",
+  "skills": [
+    {
+      "bytes": 30218,
+      "fileCount": 10,
+      "id": "account-insights",
+      "manifestSha256": "a4e05b4641e5976ae9e976d15981b3ce525ea5cc8c1a84cc0769297bdc484ec3",
+      "path": "account-insights",
+      "sourcePath": "clipper/account-insights"
+    },
+    {
+      "bytes": 28007,
+      "fileCount": 8,
+      "id": "audio-production",
+      "manifestSha256": "f233f9c1a0f795d2d97dc4c2ab5a01b4208770631dce5e730e486badd9c501eb",
+      "path": "audio-production",
+      "sourcePath": "clipper/audio-production"
+    },
+    {
+      "bytes": 34330,
+      "fileCount": 9,
+      "id": "blueprint-to-edit",
+      "manifestSha256": "d5839b3ec51527b3d6c6ef26645514e33b961c3ca3b5a354331423288ac1dbc4",
+      "path": "blueprint-to-edit",
+      "sourcePath": "clipper/blueprint-to-edit"
+    },
+    {
+      "bytes": 47930,
+      "fileCount": 11,
+      "id": "broll-generation",
+      "manifestSha256": "9d4585c28734f828ddb5168d1eb458444d21f588377369fc8bb68f8ef56ddfed",
+      "path": "broll-generation",
+      "sourcePath": "clipper/broll-generation"
+    },
+    {
+      "bytes": 60077,
+      "fileCount": 13,
+      "id": "caption-generation",
+      "manifestSha256": "9ec5cbfbfbfaaab47131383ae8d169862182d3e635719de54493955a325da50d",
+      "path": "caption-generation",
+      "sourcePath": "clipper/caption-generation"
+    },
+    {
+      "bytes": 88482,
+      "fileCount": 21,
+      "id": "clip-creation",
+      "manifestSha256": "8e25467801d6a28de47616c04872ea2856a61ce97f9d1e27963c0cb32c9d8674",
+      "path": "clip-creation",
+      "sourcePath": "clipper/clip-creation"
+    },
+    {
+      "bytes": 129990,
+      "fileCount": 28,
+      "id": "clipit-operator",
+      "manifestSha256": "8b4cd5e0e594a3fad71b65ec1a9d1d76fd72ab54291ade343b875e37db062952",
+      "path": "clipit-operator",
+      "sourcePath": "clipper/clipit-operator"
+    },
+    {
+      "bytes": 8942,
+      "fileCount": 5,
+      "id": "creator-style",
+      "manifestSha256": "fe1fe08a03ba8c1b77295f34f37ec5eb97f1f99dd6f08041b6bc0ca432a4c3c3",
+      "path": "creator-style",
+      "sourcePath": "clipper/creator-style"
+    },
+    {
+      "bytes": 18689,
+      "fileCount": 7,
+      "id": "crop-reframing",
+      "manifestSha256": "2f9e87b3fc9b93b40f332fedb3d3a42d54d3f2fc3e828725edef5b838b7d54cb",
+      "path": "crop-reframing",
+      "sourcePath": "clipper/crop-reframing"
+    },
+    {
+      "bytes": 18172,
+      "fileCount": 7,
+      "id": "delivery-qa",
+      "manifestSha256": "4bf29606583a0c3b97028159edbbab0d00dc1f63a4e59c9089033994eca42e54",
+      "path": "delivery-qa",
+      "sourcePath": "clipper/delivery-qa"
+    },
+    {
+      "bytes": 102154,
+      "fileCount": 24,
+      "id": "export-rendering",
+      "manifestSha256": "30e37ee50f1e326be6513e8c01cb5d139eb606dd346318df23c5370bc2f6e9b7",
+      "path": "export-rendering",
+      "sourcePath": "clipper/export-rendering"
+    },
+    {
+      "bytes": 30543,
+      "fileCount": 12,
+      "id": "machine-payments",
+      "manifestSha256": "74efbdd9ee403ae97ddfdac3a6d1fb014689dee6f93d67efe944b3d0954b4551",
+      "path": "machine-payments",
+      "sourcePath": "clipper/machine-payments"
+    },
+    {
+      "bytes": 8083,
+      "fileCount": 5,
+      "id": "project-sequence-management",
+      "manifestSha256": "fa1835933dd35215f9f27ff30aba1cfa78a7080d62fe562cb9e7adb456f32c39",
+      "path": "project-sequence-management",
+      "sourcePath": "clipper/project-sequence-management"
+    },
+    {
+      "bytes": 27366,
+      "fileCount": 8,
+      "id": "scene-alter",
+      "manifestSha256": "77df4294f7f74c5944d8c75af08530e6436769e94eacc50296255fa20cea5697",
+      "path": "scene-alter",
+      "sourcePath": "clipper/scene-alter"
+    },
+    {
+      "bytes": 65230,
+      "fileCount": 15,
+      "id": "social-publishing",
+      "manifestSha256": "33f6d5d1a34db78f1cdd8da1e18a5fc5195d9f02083fc1aef9ca3c07f80f184c",
+      "path": "social-publishing",
+      "sourcePath": "clipper/social-publishing"
+    },
+    {
+      "bytes": 40526,
+      "fileCount": 10,
+      "id": "thumbnail-generation",
+      "manifestSha256": "0f9d0b8042133edd00b1fc4ad16eb1de66c71738d421dede516394cd448cb04a",
+      "path": "thumbnail-generation",
+      "sourcePath": "clipper/thumbnail-generation"
+    },
+    {
+      "bytes": 27941,
+      "fileCount": 8,
+      "id": "timeline-editing",
+      "manifestSha256": "3731c623c5951f369b9d4d1e15526f07fde018bcf94d6f5c54db6b2e0f8bd4e3",
+      "path": "timeline-editing",
+      "sourcePath": "clipper/timeline-editing"
+    },
+    {
+      "bytes": 49013,
+      "fileCount": 19,
+      "id": "video-management",
+      "manifestSha256": "09201aa8f39bd68ea406a6ff17072732f8ca7355db4a762874e2c61add9a6d3e",
+      "path": "video-management",
+      "sourcePath": "clipper/video-management"
+    }
+  ],
+  "sourceManifestSha256": "e3bd519270737c18c521a7ce8e0dc9166da5ee6329c475f5c11e5a5d642f3393"
+}

@@ -1,0 +1,44 @@
+name: Validate Agent Pack
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  portable-and-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: python -m pip install -r requirements-test.txt
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: python -m unittest discover -s tests -v
+      - run: python tooling/build_portable_skills.py --check
+      - run: python tooling/build_parity_inventory.py --check
+      - run: npm test
+      - name: Build deterministic package
+        run: |
+          python tooling/package_release.py --output dist/first
+          python tooling/package_release.py --output dist/second
+          cmp dist/first/clipit-agent-pack-3.1.0.zip dist/second/clipit-agent-pack-3.1.0.zip
+          python -m zipfile -e dist/first/clipit-agent-pack-3.1.0.zip dist/extracted
+      - name: Check actual released Hermes loader
+        run: |
+          git init "$RUNNER_TEMP/hermes-source"
+          git -C "$RUNNER_TEMP/hermes-source" remote add origin https://github.com/NousResearch/hermes-agent.git
+          git -C "$RUNNER_TEMP/hermes-source" fetch --depth 1 origin 345cd2b057a452236de401d3534b8502a7465e8d
+          git -C "$RUNNER_TEMP/hermes-source" checkout --detach FETCH_HEAD
+          python tooling/verify_hermes_runtime.py --hermes-source "$RUNNER_TEMP/hermes-source" --package dist/extracted/clipit
+          python tooling/verify_hermes_install.py --hermes-source "$RUNNER_TEMP/hermes-source"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: clipit-agent-pack-candidate
+          path: dist/first/

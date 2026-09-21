@@ -1,0 +1,8 @@
+{
+  "name": "clipit",
+  "label": "ClipIt",
+  "version": "3.1.0",
+  "description": "ClipIt gateway bridge for Hermes Desktop",
+  "tab": { "hidden": true },
+  "api": "plugin_api.py"
+}

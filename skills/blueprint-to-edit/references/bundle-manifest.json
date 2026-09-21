@@ -1,0 +1,55 @@
+{
+  "files": {
+    "SKILL.md": {
+      "bytes": 4250,
+      "sha256": "7f02c83686cf35efcacf2f40839678f925ed86eb522747f276fdffac2ec2601b",
+      "source": "clipper/blueprint-to-edit/SKILL.md",
+      "sourceSha256": "f5a11752a5201ecfa9c08d1f149a619e08f9e3f4dc8037c7934178ac99d9ca63"
+    },
+    "references/LICENSE": {
+      "bytes": 1070,
+      "sha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3",
+      "source": "LICENSE",
+      "sourceSha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3"
+    },
+    "references/blueprint-execution.md": {
+      "bytes": 4029,
+      "sha256": "f2adf9c4811285bd9b09c2d1006a604302708be16001d218989f735286691585",
+      "source": "clipper/blueprint-to-edit/references/blueprint-execution.md",
+      "sourceSha256": "f2adf9c4811285bd9b09c2d1006a604302708be16001d218989f735286691585"
+    },
+    "references/clipit-operator--editorial-workflow.md": {
+      "bytes": 4918,
+      "sha256": "36c5f4dbad7c6960efb545b7952453b5999d7b4ae1738b2260b30e9285b48f5d",
+      "source": "clipper/clipit-operator/references/editorial-workflow.md",
+      "sourceSha256": "b2bdc4f174329aa2d5d9e99045c3892db3f7d890796733be4ef135c78c34212a"
+    },
+    "references/clipit-operator--media-prompting.md": {
+      "bytes": 8621,
+      "sha256": "ae26780eff3cea978222e3bf4e620321dd272ae02c17f9a216fa5ca69efba4eb",
+      "source": "clipper/clipit-operator/references/media-prompting.md",
+      "sourceSha256": "ae26780eff3cea978222e3bf4e620321dd272ae02c17f9a216fa5ca69efba4eb"
+    },
+    "references/clipit-operator--media-qa.md": {
+      "bytes": 4416,
+      "sha256": "66b139a5bf50e9b0229eee0d468032f33bf10778e760f5555e2dd441fac82c79",
+      "source": "clipper/clipit-operator/references/media-qa.md",
+      "sourceSha256": "66b139a5bf50e9b0229eee0d468032f33bf10778e760f5555e2dd441fac82c79"
+    },
+    "references/clipit-operator--time-and-state.md": {
+      "bytes": 4425,
+      "sha256": "944359de44f221f8ea56e2a8b38e5ad6419f690b3cba87d0e5501664710c685d",
+      "source": "clipper/clipit-operator/references/time-and-state.md",
+      "sourceSha256": "944359de44f221f8ea56e2a8b38e5ad6419f690b3cba87d0e5501664710c685d"
+    },
+    "requirements.txt": {
+      "bytes": 38,
+      "sha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80",
+      "source": "requirements.txt",
+      "sourceSha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80"
+    }
+  },
+  "format": "clipit-portable-skills.v1",
+  "skillId": "blueprint-to-edit",
+  "sourcePath": "clipper/blueprint-to-edit"
+}

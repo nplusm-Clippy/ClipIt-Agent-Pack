@@ -2,7 +2,9 @@
 
 ClipIt Agent Pack equips a shell- or MCP-capable agent to act as a practical video editor: ingest footage, understand transcripts, shape a story, assemble timelines, frame subjects, caption, generate supporting media, mix audio, render, deliver, publish, and prove the result is ready.
 
-Pack version `2.0.0` is described by [`agent-pack.manifest.json`](agent-pack.manifest.json). It targets capability contract `clipit-agent-capabilities.v1`, requires ClipIt CLI `0.3.0` or newer, and keeps `clipit-operator` active for every ClipIt task.
+Pack version `3.1.0` is described by [`agent-pack.manifest.json`](agent-pack.manifest.json). It retains capability contract `clipit-agent-capabilities.v1`, requires ClipIt CLI `0.3.0` or newer, and keeps `clipit-operator` active for every ClipIt task. The optional native Hermes plugin uses the additive platform contract `2026-09-16`. Existing CLI, MCP and Python workflows run independently of Hermes.
+
+Version 3.1 adds the optional native Hermes Control Room with Activity, Outputs, named sources, exact approvals, operation recovery and diagnostics. The [generated capability inventory](docs/capability-inventory.json) records all 18 skills and 52 executable scripts plus eight support modules. See [native installation and operations](docs/hermes-plugin.md) and [shared platform contract](docs/platform-client.md). Real-media acceptance, accessibility and extended mixed-client testing remain separate from the recorded model-free checks.
 
 ## Connect ClipIt
 
@@ -35,6 +37,19 @@ The CLI-generated instruction is the live connection layer. This repository adds
 
 ## Install the Full Pack
 
+### Hermes native plugin and Control Room
+
+Use the [v3.1.0 release](https://github.com/nplusm-Clippy/ClipIt-Agent-Pack/releases/tag/v3.1.0). Resolve that release tag to an exact commit, then install with Python tools initially disabled:
+
+```bash
+CLIPIT_RELEASE_SHA="$(git ls-remote --tags https://github.com/nplusm-Clippy/ClipIt-Agent-Pack.git \
+  'refs/tags/v3.1.0' 'refs/tags/v3.1.0^{}' | awk 'NR == 1 { sha = $1 } /\^\{\}$/ { sha = $1 } END { print sha }')"
+test "${#CLIPIT_RELEASE_SHA}" -eq 40 && \
+  hermes plugins install nplusm-Clippy/ClipIt-Agent-Pack --ref "$CLIPIT_RELEASE_SHA" --no-enable
+```
+
+Review Hermes' scan findings and enter the ClipIt key only in its hidden prompt. Follow the [dependency, profile and separate Desktop enablement steps](docs/hermes-plugin.md#install-version-310) before enabling tools. The native package already includes all 18 skills; a separate portable install is unnecessary. The release record includes the exact source commit and archive checksum.
+
 ### Codex or another AGENTS.md agent
 
 Clone the repository and work from its root. The agent reads [`AGENTS.md`](AGENTS.md), keeps [`clipper/clipit-operator/SKILL.md`](clipper/clipit-operator/SKILL.md) active, and loads the smallest domain skill needed for each task.
@@ -43,33 +58,28 @@ Clone the repository and work from its root. The agent reads [`AGENTS.md`](AGENT
 
 Clone the repository and work from its root. [`CLAUDE.md`](CLAUDE.md) routes Claude to the same operating and domain skills.
 
-### Hermes
+### Portable / legacy Hermes skills
+
+The generated [`skills/`](skills/manifest.json) bundles work without the native plugin. Each includes its referenced documents and Python fallbacks, with source hashes. The canonical authored skills remain in `clipper/`; other harnesses can copy a generated skill directory to their normal skill location without cloning the repository.
+
+Hermes installs one full repository/skill identifier per command:
 
 ```bash
 hermes skills tap add nplusm-Clippy/ClipIt-Agent-Pack
 
-hermes skills install \
-  clipper/clipit-operator \
-  clipper/video-management \
-  clipper/clip-creation \
-  clipper/timeline-editing \
-  clipper/project-sequence-management \
-  clipper/creator-style \
-  clipper/crop-reframing \
-  clipper/caption-generation \
-  clipper/thumbnail-generation \
-  clipper/broll-generation \
-  clipper/scene-alter \
-  clipper/audio-production \
-  clipper/blueprint-to-edit \
-  clipper/delivery-qa \
-  clipper/export-rendering \
-  clipper/social-publishing \
-  clipper/account-insights \
-  clipper/machine-payments
+for skill in \
+  clipit-operator video-management clip-creation timeline-editing \
+  project-sequence-management creator-style crop-reframing caption-generation \
+  thumbnail-generation broll-generation scene-alter audio-production \
+  blueprint-to-edit delivery-qa export-rendering social-publishing \
+  account-insights machine-payments; do
+  hermes skills install "nplusm-Clippy/ClipIt-Agent-Pack/skills/$skill" || break
+done
 ```
 
-`clipit-operator` is required. The remaining skills are installable domain modules; install the complete set for a general-purpose ClipIt editor.
+The portable commands read the repository's default branch and record its fetched revision; they are not pinned to the native release tag. For an immutable skill-only install, download the ZIP and SHA256 manifest from the versioned release, verify the archive, and copy only the chosen complete `clipit/skills/<skill>` directories into your harness's skill directory. For development, build and check bundles with `python3 tooling/build_portable_skills.py` and `python3 tooling/build_portable_skills.py --check`. Do not replace an installed skill without reviewing that user's changes.
+
+`clipit-operator` is required. The remaining skills are installable domain modules; install the complete set for a general-purpose ClipIt editor. Run bundled Python commands from the installed skill directory, or use the script's absolute path, and install that bundle's `requirements.txt` in your chosen Python environment. CLI profiles and credentials work exactly as before; Hermes is optional.
 
 ## How an Agent Uses ClipIt
 
@@ -218,10 +228,8 @@ The complete authority-preserving sequence and recovery rules are in [enterprise
 
 ```bash
 python3 -m unittest discover -s tests -v
-
-for skill in clipper/*/SKILL.md; do
-  python3 /mnt/c/Users/namas/.codex/skills/.system/skill-creator/scripts/quick_validate.py "$(dirname "$skill")"
-done
+python3 tooling/build_portable_skills.py --check
+python3 tooling/build_parity_inventory.py --check
 ```
 
 The test suite validates existing enterprise authority contracts, skill/manifest parity, reference packaging, current media terminology, and public B-Roll/thumbnail request shapes.

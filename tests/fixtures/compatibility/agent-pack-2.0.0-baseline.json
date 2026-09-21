@@ -1,0 +1,317 @@
+{
+  "commit": "4401cb3f0f7131d679c6999817abd4a626f91810",
+  "packVersion": "2.0.0",
+  "repository": "https://github.com/nplusm-Clippy/ClipIt-Agent-Pack",
+  "scripts": {
+    "scripts/__init__.py": {
+      "bytes": 244,
+      "hasMainGuard": false,
+      "sha256": "c6a890d6f2f172dc53c9bed72bda1a1d27016c783e6b467d327e9b6df5b61691"
+    },
+    "scripts/approve_workflow.py": {
+      "bytes": 2502,
+      "hasMainGuard": true,
+      "sha256": "f2206f3b7c88b569601832751e6560eab96093bc1f846fa8138e31b3820e8f31"
+    },
+    "scripts/asset_upload_contract.py": {
+      "bytes": 3519,
+      "hasMainGuard": false,
+      "sha256": "c434892d9aed1325b9d27d504bc5050eef092cc6c53b5292ead47eab4d767590"
+    },
+    "scripts/cancel_social_post.py": {
+      "bytes": 582,
+      "hasMainGuard": true,
+      "sha256": "a738d460d8ee8993609e49dfac97c841560a0401af627b96379660db6236a3db"
+    },
+    "scripts/clipper_client.py": {
+      "bytes": 13698,
+      "hasMainGuard": false,
+      "sha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f"
+    },
+    "scripts/create_clip.py": {
+      "bytes": 1170,
+      "hasMainGuard": true,
+      "sha256": "1c7fb7b259a73867d28437cc76bf9889bfc2e72166a9e38985042ccdffe4ed08"
+    },
+    "scripts/create_payment_attempt.py": {
+      "bytes": 1365,
+      "hasMainGuard": true,
+      "sha256": "b6fa27fc45434fb7b205ffc09de1775f5875c0a5d15b7082c754b91db1ebea8f"
+    },
+    "scripts/delete_clip.py": {
+      "bytes": 531,
+      "hasMainGuard": true,
+      "sha256": "a6efb586ee77bd71619a71a7a3090007b3ae1d19fd4de14a74693af139c75ace"
+    },
+    "scripts/delete_video.py": {
+      "bytes": 554,
+      "hasMainGuard": true,
+      "sha256": "8a98c9fdc33d6c4a214eb9ff47e4c75ae11d05c36a09b90b751d407a0201f0dd"
+    },
+    "scripts/deliver_export.py": {
+      "bytes": 1192,
+      "hasMainGuard": true,
+      "sha256": "17377456a04efb77e450c5eab460c5cde9ab72cea77ecb66c5a1878e2e5c4400"
+    },
+    "scripts/download_clip.py": {
+      "bytes": 593,
+      "hasMainGuard": true,
+      "sha256": "3dbb7afc890c3f9cb338320ad5e7c4ef073c234677a4a8240a549a15de68c7d8"
+    },
+    "scripts/download_export.py": {
+      "bytes": 562,
+      "hasMainGuard": true,
+      "sha256": "bfa9d6e7180031588379bfb8bb09790a8b7a7a56d8255c3cf85e41a56ddd7ae9"
+    },
+    "scripts/enterprise_delivery_contract.py": {
+      "bytes": 11251,
+      "hasMainGuard": false,
+      "sha256": "e5dae217cc243f2b10301b10938d9649f85c70e6e0fd853395cff5077db3bd91"
+    },
+    "scripts/enterprise_exact_delivery_contract.py": {
+      "bytes": 10864,
+      "hasMainGuard": false,
+      "sha256": "97622d3227ec16db8c749550f7f2ed134e67c0c94e88264442757068bddebce4"
+    },
+    "scripts/estimate_cost.py": {
+      "bytes": 3418,
+      "hasMainGuard": true,
+      "sha256": "3f92d47a8e5d35b06bf3c167ce10e86ee29511975a8e4da7fa04a38618d9ba5b"
+    },
+    "scripts/exact_caption_style_contract.py": {
+      "bytes": 5996,
+      "hasMainGuard": false,
+      "sha256": "58addefed9a71eea58090e7bfe0e487034845f0ff8e02f5d80ddd31823f27372"
+    },
+    "scripts/export_contract.py": {
+      "bytes": 4706,
+      "hasMainGuard": false,
+      "sha256": "9a4f29c2176944bbd7a83721e21a10484a46ce4def801b1433d6fa37d2febb6d"
+    },
+    "scripts/generate_broll.py": {
+      "bytes": 3404,
+      "hasMainGuard": true,
+      "sha256": "fbe1273a7be6e244653027bb2ef24a33ab5896bcd001ec425f4bd57859a9d5f5"
+    },
+    "scripts/generate_captions.py": {
+      "bytes": 1542,
+      "hasMainGuard": true,
+      "sha256": "946c0cad4022ea972e2227a7101578333aaa9eceb5e1ecbde3e49cdc33f77bf2"
+    },
+    "scripts/generate_thumbnail.py": {
+      "bytes": 2039,
+      "hasMainGuard": true,
+      "sha256": "d5f185ba28ef038968da9ee7cfb882f1e0dcfec63f945e379f716309243b6e70"
+    },
+    "scripts/get_agent_instructions.py": {
+      "bytes": 1547,
+      "hasMainGuard": true,
+      "sha256": "eaa8eed2155ca080175ba2edb2c69c61c878b73595171aa5454575ea5c4ea152"
+    },
+    "scripts/get_analytics_overview.py": {
+      "bytes": 853,
+      "hasMainGuard": true,
+      "sha256": "a673a1937e9fa16593a5226e3975428d9302c7c19a3756879fb0ba442b79173e"
+    },
+    "scripts/get_billing_catalog.py": {
+      "bytes": 445,
+      "hasMainGuard": true,
+      "sha256": "bd99d77ce2cf4e1ac9eeb2454139eb8bed8967b166218d9235ef647d3d098819"
+    },
+    "scripts/get_billing_subscription.py": {
+      "bytes": 440,
+      "hasMainGuard": true,
+      "sha256": "bf866f2de3ca593233a59c2b142529cedb8f888b609c563232a7e2a80cf187ff"
+    },
+    "scripts/get_clip.py": {
+      "bytes": 541,
+      "hasMainGuard": true,
+      "sha256": "33af8b38d4e171860ab13632e0d67ecd891ae8f03e3aae3279ff4dc5adbc2cc5"
+    },
+    "scripts/get_credits_balance.py": {
+      "bytes": 799,
+      "hasMainGuard": true,
+      "sha256": "a2c81867f9d10d26319ee672d6010c81a8af6f08457f178e036310005a2ba795"
+    },
+    "scripts/get_payment_attempt.py": {
+      "bytes": 586,
+      "hasMainGuard": true,
+      "sha256": "361bff080ce86dbd2c57507410047fc6f5ef774a2693e412aaa308955ac52118"
+    },
+    "scripts/get_payment_capabilities.py": {
+      "bytes": 454,
+      "hasMainGuard": true,
+      "sha256": "8838cca93151cf044c9e5def2d703793143ff3d07ff6034c6011dd3901afe8f6"
+    },
+    "scripts/get_payment_receipt.py": {
+      "bytes": 618,
+      "hasMainGuard": true,
+      "sha256": "eacec4447f870b0031776e4cadeb885e4ef4aa82367f0fd96be2064642b0d8ba"
+    },
+    "scripts/get_post_metrics.py": {
+      "bytes": 575,
+      "hasMainGuard": true,
+      "sha256": "1b749fd97a5a121143095458578c6706da13640dd49e538a4572f2b771b13b47"
+    },
+    "scripts/get_social_post.py": {
+      "bytes": 561,
+      "hasMainGuard": true,
+      "sha256": "7cd276df871ea425b1b6e2efacd7998ff9c417e72dc1fd00d7a7d4dc402e4d85"
+    },
+    "scripts/get_top_clips.py": {
+      "bytes": 1239,
+      "hasMainGuard": true,
+      "sha256": "05ba0182b2af7822cdea77ec6a28bb27b8221db04c20ae01ef92c67531507161"
+    },
+    "scripts/get_transcript.py": {
+      "bytes": 603,
+      "hasMainGuard": true,
+      "sha256": "dc4e69d1bb3d4188837b411d6709770ae1a12f18fbbc393543e66c5d3d23df57"
+    },
+    "scripts/get_video.py": {
+      "bytes": 549,
+      "hasMainGuard": true,
+      "sha256": "c68d138e0ba218e01f2ed31932de8199f9316b16c6fd66b454989427d8eb6a38"
+    },
+    "scripts/import_video_from_url.py": {
+      "bytes": 1025,
+      "hasMainGuard": true,
+      "sha256": "27ea7942b01d18a3782d42f7038d39e76466bad4814565522f9d290c117b190b"
+    },
+    "scripts/initialize_editor_snapshot.py": {
+      "bytes": 5605,
+      "hasMainGuard": true,
+      "sha256": "45b04c2f5f2793b92695abfec04425758d1f6b27286cd7cb568a355c6a8413ec"
+    },
+    "scripts/list_assets.py": {
+      "bytes": 966,
+      "hasMainGuard": true,
+      "sha256": "973d005dde09bef3c327d358ceefaf7394612fe3bc2fcfba8d234fea77dd9bc9"
+    },
+    "scripts/list_clips.py": {
+      "bytes": 803,
+      "hasMainGuard": true,
+      "sha256": "5b96b150a307882dc8afbd8dd1eb7a72f26511e0f7dc8012fb1c31c76241e4c6"
+    },
+    "scripts/list_deliverables.py": {
+      "bytes": 1383,
+      "hasMainGuard": true,
+      "sha256": "38ed0d21ddc6bb07d226906c3c2901e506e27ebe817722f669d92b5a66261b0c"
+    },
+    "scripts/list_social_accounts.py": {
+      "bytes": 450,
+      "hasMainGuard": true,
+      "sha256": "99d1213f9553b6c494599a0adaa3cbe63e15c931f8c0adc599729fd138fcb951"
+    },
+    "scripts/list_videos.py": {
+      "bytes": 636,
+      "hasMainGuard": true,
+      "sha256": "da56625ebffb4dafda8a97907b54700e1b545558b782dbf662816efd4fe0c112"
+    },
+    "scripts/orchestrate.py": {
+      "bytes": 4234,
+      "hasMainGuard": true,
+      "sha256": "936e7f4d89a22327df87d9dc79527d8bc9507b6636c3ba4fd7bc772ddc129f1d"
+    },
+    "scripts/plan_broll.py": {
+      "bytes": 1149,
+      "hasMainGuard": true,
+      "sha256": "e30918d0aaaf78609693919bba4de541b02e8584be1fa22f901e4a39b080cb63"
+    },
+    "scripts/post_to_social.py": {
+      "bytes": 3266,
+      "hasMainGuard": true,
+      "sha256": "0f0df537b30ccb4dc788e5051ed0f63b38243546d70ef5c4a8a2ba8c01b499e0"
+    },
+    "scripts/render_clip.py": {
+      "bytes": 3973,
+      "hasMainGuard": true,
+      "sha256": "691acfca3925f3887d0a9c4f93a6c02ee2c3280757ea9f52b6df7c0917b2327f"
+    },
+    "scripts/run_enterprise_exact_delivery.py": {
+      "bytes": 6007,
+      "hasMainGuard": true,
+      "sha256": "21f66743909d0abef9aec3c630dd46ee38ec0cf85ae4e50eae85c83ce3eaecb0"
+    },
+    "scripts/schedule_social_post.py": {
+      "bytes": 3422,
+      "hasMainGuard": true,
+      "sha256": "5627a2bdd4972f458700abca3b75098ff5f1b2ab72660edfb39a9e9648db45b3"
+    },
+    "scripts/set_caption_style.py": {
+      "bytes": 1844,
+      "hasMainGuard": true,
+      "sha256": "0a547fa9a0475fb3e4d4965c0089bacfba8c514df2b7c7af5b4c60a2dc74fe5b"
+    },
+    "scripts/social_publish_contract.py": {
+      "bytes": 10889,
+      "hasMainGuard": false,
+      "sha256": "1d022cc779cbbdc26b099cd4994e4134c83d8ffb0471bdc7cd0648bbd514d2fe"
+    },
+    "scripts/start_export.py": {
+      "bytes": 8955,
+      "hasMainGuard": true,
+      "sha256": "a892c59ebb8d8ac83adc2799a97a89cf3e965b4c37bec9c603a0ebf0f14e9db4"
+    },
+    "scripts/suggest_clips.py": {
+      "bytes": 1583,
+      "hasMainGuard": true,
+      "sha256": "6aae8c2e26cb57256419c3f18c3827a6632643154461e5275bae141463c375f0"
+    },
+    "scripts/transcribe_video.py": {
+      "bytes": 919,
+      "hasMainGuard": true,
+      "sha256": "11725bac8fadb274d48220159d0044f5c5d635f202cc29f4debe06eaacdbdc55"
+    },
+    "scripts/update_captions.py": {
+      "bytes": 1383,
+      "hasMainGuard": true,
+      "sha256": "f446beed23457c94a528c015b3da31a4ebfebe2d8a6daa53fad67edadad0fc92"
+    },
+    "scripts/update_clip.py": {
+      "bytes": 1303,
+      "hasMainGuard": true,
+      "sha256": "f8e441909a36870eecec3eba3ec25b213e3484582208378d593f1f43a33ca8a4"
+    },
+    "scripts/upload_asset.py": {
+      "bytes": 1621,
+      "hasMainGuard": true,
+      "sha256": "4bcab6d994051da65ff6a0bff80602b3115fd065d14ef8c71cf93f85d5b60e11"
+    },
+    "scripts/upload_video.py": {
+      "bytes": 819,
+      "hasMainGuard": true,
+      "sha256": "bb7ef3d2090312eed6424b4fafcb83e14882940fd78c81f105b1fb62c5ad581c"
+    },
+    "scripts/use_library_video.py": {
+      "bytes": 692,
+      "hasMainGuard": true,
+      "sha256": "5292aade3069859b31ec466deb858af155fd1cbdfaf3c40f16ad2a99b03dad47"
+    },
+    "scripts/verify_enterprise_workspace.py": {
+      "bytes": 1476,
+      "hasMainGuard": true,
+      "sha256": "ca233e58528e2f57a8500263e612e6bb2508a1cb8ad3000967baedab00ca2ff4"
+    },
+    "scripts/wait_for_export.py": {
+      "bytes": 893,
+      "hasMainGuard": true,
+      "sha256": "e0c5afe88f701e731f301268e40570293a4702b0cc700cbd832548b7ce4e2ac2"
+    },
+    "scripts/wait_for_job.py": {
+      "bytes": 908,
+      "hasMainGuard": true,
+      "sha256": "c6e06f92071cd6d1ff660592fe08d08b92c095b44830730781329a6eb8422ae6"
+    }
+  },
+  "skills": 18,
+  "validation": {
+    "command": "python3 -m unittest discover -s tests -v",
+    "date": "2026-09-16",
+    "errors": 0,
+    "exitCode": 0,
+    "failures": 0,
+    "scope": "Offline existing Python contract suite; no HTTP/provider/native-Hermes acceptance",
+    "tests": 75
+  }
+}

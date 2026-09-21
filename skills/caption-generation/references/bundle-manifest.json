@@ -1,0 +1,79 @@
+{
+  "files": {
+    "SKILL.md": {
+      "bytes": 9170,
+      "sha256": "093b699ede0d9e7877f94d72f8441c6a2d776d0f8e65396546d6ec1da033c535",
+      "source": "clipper/caption-generation/SKILL.md",
+      "sourceSha256": "2254499cd1fb30c79a928f1563c28568e9aff767788ef9187f9ab6207bb948f3"
+    },
+    "references/LICENSE": {
+      "bytes": 1070,
+      "sha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3",
+      "source": "LICENSE",
+      "sourceSha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3"
+    },
+    "requirements.txt": {
+      "bytes": 38,
+      "sha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80",
+      "source": "requirements.txt",
+      "sourceSha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80"
+    },
+    "scripts/clipper_client.py": {
+      "bytes": 13698,
+      "sha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f",
+      "source": "scripts/clipper_client.py",
+      "sourceSha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f"
+    },
+    "scripts/enterprise_exact_delivery_contract.py": {
+      "bytes": 10864,
+      "sha256": "97622d3227ec16db8c749550f7f2ed134e67c0c94e88264442757068bddebce4",
+      "source": "scripts/enterprise_exact_delivery_contract.py",
+      "sourceSha256": "97622d3227ec16db8c749550f7f2ed134e67c0c94e88264442757068bddebce4"
+    },
+    "scripts/exact_caption_style_contract.py": {
+      "bytes": 5996,
+      "sha256": "58addefed9a71eea58090e7bfe0e487034845f0ff8e02f5d80ddd31823f27372",
+      "source": "scripts/exact_caption_style_contract.py",
+      "sourceSha256": "58addefed9a71eea58090e7bfe0e487034845f0ff8e02f5d80ddd31823f27372"
+    },
+    "scripts/generate_captions.py": {
+      "bytes": 1542,
+      "sha256": "946c0cad4022ea972e2227a7101578333aaa9eceb5e1ecbde3e49cdc33f77bf2",
+      "source": "scripts/generate_captions.py",
+      "sourceSha256": "946c0cad4022ea972e2227a7101578333aaa9eceb5e1ecbde3e49cdc33f77bf2"
+    },
+    "scripts/render_clip.py": {
+      "bytes": 3973,
+      "sha256": "691acfca3925f3887d0a9c4f93a6c02ee2c3280757ea9f52b6df7c0917b2327f",
+      "source": "scripts/render_clip.py",
+      "sourceSha256": "691acfca3925f3887d0a9c4f93a6c02ee2c3280757ea9f52b6df7c0917b2327f"
+    },
+    "scripts/run_enterprise_exact_delivery.py": {
+      "bytes": 6007,
+      "sha256": "21f66743909d0abef9aec3c630dd46ee38ec0cf85ae4e50eae85c83ce3eaecb0",
+      "source": "scripts/run_enterprise_exact_delivery.py",
+      "sourceSha256": "21f66743909d0abef9aec3c630dd46ee38ec0cf85ae4e50eae85c83ce3eaecb0"
+    },
+    "scripts/set_caption_style.py": {
+      "bytes": 1844,
+      "sha256": "0a547fa9a0475fb3e4d4965c0089bacfba8c514df2b7c7af5b4c60a2dc74fe5b",
+      "source": "scripts/set_caption_style.py",
+      "sourceSha256": "0a547fa9a0475fb3e4d4965c0089bacfba8c514df2b7c7af5b4c60a2dc74fe5b"
+    },
+    "scripts/transcribe_video.py": {
+      "bytes": 919,
+      "sha256": "11725bac8fadb274d48220159d0044f5c5d635f202cc29f4debe06eaacdbdc55",
+      "source": "scripts/transcribe_video.py",
+      "sourceSha256": "11725bac8fadb274d48220159d0044f5c5d635f202cc29f4debe06eaacdbdc55"
+    },
+    "scripts/update_captions.py": {
+      "bytes": 1383,
+      "sha256": "f446beed23457c94a528c015b3da31a4ebfebe2d8a6daa53fad67edadad0fc92",
+      "source": "scripts/update_captions.py",
+      "sourceSha256": "f446beed23457c94a528c015b3da31a4ebfebe2d8a6daa53fad67edadad0fc92"
+    }
+  },
+  "format": "clipit-portable-skills.v1",
+  "skillId": "caption-generation",
+  "sourcePath": "clipper/caption-generation"
+}

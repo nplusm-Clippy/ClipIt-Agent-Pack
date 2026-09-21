@@ -1,0 +1,117 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "metadata": {
+    "component": {
+      "type": "application",
+      "name": "ClipIt Agent Pack",
+      "version": "3.1.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    "properties": [
+      {
+        "name": "clipit:coverage",
+        "value": "Distributed plugin source and declared external runtime dependencies. Host-provided transitive dependencies and developer tools are not bundled; this is not a scan of the installed Hermes environment."
+      }
+    ]
+  },
+  "components": [
+    {
+      "type": "application",
+      "bom-ref": "hermes",
+      "name": "Hermes Agent",
+      "version": "0.21.3",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "clipit:tested-commit",
+          "value": "345cd2b057a452236de401d3534b8502a7465e8d"
+        },
+        {
+          "name": "clipit:distribution",
+          "value": "external host"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "requests",
+      "name": "requests",
+      "purl": "pkg:pypi/requests",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "clipit:constraint",
+          "value": ">=2.32,<3"
+        },
+        {
+          "name": "clipit:tested-version",
+          "value": "2.33.0"
+        },
+        {
+          "name": "clipit:distribution",
+          "value": "external Python dependency"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "react",
+      "name": "react",
+      "version": "19.2.7",
+      "purl": "pkg:npm/react@19.2.7",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "clipit:distribution",
+          "value": "provided by tested Hermes Desktop, not bundled"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "fastapi",
+      "name": "fastapi",
+      "version": "0.133.1",
+      "purl": "pkg:pypi/fastapi@0.133.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "clipit:distribution",
+          "value": "provided by tested Hermes gateway, not bundled"
+        }
+      ]
+    }
+  ]
+}

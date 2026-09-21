@@ -1,0 +1,169 @@
+{
+  "files": {
+    "SKILL.md": {
+      "bytes": 8110,
+      "sha256": "508b1616e064718aaa9d423d4004dcd6fc6ea9ba8b1b2d5748b3c31397877ca5",
+      "source": "clipper/clipit-operator/SKILL.md",
+      "sourceSha256": "470272f932b45cd0026e937f4db7a7bb0790aedc96a3d76bd7ee42d4c6fa8a46"
+    },
+    "references/LICENSE": {
+      "bytes": 1070,
+      "sha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3",
+      "source": "LICENSE",
+      "sourceSha256": "a00eea21662d372283a93a67cd2268c293691523f71e66cbef61f15e4cd57ef3"
+    },
+    "references/editorial-workflow.md": {
+      "bytes": 4901,
+      "sha256": "b2bdc4f174329aa2d5d9e99045c3892db3f7d890796733be4ef135c78c34212a",
+      "source": "clipper/clipit-operator/references/editorial-workflow.md",
+      "sourceSha256": "b2bdc4f174329aa2d5d9e99045c3892db3f7d890796733be4ef135c78c34212a"
+    },
+    "references/enterprise-exactness.md": {
+      "bytes": 5391,
+      "sha256": "3f9d0e9854edf9ff2531921de8840b3a0065cc29d3dd84921e948cbbe89b053d",
+      "source": "clipper/clipit-operator/references/enterprise-exactness.md",
+      "sourceSha256": "19838d6faff60a4bcb39020911d31e5020ea232025d394fa684c93c696150027"
+    },
+    "references/media-prompting.md": {
+      "bytes": 8621,
+      "sha256": "ae26780eff3cea978222e3bf4e620321dd272ae02c17f9a216fa5ca69efba4eb",
+      "source": "clipper/clipit-operator/references/media-prompting.md",
+      "sourceSha256": "ae26780eff3cea978222e3bf4e620321dd272ae02c17f9a216fa5ca69efba4eb"
+    },
+    "references/media-qa.md": {
+      "bytes": 4416,
+      "sha256": "66b139a5bf50e9b0229eee0d468032f33bf10778e760f5555e2dd441fac82c79",
+      "source": "clipper/clipit-operator/references/media-qa.md",
+      "sourceSha256": "66b139a5bf50e9b0229eee0d468032f33bf10778e760f5555e2dd441fac82c79"
+    },
+    "references/outcome-recipes.md": {
+      "bytes": 4964,
+      "sha256": "dd29884f70bb2f98fba799aec3ed7e066cda3aa7290af062519309a14e06f58d",
+      "source": "clipper/clipit-operator/references/outcome-recipes.md",
+      "sourceSha256": "dd29884f70bb2f98fba799aec3ed7e066cda3aa7290af062519309a14e06f58d"
+    },
+    "references/time-and-state.md": {
+      "bytes": 4425,
+      "sha256": "944359de44f221f8ea56e2a8b38e5ad6419f690b3cba87d0e5501664710c685d",
+      "source": "clipper/clipit-operator/references/time-and-state.md",
+      "sourceSha256": "944359de44f221f8ea56e2a8b38e5ad6419f690b3cba87d0e5501664710c685d"
+    },
+    "references/tool-transport.md": {
+      "bytes": 6108,
+      "sha256": "56683d90555ad83439082a4e89f5d4ff050a70f4cdb1f03be5f5dbf770d7cc56",
+      "source": "clipper/clipit-operator/references/tool-transport.md",
+      "sourceSha256": "528f445a1fbf1f9fd70b6b27bd1d694c96db77ec4125c73a122f78382a394afb"
+    },
+    "requirements.txt": {
+      "bytes": 38,
+      "sha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80",
+      "source": "requirements.txt",
+      "sourceSha256": "8a0c5b9990979461800b650ec2f19238766c0bf5bb8a0db80785a8a7e7c7dd80"
+    },
+    "scripts/approve_workflow.py": {
+      "bytes": 2502,
+      "sha256": "f2206f3b7c88b569601832751e6560eab96093bc1f846fa8138e31b3820e8f31",
+      "source": "scripts/approve_workflow.py",
+      "sourceSha256": "f2206f3b7c88b569601832751e6560eab96093bc1f846fa8138e31b3820e8f31"
+    },
+    "scripts/clipper_client.py": {
+      "bytes": 13698,
+      "sha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f",
+      "source": "scripts/clipper_client.py",
+      "sourceSha256": "7da1ad4bcf43467171c833821b96ad9c70792ef5f1d0f06e9447e73bdfdb8a5f"
+    },
+    "scripts/deliver_export.py": {
+      "bytes": 1192,
+      "sha256": "17377456a04efb77e450c5eab460c5cde9ab72cea77ecb66c5a1878e2e5c4400",
+      "source": "scripts/deliver_export.py",
+      "sourceSha256": "17377456a04efb77e450c5eab460c5cde9ab72cea77ecb66c5a1878e2e5c4400"
+    },
+    "scripts/enterprise_delivery_contract.py": {
+      "bytes": 11251,
+      "sha256": "e5dae217cc243f2b10301b10938d9649f85c70e6e0fd853395cff5077db3bd91",
+      "source": "scripts/enterprise_delivery_contract.py",
+      "sourceSha256": "e5dae217cc243f2b10301b10938d9649f85c70e6e0fd853395cff5077db3bd91"
+    },
+    "scripts/enterprise_exact_delivery_contract.py": {
+      "bytes": 10864,
+      "sha256": "97622d3227ec16db8c749550f7f2ed134e67c0c94e88264442757068bddebce4",
+      "source": "scripts/enterprise_exact_delivery_contract.py",
+      "sourceSha256": "97622d3227ec16db8c749550f7f2ed134e67c0c94e88264442757068bddebce4"
+    },
+    "scripts/exact_caption_style_contract.py": {
+      "bytes": 5996,
+      "sha256": "58addefed9a71eea58090e7bfe0e487034845f0ff8e02f5d80ddd31823f27372",
+      "source": "scripts/exact_caption_style_contract.py",
+      "sourceSha256": "58addefed9a71eea58090e7bfe0e487034845f0ff8e02f5d80ddd31823f27372"
+    },
+    "scripts/get_agent_instructions.py": {
+      "bytes": 1547,
+      "sha256": "eaa8eed2155ca080175ba2edb2c69c61c878b73595171aa5454575ea5c4ea152",
+      "source": "scripts/get_agent_instructions.py",
+      "sourceSha256": "eaa8eed2155ca080175ba2edb2c69c61c878b73595171aa5454575ea5c4ea152"
+    },
+    "scripts/initialize_editor_snapshot.py": {
+      "bytes": 5605,
+      "sha256": "45b04c2f5f2793b92695abfec04425758d1f6b27286cd7cb568a355c6a8413ec",
+      "source": "scripts/initialize_editor_snapshot.py",
+      "sourceSha256": "45b04c2f5f2793b92695abfec04425758d1f6b27286cd7cb568a355c6a8413ec"
+    },
+    "scripts/list_assets.py": {
+      "bytes": 966,
+      "sha256": "973d005dde09bef3c327d358ceefaf7394612fe3bc2fcfba8d234fea77dd9bc9",
+      "source": "scripts/list_assets.py",
+      "sourceSha256": "973d005dde09bef3c327d358ceefaf7394612fe3bc2fcfba8d234fea77dd9bc9"
+    },
+    "scripts/list_deliverables.py": {
+      "bytes": 1383,
+      "sha256": "38ed0d21ddc6bb07d226906c3c2901e506e27ebe817722f669d92b5a66261b0c",
+      "source": "scripts/list_deliverables.py",
+      "sourceSha256": "38ed0d21ddc6bb07d226906c3c2901e506e27ebe817722f669d92b5a66261b0c"
+    },
+    "scripts/list_videos.py": {
+      "bytes": 636,
+      "sha256": "da56625ebffb4dafda8a97907b54700e1b545558b782dbf662816efd4fe0c112",
+      "source": "scripts/list_videos.py",
+      "sourceSha256": "da56625ebffb4dafda8a97907b54700e1b545558b782dbf662816efd4fe0c112"
+    },
+    "scripts/orchestrate.py": {
+      "bytes": 4234,
+      "sha256": "936e7f4d89a22327df87d9dc79527d8bc9507b6636c3ba4fd7bc772ddc129f1d",
+      "source": "scripts/orchestrate.py",
+      "sourceSha256": "936e7f4d89a22327df87d9dc79527d8bc9507b6636c3ba4fd7bc772ddc129f1d"
+    },
+    "scripts/render_clip.py": {
+      "bytes": 3973,
+      "sha256": "691acfca3925f3887d0a9c4f93a6c02ee2c3280757ea9f52b6df7c0917b2327f",
+      "source": "scripts/render_clip.py",
+      "sourceSha256": "691acfca3925f3887d0a9c4f93a6c02ee2c3280757ea9f52b6df7c0917b2327f"
+    },
+    "scripts/run_enterprise_exact_delivery.py": {
+      "bytes": 6007,
+      "sha256": "21f66743909d0abef9aec3c630dd46ee38ec0cf85ae4e50eae85c83ce3eaecb0",
+      "source": "scripts/run_enterprise_exact_delivery.py",
+      "sourceSha256": "21f66743909d0abef9aec3c630dd46ee38ec0cf85ae4e50eae85c83ce3eaecb0"
+    },
+    "scripts/set_caption_style.py": {
+      "bytes": 1844,
+      "sha256": "0a547fa9a0475fb3e4d4965c0089bacfba8c514df2b7c7af5b4c60a2dc74fe5b",
+      "source": "scripts/set_caption_style.py",
+      "sourceSha256": "0a547fa9a0475fb3e4d4965c0089bacfba8c514df2b7c7af5b4c60a2dc74fe5b"
+    },
+    "scripts/use_library_video.py": {
+      "bytes": 692,
+      "sha256": "5292aade3069859b31ec466deb858af155fd1cbdfaf3c40f16ad2a99b03dad47",
+      "source": "scripts/use_library_video.py",
+      "sourceSha256": "5292aade3069859b31ec466deb858af155fd1cbdfaf3c40f16ad2a99b03dad47"
+    },
+    "scripts/verify_enterprise_workspace.py": {
+      "bytes": 1476,
+      "sha256": "ca233e58528e2f57a8500263e612e6bb2508a1cb8ad3000967baedab00ca2ff4",
+      "source": "scripts/verify_enterprise_workspace.py",
+      "sourceSha256": "ca233e58528e2f57a8500263e612e6bb2508a1cb8ad3000967baedab00ca2ff4"
+    }
+  },
+  "format": "clipit-portable-skills.v1",
+  "skillId": "clipit-operator",
+  "sourcePath": "clipper/clipit-operator"
+}
