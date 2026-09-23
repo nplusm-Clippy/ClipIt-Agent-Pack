@@ -35,6 +35,10 @@ clipit agent update codex
 
 The CLI-generated instruction is the live connection layer. This repository adds the deeper editor/creator skill pack and Python REST/enterprise fallbacks.
 
+### ThinkOS
+
+Choose **ThinkOS** on [ClipIt's Agents page](https://clipit.dev/agents) for a tailored setup prompt. ThinkOS can launch the existing local CLI bridge through its protected MCP host, even when the agent has no general shell. Follow the [ThinkOS host guide](docs/thinkos.md) for secret binding, tool verification, and the tools-only resource limitation. CLI `0.3.0` is the minimum CLI version; the Agent Pack's `3.1.0` is a separate release version.
+
 ## Install the Full Pack
 
 ### Hermes native plugin and Control Room
