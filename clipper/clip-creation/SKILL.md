@@ -14,6 +14,8 @@ metadata:
 
 Use with `clipit-operator`. Prefer `clipit videos`, `clipit clips`, `clipit ask`, or discovered MCP tools; use these Python scripts for REST fallback and exact enterprise recipes. Read [../clipit-operator/references/editorial-workflow.md](../clipit-operator/references/editorial-workflow.md) before selecting or assembling moments.
 
+Clip creation and rendering require ClipIt CLI >=0.3.1. The frozen `create_clip.py` and `render_clip.py` scripts do not send `X-Idempotency-Key`, now required by `POST /api/v1/clips` and `POST /api/v1/clips/:id/render`, and will fail with `PROCESSING_IDEMPOTENCY_KEY_REQUIRED`. Use `clipit clips create` / `clipit clips render`; retain the echoed `idempotencyKey` and pass `--idempotency-key <the echoed key>` for an exact retry. Other fallback scripts retain their existing guidance.
+
 ## When to Use
 
 Use this skill when the user wants to:
@@ -33,8 +35,9 @@ Use this skill when the user wants to:
 | Operation | Preferred path | REST fallback |
 |-----------|----------------|---------------|
 | AI clip suggestions | `clipit videos suggest-clips <videoId> --count 5 --confirm --json` | `suggest_clips.py --video-id <id>` |
-| Create/list/get/update/delete | `clipit clips ...` | matching clip scripts |
-| Render and wait | `clipit clips render <clipId> --confirm --max-credits <cap> --json`; `clipit jobs wait <jobId>` | `render_clip.py --clip-id <id> --wait` |
+| Create | `clipit clips create ... --confirm --json` | frozen script is incompatible; CLI >=0.3.1 required |
+| List/get/update/delete | `clipit clips ...` | matching clip scripts |
+| Render and wait | `clipit clips render <clipId> --confirm --max-credits <cap> --json`; `clipit jobs wait <jobId>` | frozen script is incompatible; CLI >=0.3.1 required |
 | Initialize/exact enterprise delivery | enterprise Python recipe | `initialize_editor_snapshot.py`; `run_enterprise_exact_delivery.py` |
 
 ## Procedure
@@ -49,7 +52,7 @@ Use this skill when the user wants to:
 1. Run `python scripts/suggest_clips.py --video-id <id> --count 5`
 2. ClipIt's current inference route analyzes the full transcript and returns clip opportunities; do not pin a remembered provider/model in the skill.
 3. Each opportunity includes: `title`, `startTime`, `endTime`, `reason`, `confidence`, `themes`, `viralPotential`
-4. To create a clip from a suggestion, use the `startTime` and `endTime` values with `create_clip.py`
+4. To create a clip from a suggestion, use the `startTime` and `endTime` values with `clipit clips create --confirm --json`.
 
 **Options:**
 - `--count N` — number of suggestions (1-20, default 5)
@@ -62,8 +65,8 @@ Use this skill when the user wants to:
 python scripts/suggest_clips.py --video-id vid_abc123 --count 3 --platforms tiktok
 
 # 2. Create clips from the top suggestions (using start/end from the results)
-python scripts/create_clip.py --video-id vid_abc123 --start 45.2 --end 78.9 --title "Best moment"
-python scripts/create_clip.py --video-id vid_abc123 --start 120.0 --end 155.5 --title "Funny reaction"
+clipit clips create --video-id vid_abc123 --start 45.2 --end 78.9 --title "Best moment" --confirm --json
+clipit clips create --video-id vid_abc123 --start 120.0 --end 155.5 --title "Funny reaction" --confirm --json
 ```
 
 ### Creating a Clip Manually
@@ -71,7 +74,7 @@ python scripts/create_clip.py --video-id vid_abc123 --start 120.0 --end 155.5 --
 **When to use:** The user knows exactly which segment they want.
 
 **Steps:**
-1. Run `python scripts/create_clip.py --video-id <id> --start <seconds> --end <seconds>`
+1. Run `clipit clips create --video-id <id> --start <seconds> --end <seconds> --confirm --json`.
 2. Optionally add `--title "My clip"` and `--caption "Caption text"`
 3. The response includes the `clipId` for rendering
 
@@ -82,22 +85,16 @@ python scripts/create_clip.py --video-id vid_abc123 --start 120.0 --end 155.5 --
 **Steps:**
 1. Re-read current clip/editor state and run delivery QA for the intended artifact.
 2. Preflight the exact render with a user-approved cap.
-3. Run `clipit clips render <id> --aspect 9:16 --quality high --confirm --max-credits <cap> --json` or the fallback script.
+3. Run `clipit clips render <id> --aspect 9:16 --quality high --confirm --max-credits <cap> --json`.
 4. Save the job ID and wait/resume with the matching generic job waiter.
 5. Inspect the current rendered media, then obtain a fresh download URL only when needed.
 
-**Render options:**
-- `--aspect-ratio` — `16:9` (YouTube), `9:16` (TikTok/Reels), `1:1` (Instagram), `4:5` (Facebook)
-- `--quality` — `standard`, `high`, `4k`
-- `--captions` / `--no-captions` — include caption overlay (default: yes)
-- `--caption-style` — `bold`, `minimal`, `neon`, `classic`
-- `--watermark` — add ClipIt watermark (default: no)
-- `--auto-reframe` / `--no-auto-reframe` — enable or disable automatic subject framing
-- `--workspace-id` — rejects direct enterprise rendering and points to the exact-delivery recipe, preventing legacy caption-style overwrite
+Use `clipit clips render --help` for current render options. Preserve the approved aspect, quality, caption state, watermark, and framing. Enterprise workspace clips require the exact-delivery recipe to preserve canonical caption fields.
 
 **Example:**
 ```bash
-python scripts/render_clip.py --clip-id clip_xyz --aspect-ratio 9:16 --quality high --caption-style neon --wait
+clipit clips render clip_xyz --aspect 9:16 --quality high --confirm --max-credits <approved-cap> --json
+clipit jobs wait <jobId> --stream
 ```
 
 ### Enterprise Canonical Clip Workflow
@@ -123,11 +120,12 @@ python scripts/render_clip.py --clip-id clip_xyz --aspect-ratio 9:16 --quality h
    ```
 4. Create the clip, then initialize its canonical editor snapshot with the approved exact style. For an exact TikTok Viral request, place the full object (including scale, words-per-line, position, animation, and highlights) in `style.json`:
    ```bash
-   python scripts/create_clip.py \
+   clipit clips create \
      --video-id "<video-id>" \
      --start 0 \
      --end 30 \
-     --title "Client-facing title"
+     --title "Client-facing title" \
+     --confirm --json
 
    python scripts/initialize_editor_snapshot.py \
      --workspace-id "<expected-workspace-id>" \
@@ -171,7 +169,7 @@ Never use direct `render_clip.py --workspace-id ...` for enterprise work; its le
 
 - **Deletion needs explicit scope approval.** Re-read the target clip and describe what is removed before `clipit clips delete <id> --confirm` or the REST fallback.
 - **Transcript required for AI suggestions.** `suggest_clips.py` will fail if the video isn't transcribed. Always transcribe first.
-- **Rendering takes time.** Use `--wait` to block until done, or poll the returned `jobId`. Don't try to download before rendering completes.
+- **Rendering takes time.** Use `clipit jobs wait <jobId>` to wait for the returned job. Don't try to download before rendering completes.
 - **Changing clip timing invalidates the render.** If you update start/end times with `update_clip.py`, the previous render is stale — re-render before downloading.
 - **Download URLs expire.** Each call to `download_clip.py` generates a fresh signed URL. Don't cache them.
 - **Do not use remembered costs.** Preflight the current render duration, quality, profile, and provider route before approval.

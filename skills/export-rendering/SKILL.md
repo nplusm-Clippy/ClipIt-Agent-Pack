@@ -52,6 +52,8 @@ Exports are separate from generic jobs. Always poll export jobs with `GET /api/v
 
 For enterprise work, create the canonical snapshot and then use the idempotent exact-delivery recipe. The recipe performs a complete preflight before approval, verifies the exact caption hash, reuses or queues the current render, starts one snapshot-bound export, and creates one exact-lineage ready deliverable. Starting from the active named workspace profile:
 
+Clip creation and direct rendering require ClipIt CLI >=0.3.1. The frozen `scripts/create_clip.py` and `scripts/render_clip.py` scripts omit `X-Idempotency-Key`, now required by `POST /api/v1/clips` and `POST /api/v1/clips/:id/render`, and will fail with `PROCESSING_IDEMPOTENCY_KEY_REQUIRED`. Use `clipit clips create` / `clipit clips render`; retain the echoed `idempotencyKey` and pass `--idempotency-key <the echoed key>` for an exact retry. Keep the enterprise exact-delivery recipe for snapshot-bound rendering, export, and delivery.
+
 ```bash
 python scripts/verify_enterprise_workspace.py \
   --workspace-id "<expected-workspace-id>" \
@@ -63,11 +65,12 @@ python scripts/list_videos.py
 # Required for captions or AI suggestions; omit for a manual no-caption clip.
 python scripts/transcribe_video.py --video-id "<video-id>" --wait
 
-python scripts/create_clip.py \
+clipit clips create \
   --video-id "<video-id>" \
   --start 0 \
   --end 30 \
-  --title "Client-facing title"
+  --title "Client-facing title" \
+  --confirm --json
 python scripts/initialize_editor_snapshot.py \
   --workspace-id "<expected-workspace-id>" \
   --profile "enterprise-client-slug" \
@@ -96,7 +99,7 @@ python scripts/list_deliverables.py \
   --status ready
 ```
 
-The first recipe call always returns a plan before provider work. `--confirm` advances only that plan hash and exact clip/snapshot lineage. If processing is incomplete, rerun with the same original request fields plus `--resume-token`, `--plan-hash`, `--caption-style-hash`, and `--expected-final-duration` from the receipt lineage; completed stages are not repeated. `--no-outro` is required when the approved artifact duration must equal the canonical content duration. Direct captioned enterprise `scripts/render_clip.py` calls are blocked because the legacy endpoint can replace exact caption fields; the deliberate no-caption path remains available. Delivery stops at `ready`; only the client can select it for publishing.
+The first recipe call always returns a plan before provider work. `--confirm` advances only that plan hash and exact clip/snapshot lineage. If processing is incomplete, rerun with the same original request fields plus `--resume-token`, `--plan-hash`, `--caption-style-hash`, and `--expected-final-duration` from the receipt lineage; completed stages are not repeated. `--no-outro` is required when the approved artifact duration must equal the canonical content duration. Direct captioned enterprise rendering is blocked because the legacy endpoint can replace exact caption fields. The frozen Python render script is also incompatible with the required idempotency header, even without captions; use the exact-delivery recipe. Delivery stops at `ready`; only the client can select it for publishing.
 
 **Common options:**
 - `--format` — `mp4`, `mov`, `avi`, `webm`, `mkv`

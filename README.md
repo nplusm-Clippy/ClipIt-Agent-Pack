@@ -2,7 +2,7 @@
 
 ClipIt Agent Pack equips a shell- or MCP-capable agent to act as a practical video editor: ingest footage, understand transcripts, shape a story, assemble timelines, frame subjects, caption, generate supporting media, mix audio, render, deliver, publish, and prove the result is ready.
 
-Pack version `3.1.0` is described by [`agent-pack.manifest.json`](agent-pack.manifest.json). It retains capability contract `clipit-agent-capabilities.v1`, requires ClipIt CLI `0.3.0` or newer, and keeps `clipit-operator` active for every ClipIt task. The optional native Hermes plugin uses the additive platform contract `2026-09-16`. Existing CLI, MCP and Python workflows run independently of Hermes.
+Pack version `3.1.1` is described by [`agent-pack.manifest.json`](agent-pack.manifest.json). It retains capability contract `clipit-agent-capabilities.v1`, requires ClipIt CLI `0.3.1` or newer, and keeps `clipit-operator` active for every ClipIt task. The optional native Hermes plugin uses the additive platform contract `2026-09-16`. Existing CLI, MCP and Python workflows run independently of Hermes.
 
 Version 3.1 adds the optional native Hermes Control Room with Activity, Outputs, named sources, exact approvals, operation recovery and diagnostics. The [generated capability inventory](docs/capability-inventory.json) records all 18 skills and 52 executable scripts plus eight support modules. See [native installation and operations](docs/hermes-plugin.md) and [shared platform contract](docs/platform-client.md). Real-media acceptance, accessibility and extended mixed-client testing remain separate from the recorded model-free checks.
 
@@ -37,22 +37,22 @@ The CLI-generated instruction is the live connection layer. This repository adds
 
 ### ThinkOS
 
-Choose **ThinkOS** on [ClipIt's Agents page](https://clipit.dev/agents) for a tailored, keyless setup prompt. Copy the newly issued key separately into ThinkOS's protected form when its agent opens it; never paste the key into chat. ThinkOS can launch the existing local CLI bridge through its protected MCP host, even when the agent has no general shell. Follow the [ThinkOS host guide](docs/thinkos.md) for account setup, secret binding, tool verification, and the tools-only resource limitation. CLI `0.3.0` is the minimum CLI version; the Agent Pack's `3.1.0` is a separate release version.
+Choose **ThinkOS** on [ClipIt's Agents page](https://clipit.dev/agents) for a tailored, keyless setup prompt. Copy the newly issued key separately into ThinkOS's protected form when its agent opens it; never paste the key into chat. ThinkOS can launch the existing local CLI bridge through its protected MCP host, even when the agent has no general shell. Follow the [ThinkOS host guide](docs/thinkos.md) for account setup, secret binding, tool verification, and the tools-only resource limitation. CLI `0.3.1` is the minimum CLI version; the Agent Pack's `3.1.1` is a separate release version.
 
 ## Install the Full Pack
 
 ### Hermes native plugin and Control Room
 
-Use the [v3.1.0 release](https://github.com/nplusm-Clippy/ClipIt-Agent-Pack/releases/tag/v3.1.0). Resolve that release tag to an exact commit, then install with Python tools initially disabled:
+Use the [v3.1.1 release](https://github.com/nplusm-Clippy/ClipIt-Agent-Pack/releases/tag/v3.1.1). Resolve that release tag to an exact commit, then install with Python tools initially disabled:
 
 ```bash
 CLIPIT_RELEASE_SHA="$(git ls-remote --tags https://github.com/nplusm-Clippy/ClipIt-Agent-Pack.git \
-  'refs/tags/v3.1.0' 'refs/tags/v3.1.0^{}' | awk 'NR == 1 { sha = $1 } /\^\{\}$/ { sha = $1 } END { print sha }')"
+  'refs/tags/v3.1.1' 'refs/tags/v3.1.1^{}' | awk 'NR == 1 { sha = $1 } /\^\{\}$/ { sha = $1 } END { print sha }')"
 test "${#CLIPIT_RELEASE_SHA}" -eq 40 && \
   hermes plugins install nplusm-Clippy/ClipIt-Agent-Pack --ref "$CLIPIT_RELEASE_SHA" --no-enable
 ```
 
-Review Hermes' scan findings and enter the ClipIt key only in its hidden prompt. Follow the [dependency, profile and separate Desktop enablement steps](docs/hermes-plugin.md#install-version-310) before enabling tools. The native package already includes all 18 skills; a separate portable install is unnecessary. The release record includes the exact source commit and archive checksum.
+Review Hermes' scan findings and enter the ClipIt key only in its hidden prompt. Follow the [dependency, profile and separate Desktop enablement steps](docs/hermes-plugin.md#install-version-311) before enabling tools. The native package already includes all 18 skills; a separate portable install is unnecessary. The release record includes the exact source commit and archive checksum.
 
 ### Codex or another AGENTS.md agent
 
@@ -144,6 +144,8 @@ Read the manifest first, then only the skill and media-guide resources needed fo
 
 ### Python REST fallback
 
+Clip creation and rendering require ClipIt CLI >=0.3.1. The frozen `create_clip.py` and `render_clip.py` scripts omit `X-Idempotency-Key`, now required by `POST /api/v1/clips` and `POST /api/v1/clips/:id/render`, and will fail with `PROCESSING_IDEMPOTENCY_KEY_REQUIRED`. Use `clipit clips create` / `clipit clips render`; retain the echoed `idempotencyKey` and pass `--idempotency-key <the echoed key>` for exact retries. Other fallback scripts retain their existing guidance.
+
 ```bash
 python3 -m pip install -r requirements.txt
 python3 scripts/get_agent_instructions.py --target generic --format markdown
@@ -224,7 +226,7 @@ python3 scripts/verify_enterprise_workspace.py \
   --profile "enterprise-client-slug"
 ```
 
-Use Source Library registration, canonical snapshot identity, the complete approved caption object/hash, a read-only exact-delivery plan, the same capped confirmed request through resume, and an exact-lineage ready deliverable. Only the client may select it. Direct captioned legacy enterprise rendering and publishing a merely ready delivery are blocked.
+Use Source Library registration, canonical snapshot identity, the complete approved caption object/hash, a read-only exact-delivery plan, the same capped confirmed request through resume, and an exact-lineage ready deliverable. Only the workspace owner in the client portal, a delegated operator key once the owner enables delegated approval, or ClipIt support (audited) may select it. Direct captioned legacy enterprise rendering and publishing a merely ready delivery are blocked.
 
 The complete authority-preserving sequence and recovery rules are in [enterprise-exactness.md](clipper/clipit-operator/references/enterprise-exactness.md). Existing Python contract scripts and tests remain the executable source of truth.
 

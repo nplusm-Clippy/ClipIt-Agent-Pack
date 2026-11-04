@@ -19,10 +19,10 @@
       "sourceSha256": "b2bdc4f174329aa2d5d9e99045c3892db3f7d890796733be4ef135c78c34212a"
     },
     "references/enterprise-exactness.md": {
-      "bytes": 5391,
-      "sha256": "3f9d0e9854edf9ff2531921de8840b3a0065cc29d3dd84921e948cbbe89b053d",
+      "bytes": 6365,
+      "sha256": "11eb19a20edd142da5030c1ca5fcd63632718895e3f8fb58c320450d5029d1a6",
       "source": "clipper/clipit-operator/references/enterprise-exactness.md",
-      "sourceSha256": "19838d6faff60a4bcb39020911d31e5020ea232025d394fa684c93c696150027"
+      "sourceSha256": "ca2f2b1bd8bb6e561996c7f79f5b6f693b53bc81e8792c300cd89adee60c7a08"
     },
     "references/media-prompting.md": {
       "bytes": 8621,
@@ -37,10 +37,10 @@
       "sourceSha256": "66b139a5bf50e9b0229eee0d468032f33bf10778e760f5555e2dd441fac82c79"
     },
     "references/outcome-recipes.md": {
-      "bytes": 4964,
-      "sha256": "dd29884f70bb2f98fba799aec3ed7e066cda3aa7290af062519309a14e06f58d",
+      "bytes": 5639,
+      "sha256": "eb1d5dfe7d90b7f4d8b57b284fd354f602e6ff86e2874f64dd46b3ce2666ac53",
       "source": "clipper/clipit-operator/references/outcome-recipes.md",
-      "sourceSha256": "dd29884f70bb2f98fba799aec3ed7e066cda3aa7290af062519309a14e06f58d"
+      "sourceSha256": "eb1d5dfe7d90b7f4d8b57b284fd354f602e6ff86e2874f64dd46b3ce2666ac53"
     },
     "references/time-and-state.md": {
       "bytes": 4425,
@@ -49,10 +49,10 @@
       "sourceSha256": "944359de44f221f8ea56e2a8b38e5ad6419f690b3cba87d0e5501664710c685d"
     },
     "references/tool-transport.md": {
-      "bytes": 6108,
-      "sha256": "56683d90555ad83439082a4e89f5d4ff050a70f4cdb1f03be5f5dbf770d7cc56",
+      "bytes": 7583,
+      "sha256": "04a9ebd2879889c93c2ae078a8b3b0819278f2ddb785de33b5592abf7152a814",
       "source": "clipper/clipit-operator/references/tool-transport.md",
-      "sourceSha256": "528f445a1fbf1f9fd70b6b27bd1d694c96db77ec4125c73a122f78382a394afb"
+      "sourceSha256": "a90b2afc19a35662304afc66d0893a1b931b9e327f08232495c2e7d2e6174ee2"
     },
     "requirements.txt": {
       "bytes": 38,

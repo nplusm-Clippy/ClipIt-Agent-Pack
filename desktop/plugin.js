@@ -2,7 +2,7 @@ import { createElement as h, useEffect, useRef, useState, useSyncExternalStore }
 import { host, useValue, usePluginI18n, Button, Input, Textarea, ROUTES_AREA, SIDEBAR_NAV_AREA,
   STATUSBAR_AREAS, PALETTE_AREA, PANES_AREA, COMPOSER_AREAS } from '@hermes/plugin-sdk'
 
-export const VERSION = '3.1.0'
+export const VERSION = '3.1.1'
 export const CONTRACT_VERSION = '2026-09-16'
 const TERMINAL = new Set(['completed', 'failed', 'cancelled'])
 const operationResolved = value => {

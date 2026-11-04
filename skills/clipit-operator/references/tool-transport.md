@@ -35,8 +35,20 @@ Use a friendly domain command when it exactly covers the task. It provides valid
 
 ```bash
 clipit clips create --video-id <videoId> --start 12 --end 42 --title "Strong hook" --confirm --json
+clipit clips render <clipId> --confirm --max-credits <approved-cap> --json
 clipit thumbnails generate --clip-id <clipId> --prompt "..." --confirm --max-credits <approved-cap> --json
 ```
+
+For `clips create` and `clips render`, CLI 0.3.1 generates and sends `X-Idempotency-Key` with a `cli-clip:<uuid>` or `cli-render:<uuid>` key and echoes it as `idempotencyKey` in JSON output. After a timeout or ambiguous failure, read current state and retry the exact same request with `--idempotency-key <the echoed key>`. Keep every request field unchanged; do not let a retry generate a new key. If the key was not captured, inspect current state before taking further action.
+
+When QA or delivery needs the file, download it to disk:
+
+```bash
+clipit exports download <exportJobId> --output <file> --json
+clipit clips download <clipId> --output <file> --json
+```
+
+With `--output`, the CLI streams the file and prints `{path, bytes, sha256, contentType}` without the signed URL. An existing file requires `--force`. Without `--output`, `--json` keeps the URL redacted.
 
 ### Direct dynamic tool
 
@@ -78,6 +90,8 @@ The bridge supplies `tools/list`, `tools/call`, `resources/list`, and `resources
 Read `clipit://manifest` first, then only the skill and guide resources needed for the task. Treat MCP tool schemas as live. If a call returns `requiresConfirmation`, show the exact operation and estimate, obtain approval, and retry the same tool once with `confirmed: true`. Do not also run the equivalent CLI command.
 
 ### Python REST fallback
+
+Clip creation and rendering require ClipIt CLI >=0.3.1. The frozen Python fallback scripts for these operations do not send `X-Idempotency-Key`, now required by `POST /api/v1/clips` and `POST /api/v1/clips/:id/render`; they will fail with `PROCESSING_IDEMPOTENCY_KEY_REQUIRED`. Use `clipit clips create` / `clipit clips render`, retain the echoed `idempotencyKey`, and pass `--idempotency-key <the echoed key>` for an exact retry. If the required CLI is unavailable, report that blocker rather than using these frozen scripts.
 
 Use scripts in `scripts/` only when the live CLI/MCP surface cannot express the operation or the documented enterprise exact-delivery contract requires them:
 
