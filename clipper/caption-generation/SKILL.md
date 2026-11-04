@@ -76,8 +76,11 @@ python scripts/update_captions.py --clip-id clip_xyz --color "#FF0000" --font-si
 
 After changing captions, the clip needs to be re-rendered for the changes to appear in the video file. Use the clip-creation skill:
 
+Rendering requires ClipIt CLI >=0.3.1. The frozen `render_clip.py` script omits `X-Idempotency-Key`, now required by `POST /api/v1/clips/:id/render`, and will fail with `PROCESSING_IDEMPOTENCY_KEY_REQUIRED`. Use `clipit clips render`, retain the echoed `idempotencyKey`, and pass `--idempotency-key <the echoed key>` for an exact retry. Enterprise clips use the exact-delivery recipe below.
+
 ```bash
-python scripts/render_clip.py --clip-id <id> --captions --wait
+clipit clips render <id> --confirm --max-credits <approved-cap> --json
+clipit jobs wait <jobId> --stream
 ```
 
 ### Exact Enterprise Caption Style

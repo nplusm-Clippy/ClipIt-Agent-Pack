@@ -29,6 +29,8 @@ Use this skill when the user wants to:
 
 **Prerequisite:** The clip MUST have one completed export that exactly matches its current canonical editor snapshot. For enterprise, use the exact-delivery recipe so style, export lineage, outro policy, artifact duration, and ready-deliverable state are verified together; the client must then select it in the portal. Confirm authority with the named profile and `scripts/list_deliverables.py --status selected`.
 
+For enterprise deliverables, the client's selection tick (deliverable status `selected`) is REQUIRED before any `social schedule` or publish operation. Only the workspace owner in the client portal, a delegated operator key once the owner enables delegated approval, or ClipIt support (audited) can set the tick; without that, wait and report `awaiting_client_selection`. The operator must not select, unselect, or publish a merely ready item.
+
 **Account setup:** Ordinary users connect accounts in ClipIt Settings. Enterprise clients connect accounts in their workspace portal, and an admin grants the exact accounts that Hermes may use. The API cannot connect or grant accounts; it can only list and publish through already-connected/authorized accounts.
 
 **Enterprise identity:** Enterprise keys are ClipIt-team-only. Select the workspace's distinct non-default CLI profile with `CLIPIT_PROFILE`, then run `scripts/verify_enterprise_workspace.py --workspace-id <expected-id>` before listing accounts or publishing. Keep that profile selected for the whole client session. Never put a workspace key in the shared Hermes `CLIPPER_API_KEY` environment variable.
@@ -105,6 +107,8 @@ python scripts/post_to_social.py \
 ### Scheduling a Post
 
 **When to use:** The user wants to post at a specific time (e.g., "post tomorrow at 9am").
+
+For enterprise, first verify the exact export with `scripts/list_deliverables.py --workspace-id <id> --profile <name> --status selected --export-id <id>`. If the client has not selected it, wait and report `awaiting_client_selection` before scheduling.
 
 **Steps:**
 1. Refresh `scripts/list_social_accounts.py` and copy the exact authorized `accountId`.

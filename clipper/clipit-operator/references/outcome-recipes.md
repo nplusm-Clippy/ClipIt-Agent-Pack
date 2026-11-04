@@ -26,6 +26,8 @@ These recipes define order and proof, not fixed tool schemas. Discover every dyn
 7. Run delivery QA before social copy or scheduling.
 8. Refresh exact social accounts and obtain separate publish/schedule approval.
 
+For an enterprise package, verify the client's selection tick as deliverable status `selected` before any `social schedule` or publish operation. Only the workspace owner in the client portal, a delegated operator key once the owner enables delegated approval, or ClipIt support (audited) can set it; without that, wait and report `awaiting_client_selection`.
+
 ## B-Roll package
 
 1. Read the target clip/transcript and identify the spoken moment needing proof, clarification, pacing, or emotional support.
@@ -88,4 +90,4 @@ These recipes define order and proof, not fixed tool schemas. Discover every dyn
 6. Obtain approval for exact artifact, destination account, copy, timing, and cap.
 7. Publish/schedule once; wait for per-platform result and return URLs/errors.
 
-For enterprise, a ready delivery is not client-selected authority. Follow `enterprise-exactness.md` and wait for the client-controlled selected state.
+For enterprise, the client's selection tick (deliverable status `selected`) is REQUIRED before any `social schedule` or publish operation. Follow `enterprise-exactness.md`. Only the workspace owner in the client portal, a delegated operator key once the owner enables delegated approval, or ClipIt support (audited) can set the tick; without that, wait and report `awaiting_client_selection`. The operator must not select, unselect, or publish a merely ready item.

@@ -1,10 +1,10 @@
 {
   "files": {
     "SKILL.md": {
-      "bytes": 11818,
-      "sha256": "edd34fbbcac5f9bd00b69a3113d3af89d8d3567e8a857851beb8200a234c3890",
+      "bytes": 12517,
+      "sha256": "2c80a5559f1af4a897cdf51a480fe9c5c0a774bb7138cf4de49bbaa20ecc232c",
       "source": "clipper/social-publishing/SKILL.md",
-      "sourceSha256": "0475ebc8654cb39003ddf0e33492d900200e448acc3bf68e941f58eb21e435b3"
+      "sourceSha256": "b89a3b686a4c5d96d27967cdbdc5124a860e4e95bd98eb187f418f42272f3ef5"
     },
     "references/LICENSE": {
       "bytes": 1070,

@@ -83,11 +83,13 @@ Only then rerun the same request with `--confirm`. Advance only the returned pla
 
 The final receipt must prove render/export/delivery IDs, exact caption hash, current snapshot version/hash, output fingerprint, outro policy, and probed artifact duration. `deliver_export.py` is only a recovery path for an already eligible exact export; it accepts no caller-authored title or note.
 
-Direct captioned enterprise `render_clip.py` is blocked because a legacy style request can replace exact fields. A deliberate no-caption `--no-captions --no-auto-reframe` path remains available. If a requested style capability is unsupported, report one product-owned blocked state; never ask the client to repair or save the editor.
+Direct captioned enterprise `render_clip.py` is blocked because a legacy style request can replace exact fields. The frozen script also omits `X-Idempotency-Key`, now required by `POST /api/v1/clips/:id/render`, and will fail with `PROCESSING_IDEMPOTENCY_KEY_REQUIRED` even without captions. Direct clip creation/rendering requires ClipIt CLI >=0.3.1 (`clipit clips create` / `clipit clips render`); retain the echoed `idempotencyKey` and pass `--idempotency-key <the echoed key>` for an exact retry. Enterprise rendering must use the snapshot-bound exact-delivery recipe. If a requested style capability is unsupported, report one product-owned blocked state; never ask the client to repair or save the editor.
 
 ## Client selection and publishing
 
-The operator may create a `ready` deliverable. Only the client can select it in the portal. The operator must not select, unselect, or publish a merely ready item.
+The operator may create a `ready` deliverable. Only the workspace owner in the client portal, a delegated operator key once the owner enables delegated approval, or ClipIt support (audited) can select it; every selection records its authority and actor on the deliverable. The operator must not select, unselect, or publish a merely ready item.
+
+The client's selection tick, verified as deliverable status `selected`, is REQUIRED before any `social schedule` or publish operation for an enterprise deliverable. An operator key cannot set that tick unless the workspace owner has enabled delegated approval. Until then, wait and report `awaiting_client_selection` while the deliverable remains `ready`; an operator's own judgement never replaces the selection.
 
 ```bash
 python3 scripts/list_deliverables.py \

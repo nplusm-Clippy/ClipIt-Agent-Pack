@@ -8,18 +8,18 @@ Tested source: Hermes release `v2026.9.14`, commit `345cd2b057a452236de401d3534b
 
 The package uses manifest file format 1, supported by the released installer. Minimum Hermes version, Python dependencies, required secret, opt-in tools and capability declarations are retained. The pinned release's runtime accepts manifest format 2, but its Git installer rejects it; format 1 avoids that installer/runtime mismatch.
 
-### Install version 3.1.0
+### Install version 3.1.1
 
 Start from the intended Hermes profile. Add `--profile <your-profile>` to each `hermes` command when using a named profile; choose that same profile in Desktop. The default commands below use the current/default profile. Do not switch or restart unrelated gateways.
 
 ```bash
 CLIPIT_RELEASE_SHA="$(git ls-remote --tags https://github.com/nplusm-Clippy/ClipIt-Agent-Pack.git \
-  'refs/tags/v3.1.0' 'refs/tags/v3.1.0^{}' | awk 'NR == 1 { sha = $1 } /\^\{\}$/ { sha = $1 } END { print sha }')"
+  'refs/tags/v3.1.1' 'refs/tags/v3.1.1^{}' | awk 'NR == 1 { sha = $1 } /\^\{\}$/ { sha = $1 } END { print sha }')"
 test "${#CLIPIT_RELEASE_SHA}" -eq 40 && \
   hermes plugins install nplusm-Clippy/ClipIt-Agent-Pack --ref "$CLIPIT_RELEASE_SHA" --no-enable
 ```
 
-Compare the resolved commit with the [release record](https://github.com/nplusm-Clippy/ClipIt-Agent-Pack/releases/tag/v3.1.0). The tag must be published before these commands work. Hermes scans third-party code; review any caution findings before accepting its interactive confirmation. Never disable the scanner to install this pack.
+Compare the resolved commit with the [release record](https://github.com/nplusm-Clippy/ClipIt-Agent-Pack/releases/tag/v3.1.1). The tag must be published before these commands work. Hermes scans third-party code; review any caution findings before accepting its interactive confirmation. Never disable the scanner to install this pack.
 
 Hermes reports Python dependencies but does not install them automatically. Install `requests>=2.32.0,<3` into the Python environment that runs your Hermes gateway. For the standard Hermes checkout:
 
@@ -96,7 +96,7 @@ npm ci --ignore-scripts
 npm test
 python tooling/build_parity_inventory.py --check
 python tooling/package_release.py --output dist
-python -m zipfile -e dist/clipit-agent-pack-3.1.0.zip dist/extracted
+python -m zipfile -e dist/clipit-agent-pack-3.1.1.zip dist/extracted
 hermes plugins doctor dist/extracted/clipit --ci
 python tooling/verify_hermes_install.py --hermes-source /path/to/pinned/hermes-agent
 ```

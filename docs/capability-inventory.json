@@ -1,6 +1,6 @@
 {
   "schema": "clipit-capability-inventory.v1",
-  "packVersion": "3.1.0",
+  "packVersion": "3.1.1",
   "capabilityContract": "clipit-agent-capabilities.v1",
   "skillCount": 18,
   "pythonFileCount": 60,
@@ -65,7 +65,7 @@
       "id": "clip-creation",
       "path": "clipper/clip-creation",
       "category": "editing",
-      "canonicalSha256": "015b08748e8a50073e31b99c21aa4903bc0d235940af4f8b9cbee912ca6f3c58",
+      "canonicalSha256": "fd8436d42c5d0f0c486f8c552e7f74a90fd18982d53c07c3e1d95b2b9d2018cf",
       "nativeSkill": "clipit:clip-creation",
       "portableSkill": "skills/clip-creation",
       "includedScripts": [
@@ -131,7 +131,7 @@
       "id": "caption-generation",
       "path": "clipper/caption-generation",
       "category": "editing",
-      "canonicalSha256": "2254499cd1fb30c79a928f1563c28568e9aff767788ef9187f9ab6207bb948f3",
+      "canonicalSha256": "c6449a6be9c874165dfa30df9df7a54e9f9131abf07c000fc3083c544a36ba02",
       "nativeSkill": "clipit:caption-generation",
       "portableSkill": "skills/caption-generation",
       "includedScripts": [
@@ -166,7 +166,7 @@
       "id": "broll-generation",
       "path": "clipper/broll-generation",
       "category": "media-generation",
-      "canonicalSha256": "e31b2da859ca500fd5cc6ecadec91f6fca33820b8b1a0b3961d38bd9c52c28ba",
+      "canonicalSha256": "d71766e30cfb7e76f97a4a24fc30ec46707c35b77739ef6b8a150f070aad0215",
       "nativeSkill": "clipit:broll-generation",
       "portableSkill": "skills/broll-generation",
       "includedScripts": [
@@ -222,7 +222,7 @@
       "id": "export-rendering",
       "path": "clipper/export-rendering",
       "category": "delivery",
-      "canonicalSha256": "6d3727868b148e3d3cf3480b673f8be2c5ca0a6137c228265cdfde559082d53c",
+      "canonicalSha256": "10d45dbea6aa05d022f9b5bf71bd58eaa4a43ebd848e9c888f8e786111812105",
       "nativeSkill": "clipit:export-rendering",
       "portableSkill": "skills/export-rendering",
       "includedScripts": [
@@ -253,7 +253,7 @@
       "id": "social-publishing",
       "path": "clipper/social-publishing",
       "category": "delivery",
-      "canonicalSha256": "0475ebc8654cb39003ddf0e33492d900200e448acc3bf68e941f58eb21e435b3",
+      "canonicalSha256": "b89a3b686a4c5d96d27967cdbdc5124a860e4e95bd98eb187f418f42272f3ef5",
       "nativeSkill": "clipit:social-publishing",
       "portableSkill": "skills/social-publishing",
       "includedScripts": [

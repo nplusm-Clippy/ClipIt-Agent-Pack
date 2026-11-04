@@ -99,7 +99,7 @@ Never provide a remembered cost table. Use the plan/preflight returned for the c
 - **Prompt motion, not the still.** H3 Max already receives the source frame; use one camera idea and one plausible action.
 - **Protect real people.** Name identity/clothing/body/action invariants and use restrained motion.
 - **No generated audio direction.** ClipIt preserves the source clip audio.
-- **Re-render after adding B-Roll.** The B-Roll overlay is applied during the next clip render. Use `render_clip.py` after generating B-Roll.
+- **Re-render after adding B-Roll.** The B-Roll overlay is applied during the next clip render. Use ClipIt CLI >=0.3.1 (`clipit clips render <clipId> --confirm --max-credits <approved-cap> --json`); retain the echoed `idempotencyKey` and pass `--idempotency-key <the echoed key>` for an exact retry. The frozen `render_clip.py` script omits `X-Idempotency-Key`, now required by `POST /api/v1/clips/:id/render`, and will fail with `PROCESSING_IDEMPOTENCY_KEY_REQUIRED`. Enterprise clips use the exact-delivery recipe.
 
 ## Verification
 
